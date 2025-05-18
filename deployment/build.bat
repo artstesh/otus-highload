@@ -1,0 +1,1 @@
+docker-compose -f docker-compose.yml -f docker-compose.override.yml build elasticsearch kibana postgres rabbitmq adminer tenant sso aws signalr gateway email core cropmapping dsp ocr

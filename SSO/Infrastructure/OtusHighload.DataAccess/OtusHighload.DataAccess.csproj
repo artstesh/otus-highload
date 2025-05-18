@@ -11,4 +11,14 @@
       <PackageReference Include="Npgsql" Version="9.0.3" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\Common\DataAccess\Common.DataAccess\UZ.DataAccess.csproj" />
+      <ProjectReference Include="..\..\Application\OtusHighload.Services\OtusHighload.Application.csproj" />
+      <ProjectReference Include="..\..\Domain\OtusHighload.Entities\OtusHighload.Entities.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Repositories\" />
+    </ItemGroup>
+
 </Project>

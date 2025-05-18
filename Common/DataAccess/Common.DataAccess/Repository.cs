@@ -1,35 +1,49 @@
-﻿namespace UZ.DataAccess
+﻿using Dapper;
+using Npgsql;
+using OtusHighload.DataAccess;
+
+namespace UZ.DataAccess
 {
     public abstract class Repository<TEntity, TPrimaryKey> : ReadonlyRepository<TEntity, TPrimaryKey>,
         IRepository<TEntity, TPrimaryKey>
         where TEntity : class, IEntity<TPrimaryKey>
         where TPrimaryKey : IEquatable<TPrimaryKey>
     {
-        public Repository(IContextFactory factory) : base(factory)
+        private readonly string _tableName;
+        public Repository(IOtusContextFactory factory, string tableName) : base(factory, tableName)
         {
+            _tableName = tableName;
         }
 
-        public async Task<bool> CreateAsync(TEntity entity, CancellationToken cancellationToken)
+        public Task<int> CreateAsync(string[] names, object item, CancellationToken cancellationToken)
         {
-            var context = _factory.Get();
-            var result = await context.Set<TEntity>().AddAsync(entity, cancellationToken);
-            return await context.SaveChangesAsync(cancellationToken) > 0;
+            var keys = string.Join(",", names.Select(k => $"\"{k}\""));
+            var args = string.Join(", ", names.Select(k => $"@{k}"));
+            string commandText = $"INSERT INTO {_tableName} (${keys}) VALUES ({args})";
+            return _factory.Get().QueryAsync(f =>
+            {
+                return f.ExecuteAsync(commandText,item);
+            });
         }
 
-        public async Task<bool> UpdateAsync(TEntity entity, CancellationToken token)
+        public Task<int> UpdateAsync(string[] names, object item, CancellationToken token)
         {
-            var context = _factory.Get();
-            context.Set<TEntity>().Update(entity);
-            await context.SaveChangesAsync(token);
-            return true;
+            var args = string.Join(",", names.Select(k => $"\"{k}\" = @{k.ToLower()}"));
+
+            string commandText = $"UPDATE {_tableName} SET (${args});";
+            return _factory.Get().QueryAsync(f =>
+            {
+                return f.ExecuteAsync(commandText,item);
+            });
         }
 
-        public async Task<bool> DeleteAsync(TPrimaryKey id, CancellationToken cancellationToken)
+        public Task<int> DeleteAsync(string id, CancellationToken cancellationToken)
         {
-            var context = _factory.Get();
-            var entity = await GetAsync(id, cancellationToken);
-            context.Set<TEntity>().Remove(entity);
-            return await context.SaveChangesAsync(cancellationToken) > 0;
+            string commandText = $"DELETE FROM {_tableName} WHERE \"Id\" = '${id}';";
+            return _factory.Get().QueryAsync(f =>
+            {
+                return f.ExecuteAsync(commandText);
+            });
         }
     }
 }

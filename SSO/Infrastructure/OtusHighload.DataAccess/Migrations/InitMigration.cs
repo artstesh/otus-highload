@@ -14,13 +14,13 @@ public class InitMigration : IMigration
 
     public override void Migrate()
     {
-        var exists = _factory.Create().Query<int>(conn =>
+        var exists = _factory.Get().Query<int>(conn =>
         {
-            return conn.QueryFirst<int>($"select count(*) from 'migrations' where id = {MigrationId}");
+            return conn.QueryFirst<int>($"select count(*) from \"Migrations\" where id = '{MigrationId}'");
         }) > 0;
         if (exists) return;
-        _factory.Create().Execute(conn => conn.Execute("DROP TABLE IF EXISTS users;"));
-        _factory.Create().Execute(conn =>
+        _factory.Get().Execute(conn => conn.Execute("DROP TABLE IF EXISTS users;"));
+        _factory.Get().Execute(conn =>
             conn.Execute(
                 @"create table users (
                   Id uuid default gen_random_uuid() not null,
@@ -29,6 +29,6 @@ public class InitMigration : IMigration
                   BirthDate date,
                   City varchar(120) not null,
                   Hobby text default '' not null);"));
-        _factory.Create().Execute(conn => conn.Execute($"insert into 'migrations' (id) values '{MigrationId}';"));
+        _factory.Get().Execute(conn => conn.Execute($"insert into \"Migrations\" (id) values ('{MigrationId}');"));
     }
 }

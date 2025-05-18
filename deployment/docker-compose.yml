@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  sso:
+    image: ${DOCKER_REGISTRY}/africa-platform/sso:${TAG}
+    container_name: sso
+    restart: always
+    build:
+      context: ../
+      dockerfile: SSO/Host//Dockerfile
+    depends_on:
+      - postgres
+
+  #### Infrastructure
+  postgres:
+    image: postgres:13-alpine
+    container_name: postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres:/var/lib/postgresql/data/
+
+volumes:
+  postgres:
+
+networks:
+  default:
+    driver: bridge

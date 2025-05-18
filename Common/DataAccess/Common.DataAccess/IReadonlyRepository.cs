@@ -1,10 +1,11 @@
 ﻿namespace UZ.DataAccess
 {
-    public interface IReadonlyRepository<TEntity, TPrimaryKey> : IReadonlyAnonymousRepository<TEntity>
+    public interface IReadonlyRepository<TEntity, TPrimaryKey>
         where TEntity : class, IEntity<TPrimaryKey>
         where TPrimaryKey : IEquatable<TPrimaryKey>
     {
-        Task<TEntity> GetAsync(TPrimaryKey id, CancellationToken cancellationToken = default);
-        Task<TEntity> GetAsTrackingAsync(TPrimaryKey id, CancellationToken cancellationToken = default);
+        Task<TEntity?> GetAsync(TPrimaryKey id, CancellationToken cancellationToken = default);
+        Task<IEnumerable<TEntity>> ListAsync(CancellationToken cancellationToken = default);
+        Task<IEnumerable<TEntity>> ListWhereAsync(string[] names, object item,CancellationToken cancellationToken = default);
     }
 }

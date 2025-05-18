@@ -1,0 +1,115 @@
+version: '3.8'
+
+services:
+  aws:
+    environment:
+      "ASPNETCORE_ENVIRONMENT": "Production"
+      "ASPNETCORE_URLS": "https://+:443;http://+:80"
+      "ElasticConfiguration__Uri": ""
+      "AWS__Region": ""
+      "AWS__AccessKey": ""
+      "AWS__SecretKey": ""
+    ports:
+      - "80:80"
+    volumes:
+      - ~/.aspnet/https/:/https/:ro
+
+  sso:
+    environment:
+      "ASPNETCORE_ENVIRONMENT": "Production"
+      "ASPNETCORE_URLS": "https://+:443;http://+:80"
+      "ElasticConfiguration__Uri": ""
+      "ConnectionStrings__AfricaPlatform": ""
+      "EventBus__HostAddress": ""
+      "Application__Endpoints__Spa": ""
+      "Application__Endpoints__Identity": ""
+      "Application__Endpoints__Core": ""
+      "Application__Endpoints__SupportEmail": "support@6grain.com"
+      "Application__Endpoints__Images": "https://gateway.africaplatform.6grain.com/api/v1/files?bucketName={0}&key={1}"
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - ~/.aspnet/https/:/https/:ro
+
+  gateway:
+    environment:
+      "ASPNETCORE_ENVIRONMENT": "Production"
+      "ASPNETCORE_URLS": "https://+:443;http://+:80"
+      "Application__Endpoints__Spa": ""
+      "Application__Endpoints__Identity": ""
+      "ElasticConfiguration__Uri": ""
+    ports:
+      - "5001:443"
+      - "8001:80"
+    volumes:
+      - ~/.aspnet/https/:/https/:ro
+
+  signalr:
+    environment:
+      "ASPNETCORE_ENVIRONMENT": "Production"
+      "ASPNETCORE_URLS": "https://+:443;http://+:80"
+      "ElasticConfiguration__Uri": ""
+      "EventBus__HostAddress": ""
+      "Application__Endpoints__Spa": ""
+      "Application__Endpoints__Identity": ""
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - ~/.aspnet/https/:/https/:ro
+
+  email:
+    environment:
+      "ASPNETCORE_ENVIRONMENT": "Production"
+      "ASPNETCORE_URLS": "https://+:443;http://+:80"
+      "ElasticConfiguration__Uri": ""
+      "EventBus__HostAddress": ""
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - ~/.aspnet/https/:/https/:ro
+
+  webspa:
+    build:
+      args:
+        ENV: Production
+    ports:
+      - "4200:80"
+    volumes:
+      - ~/.aspnet/https/:/https/:ro
+
+  migrator:
+    environment:
+      "ASPNETCORE_ENVIRONMENT": "Production"
+      "ConnectionStrings__AfricaPlatform": ""
+      "Application__Endpoints__Identity": ""
+      "Application__Endpoints__Core": ""
+    volumes:
+      - ~/.aspnet/https/:/https/:ro
+
+  cropmapping:
+    environment:
+      "ASPNETCORE_ENVIRONMENT": "Production"
+      "ASPNETCORE_URLS": "https://+;http://+"
+      "ElasticConfiguration__Uri": ""
+      "EventBus__HostAddress": ""
+      "Application__Endpoints__Spa": ""
+      "Application__Endpoints__Identity": ""
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - ~/.aspnet/https/:/https/:ro
+
+  postgres:
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  kibana:
+    environment:
+      SERVER_NAME: kibana
+      ELASTICSEARCH_HOSTS: "http://elasticsearch:9200"
