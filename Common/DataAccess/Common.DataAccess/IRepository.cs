@@ -4,7 +4,7 @@
         where TEntity : class, IEntity<TPrimaryKey>
         where TPrimaryKey : IEquatable<TPrimaryKey>
     {
-        Task<int> CreateAsync(string[] names, object item, CancellationToken cancellationToken);
+        Task<Guid?> CreateAsync(string[] names, object item, CancellationToken cancellationToken);
         Task<int> UpdateAsync(string[] names, object item, CancellationToken token);
         Task<int> DeleteAsync(string id, CancellationToken cancellationToken);
     }

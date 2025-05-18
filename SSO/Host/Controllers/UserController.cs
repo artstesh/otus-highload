@@ -1,14 +1,15 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using OtusHighload.Application.Services;
 using OtusHighload.Attributes;
+using OtusHighload.Contracts.DTO;
 using OtusHighload.Entities;
 
 namespace OtusHighload.Controllers;
 
-[Route("api/v1/[controller]")]
-[Auth]
-public class UserController
+[Route("[controller]")]
+public class UserController : Controller
 {
     private readonly IUserService _userService;
 
@@ -17,6 +18,7 @@ public class UserController
         _userService = userService;
     }
 
+    [Auth]
     [HttpGet(""), Produces("application/json")]
     [ProducesResponseType(typeof(List<AppUser>), StatusCodes.Status200OK)]
     public Task<List<AppUser>> List(CancellationToken ct)
@@ -24,17 +26,18 @@ public class UserController
         return _userService.List(ct);
     }
 
-    [HttpGet("{id}"), Produces("application/json")]
+    [Auth]
+    [HttpGet("get/{id}"), Produces("application/json")]
     [ProducesResponseType(typeof(AppUser), StatusCodes.Status200OK)]
     public Task<AppUser?> GetUser(Guid id, CancellationToken ct)
     {
         return _userService.Get(id, ct);
     }
 
-    [HttpPost(""), Produces("application/json")]
-    [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
-    public Task<bool> Create([FromBody] AppUser item, string password, CancellationToken ct)
+    [HttpPost("register"), Produces("application/json")]
+    [ProducesResponseType(typeof(Guid?), StatusCodes.Status200OK)]
+    public Task<Guid?> Create([FromBody] AppUserCreateDto item, CancellationToken ct)
     {
-        return _userService.CreateUser(item, password, ct);
+        return _userService.CreateUser(item, ct);
     }
 }

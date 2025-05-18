@@ -22,13 +22,7 @@ public class InitMigration : IMigration
         _factory.Get().Execute(conn => conn.Execute("DROP TABLE IF EXISTS users;"));
         _factory.Get().Execute(conn =>
             conn.Execute(
-                @"create table users (
-                  Id uuid default gen_random_uuid() not null,
-                  FirstName varchar(120) not null,
-                  LastName  varchar(120) not null,
-                  BirthDate date,
-                  City varchar(120) not null,
-                  Hobby text default '' not null);"));
+                $"create table users (\"Id\" uuid default gen_random_uuid() not null, \"FirstName\" varchar(120) not null,\"LastName\" varchar(120) not null,\"PasswordHash\" varchar(120) not null,\"BirthDate\" date,\"Male\" bool not null,\"City\" varchar(120) not null,\"Hobby\" text default '' not null);"));
         _factory.Get().Execute(conn => conn.Execute($"insert into \"Migrations\" (id) values ('{MigrationId}');"));
     }
 }

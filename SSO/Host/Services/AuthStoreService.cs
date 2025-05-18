@@ -3,25 +3,24 @@
 public interface IAuthStoreService
 {
     string AddEntry(Guid userId);
-    Guid? GetId(string token);
+    Guid? GetId(Guid token);
 }
 
 public class AuthStoreService : IAuthStoreService
 {
-    private Dictionary<string, Guid> _authStore = new Dictionary<string, Guid>();
+    private Dictionary<Guid, Guid> _authStore = new Dictionary<Guid, Guid>();
     private const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     private int tokenLength = 20;
     private static readonly Random Random = new Random();
 
     public string AddEntry(Guid userId)
     {
-        var token =new string(Enumerable.Repeat(chars, tokenLength)
-            .Select(s => s[Random.Next(s.Length)]).ToArray());
+        var token = Guid.NewGuid();
         _authStore.Add(token, userId);
-        return token;
+        return token.ToString();
     }
 
-    public Guid? GetId(string token)
+    public Guid? GetId(Guid token)
     {
         return _authStore.ContainsKey(token) ? _authStore[token] : null;
     }

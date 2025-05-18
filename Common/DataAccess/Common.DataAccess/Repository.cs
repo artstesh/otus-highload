@@ -15,14 +15,14 @@ namespace UZ.DataAccess
             _tableName = tableName;
         }
 
-        public Task<int> CreateAsync(string[] names, object item, CancellationToken cancellationToken)
+        public Task<Guid?> CreateAsync(string[] names, object item, CancellationToken cancellationToken)
         {
             var keys = string.Join(",", names.Select(k => $"\"{k}\""));
             var args = string.Join(", ", names.Select(k => $"@{k}"));
-            string commandText = $"INSERT INTO {_tableName} (${keys}) VALUES ({args})";
-            return _factory.Get().QueryAsync(f =>
+            string commandText = $"INSERT INTO {_tableName} ({keys}) VALUES ({args}) RETURNING \"Id\"";
+            return _factory.Get().QueryAsync<Guid?>(f =>
             {
-                return f.ExecuteAsync(commandText,item);
+                return f.QueryFirstOrDefaultAsync<Guid?>(commandText,item);
             });
         }
 

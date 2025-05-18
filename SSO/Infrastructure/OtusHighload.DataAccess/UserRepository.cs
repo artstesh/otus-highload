@@ -6,7 +6,7 @@ namespace OtusHighload.DataAccess;
 
 public class UserRepository : Repository<AppUser,Guid>, IUserRepository
 {
-    public UserRepository(IOtusContextFactory factory) : base(factory, "AppUsers")
+    public UserRepository(IOtusContextFactory factory) : base(factory, "users")
     {
     }
 }

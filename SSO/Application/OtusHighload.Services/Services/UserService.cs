@@ -1,5 +1,6 @@
 ﻿using Common.Utility;
 using OtusHighload.Application.Repositories;
+using OtusHighload.Contracts.DTO;
 using OtusHighload.Entities;
 
 namespace OtusHighload.Application.Services;
@@ -9,7 +10,7 @@ public interface IUserService
     Task<List<AppUser>> List(CancellationToken ct);
     Task<AppUser?> Get(Guid id, CancellationToken ct);
     Task<bool> CheckPassword(string id, string password, CancellationToken ct);
-    Task<bool> CreateUser(AppUser appUser, string password, CancellationToken ct);
+    Task<Guid?> CreateUser(AppUserCreateDto appUser, CancellationToken ct);
     Task<bool> Update(AppUser appUser, CancellationToken ct);
 }
 
@@ -47,11 +48,10 @@ public class UserService : IUserService
         return (await _userRepository.ListWhereAsync(keys, item, ct)).Any();
     }
 
-    public async Task<bool> CreateUser(AppUser appUser, string password, CancellationToken ct)
+    public async Task<Guid?> CreateUser(AppUserCreateDto appUser, CancellationToken ct)
     {
         var keys = new[]
         {
-            "Id",
             "FirstName",
             "LastName",
             "BirthDate",
@@ -60,8 +60,8 @@ public class UserService : IUserService
             "City",
             "PasswordHash"
         };
-        appUser.PasswordHash = Md5Hasher.Hash(password);
-        return (await _userRepository.CreateAsync(keys, appUser, ct)) > 0;
+        appUser.PasswordHash = Md5Hasher.Hash(appUser.Password);
+        return await _userRepository.CreateAsync(keys, appUser, ct);
     }
 
     public async Task<bool> Update(AppUser appUser, CancellationToken ct)

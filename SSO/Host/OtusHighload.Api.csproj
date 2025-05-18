@@ -20,6 +20,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Application\OtusHighload.Services\OtusHighload.Application.csproj" />
+      <ProjectReference Include="..\Contracts\OtusHighload.Contracts\OtusHighload.Contracts.csproj" />
       <ProjectReference Include="..\Domain\OtusHighload.Entities\OtusHighload.Entities.csproj" />
       <ProjectReference Include="..\Infrastructure\OtusHighload.DataAccess\OtusHighload.DataAccess.csproj" />
       <ProjectReference Include="..\Infrastructure\OtusHighload.Registry\OtusHighload.Registry.csproj" />
