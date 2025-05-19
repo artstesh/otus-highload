@@ -23,7 +23,7 @@ namespace UZ.DataAccess
             return _factory.Get().QueryAsync<TEntity?>(f =>
             {
                 var queryArgs = new { Id = id };
-                return f.QueryFirstOrDefaultAsync<TEntity>($"SELECT * FROM {_tableName} WHERE ID = @id",queryArgs);
+                return f.QueryFirstOrDefaultAsync<TEntity>($"SELECT * FROM {_tableName} WHERE \"Id\" = @Id",queryArgs);
             });
         }
 
@@ -37,9 +37,9 @@ namespace UZ.DataAccess
 
         public Task<IEnumerable<TEntity>> ListWhereAsync(string[] names, object item, CancellationToken cancellationToken = default)
         {
-            var args = string.Join(" and ", names.Select(k => $"\"{k}\" = @{k.ToLower()}"));
+            var args = string.Join(" and ", names.Select(k => $"\"{k}\" = @{k}"));
 
-            string commandText = $"SELECT * FROM {_tableName} WHERE {args}";
+            string commandText = $"SELECT * FROM {_tableName} WHERE {args};";
             return _factory.Get().QueryAsync(f =>
             {
                 return f.QueryAsync<TEntity>(commandText,item);

@@ -23,6 +23,7 @@
         <None Include="services\rabbitmq\Dockerfile" />
         <None Include="services\rabbitmq\etc\enabled_plugins" />
         <None Include="services\rabbitmq\etc\rabbitmq.conf" />
+        <None Include="start-production.bat" />
         <None Include="start.bat" />
     </ItemGroup>
     <ItemGroup>

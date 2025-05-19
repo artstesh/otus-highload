@@ -25,7 +25,9 @@ public class LoginController: Controller
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> Create([FromBody] SignInModel data, CancellationToken ct)
     {
-        var valid = await _userService.CheckPassword(data.UserId.ToString(), data.Password, ct);
+        var logged = _authStoreService.CheckExisting(data.UserId);
+        if (logged != null) return Ok(logged);
+        var valid = await _userService.CheckPassword(data.UserId, data.Password, ct);
         if (valid) return Ok(_authStoreService.AddEntry(data.UserId));
         return BadRequest();
     }

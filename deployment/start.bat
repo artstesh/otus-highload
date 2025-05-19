@@ -1,1 +1,1 @@
-docker-compose -f docker-compose.yml -f docker-compose.override.yml down && docker-compose -f docker-compose.yml -f docker-compose.override.yml build && docker-compose -f docker-compose.yml -f docker-compose.override.yml up postgres sso
+docker-compose --profile development -f docker-compose.yml -f docker-compose.override.yml down && docker-compose --profile development -f docker-compose.yml -f docker-compose.override.yml build && docker-compose --profile development -f docker-compose.yml -f docker-compose.override.yml up

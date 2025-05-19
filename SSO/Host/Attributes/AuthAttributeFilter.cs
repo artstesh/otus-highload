@@ -4,27 +4,22 @@ using OtusHighload.Services;
 
 namespace OtusHighload.Attributes;
 
-public class AuthAttribute : TypeFilterAttribute
+public class AuthAttribute : ActionFilterAttribute
 {
-    public AuthAttribute() : base(typeof(AuthAttributeFilter))
-    {
+    private IAuthStoreService? storeService;
+
+    public override void OnActionExecuting(ActionExecutingContext context)
+    {var token = context.HttpContext.Request.Headers["x-token"].ToString();
+        if (string.IsNullOrWhiteSpace(token) || GetService(context).GetId(Guid.Parse(token)) == null)
+            context.Result = new UnauthorizedResult();
+        else
+            base.OnActionExecuting(context);
     }
-}
-
-public class AuthAttributeFilter : IAuthorizationFilter
-{
-    private readonly IAuthStoreService storeService;
-
-    public AuthAttributeFilter(IAuthStoreService storeService)
+    private IAuthStoreService GetService(ActionExecutingContext context)
     {
-        this.storeService = storeService;
-    }
-
-
-    public void OnAuthorization(AuthorizationFilterContext context)
-    {
-        var token = context.HttpContext.Request.Headers["x-token"].ToString();
-        if (string.IsNullOrWhiteSpace(token) || storeService.GetId(Guid.Parse(token)) == null)
-            context.Result = new ForbidResult();
+        if (storeService != null) return storeService;
+        var svc = context.HttpContext.RequestServices;
+        storeService = svc.GetService<IAuthStoreService>();
+        return storeService!;
     }
 }

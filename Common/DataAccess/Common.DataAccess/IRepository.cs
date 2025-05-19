@@ -6,6 +6,6 @@
     {
         Task<Guid?> CreateAsync(string[] names, object item, CancellationToken cancellationToken);
         Task<int> UpdateAsync(string[] names, object item, CancellationToken token);
-        Task<int> DeleteAsync(string id, CancellationToken cancellationToken);
+        Task<int> DeleteAsync(TEntity id, CancellationToken cancellationToken);
     }
 }

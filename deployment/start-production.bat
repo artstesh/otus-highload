@@ -1,0 +1,1 @@
+docker-compose --profile production -f docker-compose.yml -f docker-compose.production.yml down && docker-compose --profile production -f docker-compose.yml -f docker-compose.production.yml build && docker-compose --profile production -f docker-compose.yml -f docker-compose.production.yml up

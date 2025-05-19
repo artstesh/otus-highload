@@ -37,12 +37,13 @@ namespace UZ.DataAccess
             });
         }
 
-        public Task<int> DeleteAsync(string id, CancellationToken cancellationToken)
+        public Task<int> DeleteAsync(TEntity id, CancellationToken cancellationToken)
         {
-            string commandText = $"DELETE FROM {_tableName} WHERE \"Id\" = '${id}';";
+            var args = new { id = id };
+            string commandText = $"DELETE FROM {_tableName} WHERE \"Id\" = @id;";
             return _factory.Get().QueryAsync(f =>
             {
-                return f.ExecuteAsync(commandText);
+                return f.ExecuteAsync(commandText, args);
             });
         }
     }

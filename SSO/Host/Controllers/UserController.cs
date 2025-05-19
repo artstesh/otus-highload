@@ -19,7 +19,7 @@ public class UserController : Controller
     }
 
     [Auth]
-    [HttpGet(""), Produces("application/json")]
+    [HttpGet("list"), Produces("application/json")]
     [ProducesResponseType(typeof(List<AppUser>), StatusCodes.Status200OK)]
     public Task<List<AppUser>> List(CancellationToken ct)
     {

@@ -9,7 +9,7 @@ public interface IUserService
 {
     Task<List<AppUser>> List(CancellationToken ct);
     Task<AppUser?> Get(Guid id, CancellationToken ct);
-    Task<bool> CheckPassword(string id, string password, CancellationToken ct);
+    Task<bool> CheckPassword(Guid id, string password, CancellationToken ct);
     Task<Guid?> CreateUser(AppUserCreateDto appUser, CancellationToken ct);
     Task<bool> Update(AppUser appUser, CancellationToken ct);
 }
@@ -33,7 +33,7 @@ public class UserService : IUserService
         return await _userRepository.GetAsync(id, ct);
     }
 
-    public async Task<bool> CheckPassword(string id, string password, CancellationToken ct)
+    public async Task<bool> CheckPassword(Guid id, string password, CancellationToken ct)
     {
         var keys = new[]
         {

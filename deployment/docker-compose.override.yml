@@ -11,6 +11,8 @@ services:
     ports:
       - "5001:443"
       - "8001:80"
+    depends_on:
+      - postgres
 
   postgres:
     environment:
