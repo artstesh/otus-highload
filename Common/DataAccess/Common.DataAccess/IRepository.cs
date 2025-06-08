@@ -1,4 +1,4 @@
-﻿namespace UZ.DataAccess
+﻿namespace Common.DataAccess
 {
     public interface IRepository<TEntity, TPrimaryKey> : IReadonlyRepository<TEntity, TPrimaryKey>
         where TEntity : class, IEntity<TPrimaryKey>
@@ -7,5 +7,6 @@
         Task<Guid?> CreateAsync(string[] names, object item, CancellationToken cancellationToken);
         Task<int> UpdateAsync(string[] names, object item, CancellationToken token);
         Task<int> DeleteAsync(TEntity id, CancellationToken cancellationToken);
+        Task BulkCreateAsync(string[] names, List<object> items, CancellationToken cancellationToken);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using OtusHighload.Application.Repositories;
 using OtusHighload.Entities;
-using UZ.DataAccess;
+using Common.DataAccess;
+using Common.DataAccess;
 
 namespace OtusHighload.DataAccess;
 

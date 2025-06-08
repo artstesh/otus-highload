@@ -1,4 +1,4 @@
-﻿namespace UZ.DataAccess
+﻿namespace Common.DataAccess
 {
     public interface IEntity
     {

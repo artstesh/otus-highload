@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace UZ.DataAccess
+namespace Common.DataAccess
 {
     public static class ServiceCollectionExtensions
     {

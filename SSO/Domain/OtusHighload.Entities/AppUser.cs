@@ -1,5 +1,5 @@
 ﻿using System.Text.Json.Serialization;
-using UZ.DataAccess;
+using Common.DataAccess;
 
 namespace OtusHighload.Entities;
 

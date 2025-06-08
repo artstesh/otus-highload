@@ -1,10 +1,16 @@
 ﻿using Npgsql;
+using Polly;
+using System.Data.SqlClient;
+using Common.DataAccess;
 
 namespace OtusHighload.DataAccess;
 
 public class OtusContext
 {
     private string _connectionString;
+
+    private Polly.Retry.AsyncRetryPolicy policy = Policy.Handle<NpgsqlException>(ex => ex.IsTransient)
+        .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
 
     public OtusContext(string connectionString)
     {
@@ -13,35 +19,50 @@ public class OtusContext
 
     public async Task<T> QueryAsync<T>(Func<NpgsqlConnection, Task<T>> func)
     {
-        var con = new NpgsqlConnection(connectionString: _connectionString);
-        con.Open();
-        var result = await func(con);
-        await con.CloseAsync();
+        T result = default;
+        await ApplyPolicy(async c => result = await func(c));
         return result;
+    }
+
+    public Task ExecuteAsync(Func<NpgsqlConnection, Task> func)
+    {
+        return ApplyPolicy(async c =>
+        {
+            await func(c);
+            return true;
+        });
     }
 
     public T Query<T>(Func<NpgsqlConnection, T> func)
     {
-        var con = new NpgsqlConnection(connectionString: _connectionString);
-        con.Open();
-        var result = func(con);
-        con.Close();
+        var connection = ConnectionPool.Instance.GetConnection(_connectionString);
+        var result = func(connection);
+        ConnectionPool.Instance.ReturnConnection(connection);
         return result;
-    }
-
-    public async Task ExecuteAsync(Func<NpgsqlConnection, Task> func)
-    {
-        var con = new NpgsqlConnection(connectionString: _connectionString);
-        con.Open();
-        await func(con);
-        await con.CloseAsync();
     }
 
     public void Execute(Action<NpgsqlConnection> func)
     {
-        var con = new NpgsqlConnection(connectionString: _connectionString);
-        con.Open();
-        func(con);
-        con.Close();
+        var connection = new NpgsqlConnection(_connectionString);
+        connection.Open();
+        func(connection);
+        connection.Close();
+    }
+
+    private async Task<T> ApplyPolicy<T>(Func<NpgsqlConnection, Task<T>> func)
+    {
+        var connection = ConnectionPool.Instance.GetConnection(_connectionString);
+
+        T result;
+        try
+        {
+            result = await policy.ExecuteAsync(() => func(connection));
+        }
+        finally
+        {
+            ConnectionPool.Instance.ReturnConnection(connection);
+        }
+
+        return result;
     }
 }

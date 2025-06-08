@@ -34,7 +34,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Http", "Http", "{02E0C4EA-9
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utility", "Utility", "{786F8241-7205-40C8-B4A8-B315559A22E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UZ.DataAccess", "Common\DataAccess\Common.DataAccess\UZ.DataAccess.csproj", "{7466B7AC-5935-446F-91B4-5636E0041413}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.DataAccess", "Common\DataAccess\Common.DataAccess\Common.DataAccess.csproj", "{7466B7AC-5935-446F-91B4-5636E0041413}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Http", "Common\Http\Common.Http\Common.Http.csproj", "{E76BD238-0F71-46E6-B51D-BCC6C91B6115}"
 EndProject

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using OtusHighload.Application.Services;
@@ -34,10 +35,25 @@ public class UserController : Controller
         return _userService.Get(id, ct);
     }
 
+    [Auth]
+    [HttpGet("search/{search}"), Produces("application/json")]
+    [ProducesResponseType(typeof(List<AppUser>), StatusCodes.Status200OK)]
+    public Task<List<AppUser>> SearchUsers(string search, CancellationToken ct)
+    {
+        return _userService.SearchByName(search, ct);
+    }
+
     [HttpPost("register"), Produces("application/json")]
     [ProducesResponseType(typeof(Guid?), StatusCodes.Status200OK)]
     public Task<Guid?> Create([FromBody] AppUserCreateDto item, CancellationToken ct)
     {
         return _userService.CreateUser(item, ct);
+    }
+
+    [HttpPost("generate"), Produces("application/json")]
+    [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+    public Task<bool> CreateRandomUsers(CancellationToken ct, int count = 1000000)
+    {
+        return _userService.CreateRandomUsers(ct, count);
     }
 }

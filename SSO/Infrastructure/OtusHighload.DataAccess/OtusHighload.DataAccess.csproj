@@ -12,7 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\Common\DataAccess\Common.DataAccess\UZ.DataAccess.csproj" />
+      <ProjectReference Include="..\..\..\Common\DataAccess\Common.DataAccess\Common.DataAccess.csproj" />
       <ProjectReference Include="..\..\Application\OtusHighload.Services\OtusHighload.Application.csproj" />
       <ProjectReference Include="..\..\Domain\OtusHighload.Entities\OtusHighload.Entities.csproj" />
     </ItemGroup>

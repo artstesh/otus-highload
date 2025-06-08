@@ -8,7 +8,7 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["SSO/Host/OtusHighload.Api.csproj", "SSO/Host/"]
 COPY ["SSO/Domain/OtusHighload.Entities/OtusHighload.Entities.csproj", "SSO/Domain/OtusHighload.Entities/"]
-COPY ["Common/DataAccess/Common.DataAccess/UZ.DataAccess.csproj", "Common/DataAccess/Common.DataAccess/"]
+COPY ["Common/DataAccess/Common.DataAccess/Common.DataAccess.csproj", "Common/DataAccess/Common.DataAccess/"]
 COPY ["SSO/Application/OtusHighload.Services/OtusHighload.Application.csproj", "SSO/Application/OtusHighload.Services/"]
 COPY ["Common/Utility/Common.Utility.csproj", "Common/Utility/"]
 COPY ["SSO/Infrastructure/OtusHighload.DataAccess/OtusHighload.DataAccess.csproj", "SSO/Infrastructure/OtusHighload.DataAccess/"]

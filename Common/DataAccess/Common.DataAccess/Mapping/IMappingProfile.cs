@@ -1,4 +1,4 @@
-﻿namespace UZ.DataAccess.Mapping
+﻿namespace Common.DataAccess.Mapping
 {
     public interface IMappingFromProfile<T, T2>
     {

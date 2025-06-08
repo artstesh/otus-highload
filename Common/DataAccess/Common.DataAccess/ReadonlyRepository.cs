@@ -1,8 +1,10 @@
-﻿using Dapper;
+﻿using System.Diagnostics;
+using Common.DataAccess;
+using Dapper;
 using Microsoft.EntityFrameworkCore;
 using OtusHighload.DataAccess;
 
-namespace UZ.DataAccess
+namespace Common.DataAccess
 {
     public abstract class ReadonlyRepository<TEntity, TPrimaryKey> :
         IReadonlyRepository<TEntity, TPrimaryKey>
@@ -44,6 +46,13 @@ namespace UZ.DataAccess
             {
                 return f.QueryAsync<TEntity>(commandText,item);
             });
+        }
+
+        public Task<IEnumerable<TEntity>> SelectLikeAsync(string[] names, object item, CancellationToken cancellationToken = default)
+        {
+            var args = string.Join($" or ", names.Select(k => $"\"{k}\" LIKE @{k}"));
+            string commandText = $"SELECT * FROM {_tableName} WHERE {args};";
+            return _factory.Get().QueryAsync(f => f.QueryAsync<TEntity>(commandText,item));
         }
     }
 }

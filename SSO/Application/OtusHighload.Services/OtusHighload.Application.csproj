@@ -7,7 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\Common\DataAccess\Common.DataAccess\UZ.DataAccess.csproj" />
+      <PackageReference Include="Faker" Version="1.2.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\Common\DataAccess\Common.DataAccess\Common.DataAccess.csproj" />
       <ProjectReference Include="..\..\..\Common\Utility\Common.Utility.csproj" />
       <ProjectReference Include="..\..\Contracts\OtusHighload.Contracts\OtusHighload.Contracts.csproj" />
       <ProjectReference Include="..\..\Domain\OtusHighload.Entities\OtusHighload.Entities.csproj" />

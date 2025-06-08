@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using OtusHighload.Application.Repositories;
 using OtusHighload.Application.Services;
 using OtusHighload.DataAccess;
-using UZ.DataAccess;
+using Common.DataAccess;
 
 namespace SSO.ComponentRegistry
 {
