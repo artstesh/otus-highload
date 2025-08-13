@@ -36,11 +36,11 @@ public class UserController : Controller
     }
 
     [Auth]
-    [HttpGet("search/{search}"), Produces("application/json")]
+    [HttpGet("search"), Produces("application/json")]
     [ProducesResponseType(typeof(List<AppUser>), StatusCodes.Status200OK)]
-    public Task<List<AppUser>> SearchUsers(string search, CancellationToken ct)
+    public Task<List<AppUser>> SearchUsers(string? firstName, string? lastName, CancellationToken ct)
     {
-        return _userService.SearchByName(search, ct);
+        return _userService.SearchByName(firstName, lastName, ct);
     }
 
     [HttpPost("register"), Produces("application/json")]

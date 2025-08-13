@@ -50,7 +50,7 @@ namespace Common.DataAccess
 
         public Task<IEnumerable<TEntity>> SelectLikeAsync(string[] names, object item, CancellationToken cancellationToken = default)
         {
-            var args = string.Join($" or ", names.Select(k => $"\"{k}\" LIKE @{k}"));
+            var args = string.Join($" and ", names.Select(k => $"\"{k}\" ILIKE @{k}"));
             string commandText = $"SELECT * FROM {_tableName} WHERE {args};";
             return _factory.Get().QueryAsync(f => f.QueryAsync<TEntity>(commandText,item));
         }

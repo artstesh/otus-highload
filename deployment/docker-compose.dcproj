@@ -19,10 +19,6 @@
         <None Include="proxy\certs\localhost-selfsigned.crt" />
         <None Include="proxy\certs\localhost-selfsigned.key" />
         <None Include="proxy\proxy.conf" />
-        <None Include="services\kibana\kibana.yml" />
-        <None Include="services\rabbitmq\Dockerfile" />
-        <None Include="services\rabbitmq\etc\enabled_plugins" />
-        <None Include="services\rabbitmq\etc\rabbitmq.conf" />
         <None Include="start-production.bat" />
         <None Include="start.bat" />
     </ItemGroup>
