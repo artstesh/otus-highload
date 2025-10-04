@@ -1,0 +1,34 @@
+﻿version: '3.8'
+
+services:
+  sso:
+    environment:
+      "ASPNETCORE_ENVIRONMENT": "Development"
+      "ASPNETCORE_URLS": "https://+;http://+"
+      "Kestrel:Certificates:Default:Path": "/app/aspnetapp.pfx"
+      "Kestrel:Certificates:Default:Password": "123"
+      "Kestrel:Certificates:Default:AllowInvalid": "true"
+      "ConnectionStrings__DefaultConnection": "User ID=postgres;Password=postgres;Host=postgres;Port=5432;Database=postgres;Pooling=true;"
+      "ConnectionStrings__Slave1Connection": "User ID=postgres;Password=postgres;Host=postgres-slave1;Port=5433;Database=postgres;Pooling=true;"
+      "ConnectionStrings__Slave2Connection": "User ID=postgres;Password=postgres;Host=postgres-slave2;Port=5434;Database=postgres;Pooling=true;"
+    ports:
+      - "5001:443"
+      - "8001:80"
+
+  postgres:
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  postgres-slave1:
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  postgres-slave2:
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres

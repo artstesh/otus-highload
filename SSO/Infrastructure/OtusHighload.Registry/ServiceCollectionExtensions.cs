@@ -14,9 +14,12 @@ namespace SSO.ComponentRegistry
             services
                 .AddScoped<IUserRepository, UserRepository>()
                 .AddScoped<IUserService, UserService>()
-                .AddSingleton<IOtusContextFactory>(new OtusContextFactory("User ID=postgres;Password=postgres;Host=postgres;Port=5432;Database=otus_highload;Pooling=true;"))
                 .AddSingleton<IOtusContextFactory, OtusContextFactory>(p =>
-                    new OtusContextFactory(configuration.GetConnectionString("DefaultConnection")!));
+                    new OtusContextFactory(configuration.GetConnectionString("DefaultConnection")!, new []
+                    {
+                        configuration.GetConnectionString("Slave1Connection")!,
+                        configuration.GetConnectionString("Slave2Connection")!
+                    }));
 
             return services;
         }

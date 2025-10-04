@@ -1,0 +1,1 @@
+docker-compose --profile development -f replica-compose.yml -f replica-compose.override.yml down && docker-compose --profile development -f replica-compose.yml -f replica-compose.override.yml build && docker-compose --profile development -f replica-compose.yml -f replica-compose.override.yml up

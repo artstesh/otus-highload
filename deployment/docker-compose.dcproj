@@ -25,4 +25,21 @@
     <ItemGroup>
         <None Remove="proxy\**" />
     </ItemGroup>
+    <ItemGroup>
+      <Content Include="Replication\.env" />
+      <Content Include="Replication\check-status.bat" />
+      <Content Include="Replication\Postgres\Master\Dockerfile" />
+      <Content Include="Replication\Postgres\Master\init-scripts\02-create-replication-user.sh" />
+      <Content Include="Replication\Postgres\Master\init-scripts\01-init-master.sh" />
+      <Content Include="Replication\Postgres\Master\init-scripts\03-configure-pg-hba.sh" />
+      <Content Include="Replication\Postgres\Slave1\Dockerfile" />
+      <Content Include="Replication\Postgres\Slave1\init-scripts\init-slave.sh" />
+      <Content Include="Replication\Postgres\Slave2\Dockerfile" />
+      <Content Include="Replication\Postgres\Slave2\init-scripts\init-slave.sh" />
+      <Content Include="Replication\replica-compose.override.yml">
+        <DependentUpon>replica-compose.yml</DependentUpon>
+      </Content>
+      <Content Include="Replication\replica-compose.yml" />
+      <Content Include="Replication\start-replica.bat" />
+    </ItemGroup>
 </Project>

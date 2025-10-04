@@ -17,7 +17,7 @@ public class InitMigration : IMigration
         var exists = _factory.Get().Query<int>(conn =>
         {
             return conn.QueryFirst<int>($"select count(*) from \"Migrations\" where id = '{MigrationId}'");
-        }) > 0;
+        }, true) > 0;
         if (exists) return;
         _factory.Get().Execute(conn => conn.Execute("DROP TABLE IF EXISTS users;"));
         _factory.Get().Execute(conn =>

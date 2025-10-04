@@ -1,0 +1,89 @@
+﻿version: '3.8'
+
+services:
+  sso:
+    image: ${DOCKER_REGISTRY}/africa-platform/sso:${TAG}
+    container_name: sso
+    restart: always
+    build:
+      context: ../../
+      dockerfile: SSO/Host//Dockerfile
+    profiles:
+      - development
+      - production
+    networks:
+      - postgres-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      postgres-slave1:
+        condition: service_healthy
+      postgres-slave2:
+        condition: service_healthy
+
+  #### Infrastructure
+  postgres:
+    build: ./postgres/Master
+    container_name: postgres
+    ports:
+      - 5432:5432
+    profiles:
+      - development
+    networks:
+      - postgres-network
+    volumes:
+      - postgres:/var/lib/postgresql/data/
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  postgres-slave1:
+    build: ./postgres/Slave1
+    container_name: postgres-slave1
+    ports:
+      - "5433:5432"
+    profiles:
+      - development
+    networks:
+      - postgres-network
+    volumes:
+      - slave1:/var/lib/postgresql/data/
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  postgres-slave2:
+    build: ./postgres/Slave2
+    container_name: postgres-slave2
+    ports:
+      - "5434:5432"
+    profiles:
+      - development
+    networks:
+      - postgres-network
+    volumes:
+      - slave2:/var/lib/postgresql/data/
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres:
+  slave1:
+  slave2:
+
+networks:
+  postgres-network:
+    driver: bridge
