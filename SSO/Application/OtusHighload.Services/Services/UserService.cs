@@ -87,11 +87,11 @@ public class UserService : IUserService
 
     public async Task<bool> CreateRandomUsers(CancellationToken ct, int count = 10000)
     {
-        List<AppUser> users = new List<AppUser>(10000);
+        List<AppUser> users = new List<AppUser>(count);
         for (var i = 0; i < count; i++)
         {
             users.Add(UserGenerator.GenerateUser());
-            if (users.Count >= 10000 || i >= count)
+            if (users.Count >= count || i >= count)
             {
                 await _userRepository.BulkCreateAsync(userKeys, users.Cast<object>().ToList(), ct);
                 users.Clear();

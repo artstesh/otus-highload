@@ -87,3 +87,4 @@ volumes:
 networks:
   postgres-network:
     driver: bridge
+    name: your_project_postgres-network

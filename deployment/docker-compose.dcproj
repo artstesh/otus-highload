@@ -26,6 +26,12 @@
         <None Remove="proxy\**" />
     </ItemGroup>
     <ItemGroup>
+      <Content Include="Monitoring\dashboards\dashboard.yml" />
+      <Content Include="Monitoring\dashboards\postgresql-replication.json" />
+      <Content Include="Monitoring\datasources\prometheus.yml" />
+      <Content Include="Monitoring\docker-compose.monitoring.yml" />
+      <Content Include="Monitoring\prometheus.yml" />
+      <Content Include="Monitoring\start.bat" />
       <Content Include="Replication\.env" />
       <Content Include="Replication\check-status.bat" />
       <Content Include="Replication\Postgres\Master\Dockerfile" />
