@@ -9,9 +9,9 @@ const searchTrend = new Trend('search_endpoint_duration');
 
 export const options = {
     stages: [
-        { duration: '1m', target: 50 },  // Постепенно наращиваем до 50 пользователей
-        { duration: '3m', target: 50 },  // Держим нагрузку
-        { duration: '1m', target: 0 },   // Постепенно снижаем до 0
+        { duration: '10s', target: 15 },  // Постепенно наращиваем до 50 пользователей
+        { duration: '10s', target: 15 },  // Держим нагрузку
+        { duration: '10s', target: 0 },   // Постепенно снижаем до 0
     ],
     thresholds: {
         http_req_duration: ['p(95)<500'], // 95% запросов должны быть быстрее 500мс
@@ -42,42 +42,42 @@ export function setup() {
     const response = http.post(loginUrl, payload, params);
     
     if (response.status === 200) {
-        const body = response.json();
-        const token = body.Access_Token;
+        const token = response.json();
         console.log('Токен успешно получен');
-        return { token };
+        return token;
     } else {
         console.error(`Ошибка авторизации: ${response.status} - ${response.body}`);
         throw new Error(`Failed to get auth token: ${response.status}`);
     }
 }
 
-export function init(data) {
-    authToken = data.token;
-    console.log('Токен установлен для VU');
-}
-
-export default function () {
-    const BASE_URL = 'https://localhost:5001'; // Обновите URL если нужно
+export default function (data) {
+    // Проверяем, что токен есть
+	const authToken = data;
+    if (!authToken) {
+        console.error('Токен отсутствует!');
+        return;
+    }
+	
+    const BASE_URL = 'https://localhost:5001';
 
     const headers = {
         'x-token': authToken,
         'Content-Type': 'application/json',
     };
 
-    const searchUrl = `${BASE_URL}/User/search?firstName=Antlovy&lastname=Abac`;
+    const searchUrl = `${BASE_URL}/User/search?firstName=Kar&lastname=Mic`;
     
     const searchResponse = http.get(searchUrl, { headers: headers });
     
     const searchCheck = check(searchResponse, {
         'search user status is 200': (r) => r.status === 200,
-        'search user response time OK': (r) => r.timings.duration < 1000,
-        'has x-token header': (r) => r.request.headers['x-token'] === authToken,
+        'search user response time OK': (r) => r.timings.duration < 300,
+        'has x-token header': (r) => r.request.headers['X-Token'][0] === authToken,
     });
     
     errorRate.add(!searchCheck);
     searchTrend.add(searchResponse.timings.duration);
 
-    // Пауза между итерациями
     sleep(1);
 }

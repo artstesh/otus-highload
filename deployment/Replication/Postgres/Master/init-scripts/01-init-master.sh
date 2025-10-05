@@ -1,12 +1,12 @@
-﻿#!/bin/bash
+#!/bin/bash
 set -e
 
-echo "Настройка мастер-сервера PostgreSQL..."
+echo "Setting up master PostgreSQL..."
 
-# Создаем кастомный конфиг для мастера
+# Creating of a custom setting
 cat >> /var/lib/postgresql/data/postgresql.conf << EOF
 
-# Репликация настройки
+# Settings
 wal_level = replica
 max_wal_senders = 10
 max_replication_slots = 5
@@ -16,4 +16,4 @@ archive_command = 'cd .'
 listen_addresses = '*'
 EOF
 
-echo "Мастер-сервер настроен для репликации"
+echo "Master is ready for replication"

@@ -1,30 +1,28 @@
-﻿#!/bin/bash
+#!/bin/bash
 set -e
 
-echo "Настройка slave1 сервера..."
+echo "Setting up the slave1..."
 
-# Ждем доступности мастера
-echo "Ожидание доступности мастера..."
+echo "Waiting for the master..."
 until pg_isready -h postgres -p 5432 -U postgres; do
   sleep 2
 done
 
-echo "Мастер доступен, начинаем настройку репликации..."
+echo "Master is ready, setting up..."
 
-# Останавливаем PostgreSQL если запущен
+# Stop PostgreSQL
 pg_ctl -D "$PGDATA" -m fast -w stop
 
-# Очищаем data directory
+# Clean data directory
 rm -rf "$PGDATA"/*
 
-# Создаем базовую резервную копию с мастера
-echo "Создание базовой резервной копии с мастера..."
+echo "Pulling from the master..."
 PGPASSWORD=replica_password pg_basebackup -h postgres -p 5432 -U replica_user -D "$PGDATA" -Fp -Xs -P -R -S replica_slot1
 
-# Создаем файл standby сигнала
+# Creating of a standby signal
 touch "$PGDATA/standby.signal"
 
-# Запускаем PostgreSQL
+# Up PostgreSQL
 pg_ctl -D "$PGDATA" -w start
 
-echo "Slave1 настроен и запущен как реплика"
+echo "Slave1 is ready"
