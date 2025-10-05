@@ -1,11 +1,11 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Common.DataAccess;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OtusHighload.Application.Repositories;
 using OtusHighload.Application.Services;
-using OtusHighload.DataAccess;
-using Common.DataAccess;
+using OtusHighload.DataAccess.Repositories;
 
-namespace SSO.ComponentRegistry
+namespace OtusHighload.Registry
 {
     public static class ServiceCollectionExtensions
     {
@@ -20,7 +20,6 @@ namespace SSO.ComponentRegistry
                 .AddScoped<IFriendshipService, FriendshipService>()
                 .AddScoped<IFeedCacheService, FeedCacheService>()
                 .AddScoped<ICacheRebuildService, CacheRebuildService>()
-                .AddSingleton<IOtusContextFactory>(new OtusContextFactory("User ID=postgres;Password=postgres;Host=postgres;Port=5432;Database=postgres;Pooling=true;"))
                 .AddSingleton<IOtusContextFactory, OtusContextFactory>(p =>
                     new OtusContextFactory(configuration.GetConnectionString("DefaultConnection")!));
 

@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using OtusHighload.Entities;
 
-namespace OtusHighload.Contracts.DTO;
+namespace OtusHighload.Contracts.Models;
 
 public class AppUserCreateDto : AppUser
 {

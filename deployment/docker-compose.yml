@@ -7,13 +7,27 @@ services:
     restart: always
     build:
       context: ../
-      dockerfile: SSO/Host//Dockerfile
+      dockerfile: SSO/Host/Dockerfile
     profiles:
       - development
       - production
     depends_on:
       - postgres
       - redis
+
+  dialogs:
+    image: ${DOCKER_REGISTRY}/africa-platform/dialogs:${TAG}
+    container_name: dialogs
+    restart: always
+    build:
+      context: ../
+      dockerfile: Dialogs/Host/Dialogs.Api/Dockerfile
+    profiles:
+      - development
+      - production
+    depends_on:
+      - dialogs-pg-1
+      - dialogs-pg-2
 
   #### Infrastructure
   postgres:
@@ -26,6 +40,26 @@ services:
     volumes:
       - postgres:/var/lib/postgresql/data/
 
+  dialogs-pg-1:
+    image: postgres:13-alpine
+    container_name: dialogs-pg-1
+    ports:
+      - 5433:5432
+    profiles:
+      - development
+    volumes:
+      - dialogs_pg_1:/var/lib/postgresql/data/
+
+  dialogs-pg-2:
+    image: postgres:13-alpine
+    container_name: dialogs-pg-2
+    ports:
+      - 5434:5432
+    profiles:
+      - development
+    volumes:
+      - dialogs_pg_2:/var/lib/postgresql/data/
+
   redis:
     image: redis:7-alpine
     ports:
@@ -35,6 +69,8 @@ services:
 
 volumes:
   postgres:
+  dialogs_pg_1:
+  dialogs_pg_2:
   redis_data:
 
 networks:

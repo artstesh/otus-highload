@@ -1,4 +1,5 @@
-﻿using Dapper;
+﻿using Common.DataAccess;
+using Dapper;
 
 namespace OtusHighload.DataAccess.Migrations;
 

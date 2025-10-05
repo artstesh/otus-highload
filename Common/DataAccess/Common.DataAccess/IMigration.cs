@@ -1,4 +1,4 @@
-﻿namespace OtusHighload.DataAccess.Migrations;
+﻿namespace Common.DataAccess;
 
 public abstract class IMigration
 {

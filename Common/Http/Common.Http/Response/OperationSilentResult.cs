@@ -1,4 +1,4 @@
-namespace SSO.Contracts
+namespace UZ.Http.Response
 {
     /// <summary>
     /// Represents the result of an operation.

@@ -1,4 +1,4 @@
-﻿namespace OtusHighload.DataAccess;
+﻿namespace Common.DataAccess;
 
 public interface IOtusContextFactory
 {
@@ -15,9 +15,16 @@ public class OtusContextFactory : IOtusContextFactory
         _connectionString = connectionString;
     }
 
+    public OtusContextFactory()
+    {
+        _connectionString = string.Empty;
+    }
+
     public OtusContext Get(string? connectionString = null)
     {
-        return new OtusContext(connectionString ?? _connectionString);
+        var cs = connectionString ?? _connectionString;
+        if (string.IsNullOrEmpty(cs)) throw new ArgumentNullException(nameof(connectionString));
+        return new OtusContext(cs);
     }
 
     public string GetConnectionString()

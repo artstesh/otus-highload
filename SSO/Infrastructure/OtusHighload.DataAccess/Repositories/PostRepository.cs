@@ -3,7 +3,7 @@ using Dapper;
 using OtusHighload.Application.Repositories;
 using OtusHighload.Entities;
 
-namespace OtusHighload.DataAccess;
+namespace OtusHighload.DataAccess.Repositories;
 
 public class PostRepository: Repository<Post,Guid>, IPostRepository
 {

@@ -1,5 +1,4 @@
 ﻿using OtusHighload.Application.Repositories;
-using OtusHighload.DataAccess;
 using OtusHighload.Entities;
 
 namespace OtusHighload.Application.Services;

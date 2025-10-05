@@ -2,7 +2,6 @@
 using Common.DataAccess;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
-using OtusHighload.DataAccess;
 
 namespace Common.DataAccess
 {
