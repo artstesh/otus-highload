@@ -9,8 +9,8 @@ const searchTrend = new Trend('search_endpoint_duration');
 
 export const options = {
     stages: [
-        { duration: '10s', target: 15 },  // Постепенно наращиваем до 50 пользователей
-        { duration: '10s', target: 15 },  // Держим нагрузку
+        { duration: '10s', target: 45 },  // Постепенно наращиваем до 50 пользователей
+        { duration: '10s', target: 45 },  // Держим нагрузку
         { duration: '10s', target: 0 },   // Постепенно снижаем до 0
     ],
     thresholds: {
@@ -66,7 +66,7 @@ export default function (data) {
         'Content-Type': 'application/json',
     };
 
-    const searchUrl = `${BASE_URL}/User/search?firstName=Kar&lastname=Mic`;
+    const searchUrl = `${BASE_URL}/User/search?firstName=Kara&lastname=Mic`;
     
     const searchResponse = http.get(searchUrl, { headers: headers });
     
