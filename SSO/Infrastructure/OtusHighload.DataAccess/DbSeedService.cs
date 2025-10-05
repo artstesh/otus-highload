@@ -15,7 +15,8 @@ public class DbSeedService
         _contextFactory = contextFactory;
         _migrations = new List<IMigration>
         {
-            new InitMigration(contextFactory)
+            new InitMigration(contextFactory),
+            new PostsMigration(contextFactory)
         };
     }
 

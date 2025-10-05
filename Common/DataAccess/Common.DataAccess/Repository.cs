@@ -11,7 +11,7 @@ namespace Common.DataAccess
         where TEntity : class, IEntity<TPrimaryKey>
         where TPrimaryKey : IEquatable<TPrimaryKey>
     {
-        private readonly string _tableName;
+        protected readonly string _tableName;
 
         public Repository(IOtusContextFactory factory, string tableName) : base(factory, tableName)
         {
@@ -55,7 +55,7 @@ namespace Common.DataAccess
             return _factory.Get().QueryAsync(f => { return f.ExecuteAsync(commandText, item); });
         }
 
-        public Task<int> DeleteAsync(TEntity id, CancellationToken cancellationToken)
+        public Task<int> DeleteAsync(TPrimaryKey id, CancellationToken cancellationToken)
         {
             var args = new { id = id };
             string commandText = $"DELETE FROM {_tableName} WHERE \"Id\" = @id;";

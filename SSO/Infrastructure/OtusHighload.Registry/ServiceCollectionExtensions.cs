@@ -13,7 +13,13 @@ namespace SSO.ComponentRegistry
         {
             services
                 .AddScoped<IUserRepository, UserRepository>()
+                .AddScoped<IPostRepository, PostRepository>()
+                .AddScoped<IFriendRepository, FriendRepository>()
                 .AddScoped<IUserService, UserService>()
+                .AddScoped<IPostService, PostService>()
+                .AddScoped<IFriendshipService, FriendshipService>()
+                .AddScoped<IFeedCacheService, FeedCacheService>()
+                .AddScoped<ICacheRebuildService, CacheRebuildService>()
                 .AddSingleton<IOtusContextFactory>(new OtusContextFactory("User ID=postgres;Password=postgres;Host=postgres;Port=5432;Database=postgres;Pooling=true;"))
                 .AddSingleton<IOtusContextFactory, OtusContextFactory>(p =>
                     new OtusContextFactory(configuration.GetConnectionString("DefaultConnection")!));
