@@ -8,7 +8,7 @@ services:
       "Kestrel:Certificates:Default:Path": "/app/aspnetapp.pfx"
       "Kestrel:Certificates:Default:Password": "123"
       "Kestrel:Certificates:Default:AllowInvalid": "true"
-      "ConnectionStrings__DefaultConnection": "User ID=postgres;Password=postgres;Host=postgres;Port=5433;Database=otus_highload;Pooling=true;"
+      "ConnectionStrings__DefaultConnection": "User ID=postgres;Password=postgres;Host=postgres;Port=5433;Database=postgres;Pooling=true;"
     ports:
       - "5001:443"
       - "8001:80"
