@@ -26,23 +26,12 @@ public class DbSeedService
 
     public void Seed()
     {
-        _shardManager.GetAllActiveShardsAsync().ForEach(s => ApplyMigrations(s));
+        _shardManager.GetAllActiveShardsAsync().ForEach(ApplyMigrations);
     }
 
     private void ApplyMigrations(DialogShard dialogShard)
     {
-        try
-        {
-            var dbName = Regex.Match(dialogShard.ConnectionString, "Database=([^;]+);").Groups[1].Value;
-            _contextFactory.Get(Regex.Replace(dialogShard.ConnectionString,"Database[^;]+;","")).Execute(conn =>
-            {
-                conn.Execute($"CREATE DATABASE {dbName}");
-            });
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-        }
+        Console.WriteLine(dialogShard.ConnectionString);
         _contextFactory.Get(dialogShard.ConnectionString).Execute(conn =>
         {
             conn.Execute("CREATE TABLE IF NOT EXISTS \"Migrations\" (Id uuid not null);");

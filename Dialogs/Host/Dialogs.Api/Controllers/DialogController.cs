@@ -24,11 +24,8 @@ public class DialogController : ControllerBase
     {
         try
         {
-            if (userId != request.FromUserId)
-                return BadRequest(new { error = "User ID mismatch" });
-
             var messageId = await _dialogService.SendMessageAsync(
-                request.FromUserId,
+                userId,
                 request.ToUserId,
                 request.Text);
 
@@ -41,14 +38,14 @@ public class DialogController : ControllerBase
         }
     }
 
-    [HttpGet("list")]
+    [HttpGet("list/with/{withUserId}")]
     public async Task<IActionResult> GetDialog(
         [FromRoute] Guid userId,
-        [FromQuery] Guid with_user_id)
+        Guid withUserId)
     {
         try
         {
-            var messages = await _dialogService.GetDialogAsync(userId, with_user_id);
+            var messages = await _dialogService.GetDialogAsync(userId, withUserId);
             return Ok(messages);
         }
         catch (Exception ex)
@@ -58,7 +55,7 @@ public class DialogController : ControllerBase
         }
     }
 
-    [HttpGet("all")]
+    [HttpGet("list/all")]
     public async Task<IActionResult> GetAllUserMessages([FromRoute] Guid userId)
     {
         try
