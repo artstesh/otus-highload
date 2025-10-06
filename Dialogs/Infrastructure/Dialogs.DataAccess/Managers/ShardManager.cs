@@ -38,7 +38,6 @@ public class ShardManager : IShardManager
         var totalWeight = _shards.Where(s => s.IsActive).Sum(s => s.Weight);
         var shardIndex = ShardKeyGenerator.GetShardIndexOptimized(shardKey, totalWeight);
 
-        // Взвешенное распределение
         var currentWeight = 0;
         foreach (var shard in _shards.Where(s => s.IsActive).OrderBy(s => s.ShardId))
         {
@@ -85,7 +84,7 @@ public class ShardManager : IShardManager
 
         // Читаем сообщения из исходного шарда
         var messages = await fromConn.QueryAsync<Message>(
-            "SELECT * FROM messages WHERE shard_key = @shardKey",
+            "SELECT id as Id, from_user_id as FromUserId, to_user_id as ToUserId, text as Text, sent_at as SentAt, shard_key as ShardKey FROM messages WHERE shard_key = @shardKey",
             new { shardKey });
 
         // Пишем в целевой шард
@@ -103,10 +102,6 @@ public class ShardManager : IShardManager
     public async Task RebalanceShardsAsync()
     {
         _logger.LogInformation("Starting shard rebalancing");
-
-        // Здесь может быть сложная логика перебалансировки
-        // Например, перемещение данных между шардами для равномерного распределения
-
         await Task.CompletedTask;
     }
 

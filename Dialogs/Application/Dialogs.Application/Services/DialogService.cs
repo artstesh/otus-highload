@@ -62,7 +62,7 @@ public class DialogService : IDialogService
 
         using var connection = new NpgsqlConnection(connectionString);
 
-        var sql = @"SELECT * FROM messages
+        var sql = @"SELECT id as Id, from_user_id as FromUserId, to_user_id as ToUserId, text as Text, sent_at as SentAt, shard_key as ShardKey FROM messages
                    WHERE (from_user_id = @user1 AND to_user_id = @user2)
                       OR (from_user_id = @user2 AND to_user_id = @user1)
                    ORDER BY sent_at";
@@ -103,7 +103,7 @@ public class DialogService : IDialogService
         try
         {
             using var connection = new NpgsqlConnection(connectionString);
-            var sql = @"SELECT * FROM messages
+            var sql = @"SELECT id as Id, from_user_id as FromUserId, to_user_id as ToUserId, text as Text, sent_at as SentAt, shard_key as ShardKey FROM messages
                        WHERE from_user_id = @userId OR to_user_id = @userId
                        ORDER BY sent_at";
 

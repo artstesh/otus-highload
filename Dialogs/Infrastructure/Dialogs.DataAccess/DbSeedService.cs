@@ -10,17 +10,15 @@ namespace Dialogs.DataAccess;
 
 public class DbSeedService
 {
-    private readonly IOtusContextFactory _contextFactory;
     private readonly IShardManager _shardManager;
     private readonly List<IMigration> _migrations;
 
-    public DbSeedService(IOtusContextFactory contextFactory, IShardManager shardManager)
+    public DbSeedService(IShardManager shardManager)
     {
-        _contextFactory = contextFactory;
         _shardManager = shardManager;
         _migrations = new List<IMigration>
         {
-            new MessagesMigration(contextFactory)
+            new MessagesMigration()
         };
     }
 
@@ -31,8 +29,7 @@ public class DbSeedService
 
     private void ApplyMigrations(DialogShard dialogShard)
     {
-        Console.WriteLine(dialogShard.ConnectionString);
-        _contextFactory.Get(dialogShard.ConnectionString).Execute(conn =>
+        new OtusContextFactory(dialogShard.ConnectionString).Get(dialogShard.ConnectionString).Execute(conn =>
         {
             conn.Execute("CREATE TABLE IF NOT EXISTS \"Migrations\" (Id uuid not null);");
         });

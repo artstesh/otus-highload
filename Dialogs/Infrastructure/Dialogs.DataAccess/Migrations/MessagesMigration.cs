@@ -5,12 +5,11 @@ namespace Dialogs.DataAccess.Migrations;
 
 public class MessagesMigration : IMigration
 {
-    private readonly IOtusContextFactory _factory;
+    private readonly IOtusContextFactory _factory = new OtusContextFactory();
 
-    public MessagesMigration(IOtusContextFactory factory)
+    public MessagesMigration()
     {
-        _factory = factory;
-        MigrationId = Guid.Parse("1c77a255-4545-4b95-8b60-e5cb12b05074");
+        MigrationId = Guid.Parse("1c77a255-4545-4b95-8b60-e5cb12b05077");
     }
 
     public override void Migrate(string connectionString)
@@ -19,9 +18,9 @@ public class MessagesMigration : IMigration
         {
             return conn.QueryFirst<int>($"select count(*) from \"Migrations\" where id = '{MigrationId}'");
         }) > 0;
+
         if (exists) return;
 
-        _factory.Get(connectionString).Execute(conn => conn.Execute("create schema if not exists dialogs;"));
         _factory.Get(connectionString).Execute(conn => conn.Execute("DROP TABLE IF EXISTS messages;"));
         _factory.Get(connectionString).Execute(conn =>
             conn.Execute(
