@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test</title>
+    <script>
+
+        console.log('loaded');
+        window.onload = function() {
+            console.log('loaded');
+            const socket = new WebSocket('ws://localhost:8083/post/feed/posted?userId=b8946cd4-9197-4319-b61b-1a329e6db4a8');
+            let board = document.getElementById('messages');
+            socket.onopen = function() {
+                const newDiv = document.createElement('div');
+                newDiv.innerHTML = 'WebSocket connection established';
+                board.appendChild(newDiv);
+                console.log('WebSocket connection established');
+            };
+
+            socket.onmessage = function(event) {
+                const post = JSON.parse(event.data);
+                const newDiv = document.createElement('div');
+                newDiv.innerHTML = `New post received:${JSON.stringify(post)}`;
+                board.appendChild(newDiv);
+                console.log('New post received:', post);
+            };
+
+            socket.onclose = function() {
+                const newDiv = document.createElement('div');
+                newDiv.innerHTML = 'WebSocket connection closed';
+                board.appendChild(newDiv);
+                console.log('WebSocket connection closed');
+            };
+        };
+    </script>
+    <style>
+        #messages {
+            width: 100%;
+            height: 100%;
+            padding: 4px 10%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+<div id="messages"></div>
+</body>
+</html>

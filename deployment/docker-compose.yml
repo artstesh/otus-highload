@@ -14,6 +14,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
       redis:
         condition: service_healthy
 
@@ -32,6 +34,19 @@ services:
           condition: service_healthy
       dialogs-pg-2:
           condition: service_healthy
+
+  post-socket:
+    image: ${DOCKER_REGISTRY}/africa-platform/post-socket:${TAG}
+    container_name: post-socket
+    restart: always
+    build:
+      context: ../
+      dockerfile: Infrastructure/PostSocket/Hosts/PostSocket.Daemon/Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
 
   #### Infrastructure
   postgres:
@@ -91,11 +106,35 @@ services:
       timeout: 3s
       retries: 30
 
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    hostname: 'otus-rabbit'
+    restart: always
+    build:
+      context: ./services/rabbitmq
+      dockerfile: Dockerfile
+    environment:
+      RABBITMQ_DEFAULT_USER: otus
+      RABBITMQ_DEFAULT_PASS: 6GccewECzxGJgTh4QYr82D8JUgCxsC5E
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: [ "CMD", "rabbitmq-diagnostics", "-q", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
 volumes:
   postgres:
   dialogs_pg_one:
   dialogs_pg_two:
   redis_data:
+  rabbitmq_data:
 
 networks:
   default:

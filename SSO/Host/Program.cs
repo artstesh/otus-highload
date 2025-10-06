@@ -21,6 +21,7 @@ builder.Services.AddStackExchangeRedisCache(options =>
 builder.Services.AddSingleton<IAuthStoreService, AuthStoreService>();
 builder.Services.AddSingleton<DbSeedService>();
 builder.Services.AddSso(builder.Configuration);
+builder.Services.AddLogging();
 
 var app = builder.Build();
 

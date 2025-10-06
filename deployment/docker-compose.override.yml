@@ -8,6 +8,7 @@ services:
       "Kestrel:Certificates:Default:Path": "/app/aspnetapp.pfx"
       "Kestrel:Certificates:Default:Password": "123"
       "Kestrel:Certificates:Default:AllowInvalid": "true"
+      "EventBus__HostAddress": "amqp://otus:6GccewECzxGJgTh4QYr82D8JUgCxsC5E@rabbitmq:5672"
     ports:
       - "5001:443"
       - "8001:80"
@@ -25,9 +26,27 @@ services:
       "Database__Shards__1__ShardId": 2
       "Database__Shards__1__ConnectionString": "Host=dialogs-pg-1;Port=5432;Database=postgres;Username=postgres;Password=postgres"
       "Database__Shards__1__IsActive": true
+      "RabbitMQ__HostName": "rabbitmq"
+      "RabbitMQ__UserName": "otus"
+      "RabbitMQ__Password": "6GccewECzxGJgTh4QYr82D8JUgCxsC5E"
+      "RabbitMQ__VirtualHost": "/"
+
     ports:
       - "5002:443"
       - "8002:80"
+
+  post-socket:
+    environment:
+      "ASPNETCORE_ENVIRONMENT": "Development"
+      "Kestrel:Certificates:Default:Path": "/app/aspnetapp.pfx"
+      "Kestrel:Certificates:Default:Password": "123"
+      "Kestrel:Certificates:Default:AllowInvalid": "true"
+      "RabbitMQ__HostName": "rabbitmq"
+      "RabbitMQ__UserName": "otus"
+      "RabbitMQ__Password": "6GccewECzxGJgTh4QYr82D8JUgCxsC5E"
+      "RabbitMQ__VirtualHost": "/"
+    ports:
+      - "8083:8080"
 
   postgres:
     environment:

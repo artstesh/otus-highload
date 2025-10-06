@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Common.Contracts;
+using Microsoft.AspNetCore.Mvc;
 using OtusHighload.Application.Repositories;
 using OtusHighload.Application.Services;
 using OtusHighload.Contracts.Models;
@@ -13,15 +14,18 @@ public class PostController : Controller
 {
     private readonly IPostService _postService;
     private readonly IFeedCacheService _feedCacheService;
+    private readonly IMessageBusService _messageBusService;
     private readonly ILogger<PostController> _logger;
 
     public PostController(
         IPostService postService,
         IFeedCacheService feedCacheService,
+        IMessageBusService messageBusService,
         ILogger<PostController> logger)
     {
         _postService = postService;
         _feedCacheService = feedCacheService;
+        _messageBusService = messageBusService;
         _logger = logger;
     }
 
@@ -37,6 +41,14 @@ public class PostController : Controller
         var postId = await _postService.CreateAsync(post, ct);
         if (postId == null) return Problem();
         post.Id = (Guid)postId;
+
+        await _messageBusService.PublishPostCreatedAsync(new PostCreatedEvent
+        {
+            PostId = post.Id,
+            Text = post.Text,
+            AuthorId = post.AuthorId,
+            CreatedAt = post.CreatedAt
+        }, ct);
 
         _ = Task.Run(async () =>
         {
@@ -56,12 +68,8 @@ public class PostController : Controller
     [HttpDelete("delete/{id}")]
     public async Task<IActionResult> Delete(Guid id, [FromQuery] Guid userId, CancellationToken ct)
     {
-        var existingPost = await _postService.GetByIdAsync(id, ct);
-        if (existingPost == null || existingPost.AuthorId != userId)
-            return NotFound();
-
         var success = await _postService.DeleteAsync(id, ct);
-        if (!success) return BadRequest();
+        if (!success) return NotFound();
 
         // Инвалидируем кэши друзей
         _ = Task.Run(async () =>

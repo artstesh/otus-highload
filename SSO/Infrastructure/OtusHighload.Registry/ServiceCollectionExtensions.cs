@@ -20,6 +20,7 @@ namespace OtusHighload.Registry
                 .AddScoped<IFriendshipService, FriendshipService>()
                 .AddScoped<IFeedCacheService, FeedCacheService>()
                 .AddScoped<ICacheRebuildService, CacheRebuildService>()
+                .AddScoped<IMessageBusService, RabbitMQService>()
                 .AddSingleton<IOtusContextFactory, OtusContextFactory>(p =>
                     new OtusContextFactory(configuration.GetConnectionString("DefaultConnection")!));
 

@@ -9,7 +9,6 @@ services:
       "Kestrel:Certificates:Default:Password": "123"
       "Kestrel:Certificates:Default:AllowInvalid": "true"
       "ConnectionStrings__DefaultConnection": "User ID=postgres;Password=postgres;Host=postgres;Port=5433;Database=postgres;Pooling=true;"
-      "ConnectionStrings__Redis":"redis:6379"
     ports:
       - "5001:443"
       - "8001:80"

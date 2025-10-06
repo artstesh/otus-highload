@@ -25,4 +25,18 @@
     <ItemGroup>
         <None Remove="proxy\**" />
     </ItemGroup>
+    <ItemGroup>
+      <Folder Include="services\grafana\config\csv\" />
+      <Folder Include="services\grafana\config\pdf\" />
+      <Folder Include="services\grafana\config\plugins\" />
+      <Folder Include="services\grafana\config\png\" />
+      <Folder Include="services\prometheus\" />
+      <Folder Include="services\rabbitmq\obj\Docker\empty\" />
+    </ItemGroup>
+    <ItemGroup>
+      <Content Include="services\rabbitmq\Dockerfile" />
+      <Content Include="services\rabbitmq\etc\enabled_plugins" />
+      <Content Include="services\rabbitmq\etc\rabbitmq.conf" />
+      <Content Include="services\rabbitmq\obj\Docker\CanonicalServiceNames.cache" />
+    </ItemGroup>
 </Project>
