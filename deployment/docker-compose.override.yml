@@ -11,10 +11,37 @@ services:
     ports:
       - "5001:443"
       - "8001:80"
-    depends_on:
-      - postgres
+
+  dialogs:
+    environment:
+      "ASPNETCORE_ENVIRONMENT": "Development"
+      "ASPNETCORE_URLS": "https://+;http://+"
+      "Kestrel:Certificates:Default:Path": "/app/aspnetapp.pfx"
+      "Kestrel:Certificates:Default:Password": "123"
+      "Kestrel:Certificates:Default:AllowInvalid": "true"
+      "Database__Shards__0__ShardId": 1
+      "Database__Shards__0__ConnectionString": "Host=dialogs-pg-2;Port=5432;Database=postgres;Username=postgres;Password=postgres"
+      "Database__Shards__0__IsActive": true
+      "Database__Shards__1__ShardId": 2
+      "Database__Shards__1__ConnectionString": "Host=dialogs-pg-1;Port=5432;Database=postgres;Username=postgres;Password=postgres"
+      "Database__Shards__1__IsActive": true
+    ports:
+      - "5002:443"
+      - "8002:80"
 
   postgres:
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  dialogs-pg-1:
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  dialogs-pg-2:
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres

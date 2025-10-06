@@ -2,7 +2,7 @@
 using Common.Utility;
 using OtusHighload.Application.Repositories;
 using OtusHighload.Application.Utils;
-using OtusHighload.Contracts.DTO;
+using OtusHighload.Contracts.Models;
 using OtusHighload.Entities;
 
 namespace OtusHighload.Application.Services;

@@ -1,12 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using OtusHighload.Application.Services;
-using OtusHighload.Attributes;
-using OtusHighload.Contracts.DTO;
-using OtusHighload.Entities;
+using OtusHighload.Contracts.Models;
 using OtusHighload.Services;
 
+namespace OtusHighload.Controllers;
 
 [Route("[controller]")]
 public class LoginController: Controller

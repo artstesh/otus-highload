@@ -1,9 +1,7 @@
 ﻿using Npgsql;
 using Polly;
-using System.Data.SqlClient;
-using Common.DataAccess;
 
-namespace OtusHighload.DataAccess;
+namespace Common.DataAccess;
 
 public class OtusContext
 {

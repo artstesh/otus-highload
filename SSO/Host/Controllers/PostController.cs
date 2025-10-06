@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OtusHighload.Application.Repositories;
 using OtusHighload.Application.Services;
-using OtusHighload.Contracts.DTO;
+using OtusHighload.Contracts.Models;
 using OtusHighload.Entities;
 
 namespace OtusHighload.Controllers;

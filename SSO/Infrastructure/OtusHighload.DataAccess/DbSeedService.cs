@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using Common.DataAccess;
 using Dapper;
 using OtusHighload.DataAccess.Migrations;
 
@@ -22,18 +23,6 @@ public class DbSeedService
 
     public void Seed()
     {
-        try
-        {
-            dbName = Regex.Match(_contextFactory.GetConnectionString(), "Database=([^;]+);").Groups[1].Value;
-            _contextFactory.Get(Regex.Replace((_contextFactory.GetConnectionString()),"Database[^;]+;","")).Execute(conn =>
-            {
-                conn.Execute($"CREATE DATABASE {dbName}");
-            });
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-        }
         _contextFactory.Get().Execute(conn =>
         {
             conn.Execute("CREATE TABLE IF NOT EXISTS \"Migrations\" (Id uuid not null);");

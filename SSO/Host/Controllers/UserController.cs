@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using OtusHighload.Application.Services;
 using OtusHighload.Attributes;
-using OtusHighload.Contracts.DTO;
+using OtusHighload.Contracts.Models;
 using OtusHighload.Entities;
 
 namespace OtusHighload.Controllers;

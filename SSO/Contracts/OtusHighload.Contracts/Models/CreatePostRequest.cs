@@ -1,4 +1,4 @@
-﻿namespace OtusHighload.Contracts.DTO;
+﻿namespace OtusHighload.Contracts.Models;
 
 public class CreatePostRequest
 {

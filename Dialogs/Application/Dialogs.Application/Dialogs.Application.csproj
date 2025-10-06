@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\Common\Utility\Common.Utility.csproj" />
+      <ProjectReference Include="..\..\Domain\Dialogs.Entities\Dialogs.Entities.csproj" />
+      <ProjectReference Include="..\..\Infrastructure\Dialogs.DataAccess\Dialogs.DataAccess.csproj" />
+      <ProjectReference Include="..\Dialogs.DataAccess\Dialogs.DataAccess.csproj" />
+      <ProjectReference Include="..\Dialogs.Entities\Dialogs.Entities.csproj" />
+    </ItemGroup>
+
+</Project>
