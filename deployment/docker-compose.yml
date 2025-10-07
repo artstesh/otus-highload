@@ -64,36 +64,6 @@ services:
       timeout: 5s
       retries: 5
 
-  dialogs-pg-1:
-    image: postgres:13-alpine
-    container_name: dialogs-pg-1
-    ports:
-      - "5443:5432"
-    profiles:
-      - development
-    volumes:
-      - dialogs_pg_one:/var/lib/postgresql/data/
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  dialogs-pg-2:
-    image: postgres:13-alpine
-    container_name: dialogs-pg-2
-    ports:
-      - "5444:5432"
-    profiles:
-      - development
-    volumes:
-      - dialogs_pg_two:/var/lib/postgresql/data/
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
   redis:
     image: redis:7-alpine
     ports:
@@ -131,8 +101,6 @@ services:
 
 volumes:
   postgres:
-  dialogs_pg_one:
-  dialogs_pg_two:
   redis_data:
   rabbitmq_data:
 
