@@ -12,9 +12,9 @@ namespace Dialogs.Registry
         public static IServiceCollection AddDialogs(this IServiceCollection services, IConfiguration configuration)
         {
             services
-                .AddScoped<IDialogRepository, DialogRepository>(e => new DialogRepository(configuration.GetConnectionString("Dialogs")!))
+                .AddScoped<IDialogRepository, DialogRepository>()
                 .AddScoped<IDialogService, DialogService>()
-                .AddSingleton<IOtusContextFactory, OtusContextFactory>();
+                .AddSingleton<IBoxConnectionPool, BoxConnectionPool>(e => new BoxConnectionPool(configuration.GetConnectionString("Dialogs")!, 3301));
 
             return services;
         }

@@ -3,7 +3,15 @@
     memtx_memory = 1024 * 1024 * 1024, -- 1GB
     memtx_dir = '/var/lib/tarantool/memtx',
     wal_dir = '/var/lib/tarantool/wal',
-    log_level = 5
+    log_level = 5,
+    wal_mode = 'write',                -- баланс между производительностью и надежностью
+    wal_max_size = 256 * 1024 * 1024,
+                     readahead = 4 * 1024,              -- 4KB
+                     net_msg_max = 768,                 -- увеличить лимит сообщений
+                     worker_pool_threads = 4,           -- больше потоков для обработки
+                     replication_connect_quorum = 0,
+                     replication_connect_timeout = 30,
+                     log_format = 'json'
 }
 
 -- Создание пространства для сообщений
@@ -25,13 +33,15 @@ messages:create_index('primary', {
 
 messages:create_index('user_dialog', {
     type = 'tree',
-    parts = {'from_user_id', 'to_user_id', 'sent_at'},
-    if_not_exists = true
+        parts = {'from_user_id', 'to_user_id', 'sent_at'},
+        unique = false,
+        if_not_exists = true
 })
 
 messages:create_index('reverse_dialog', {
     type = 'tree',
     parts = {'to_user_id', 'from_user_id', 'sent_at'},
+        unique = false,
     if_not_exists = true
 })
 

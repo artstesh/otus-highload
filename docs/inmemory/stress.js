@@ -47,8 +47,10 @@ export default function (data) {
         console.error('Токен отсутствует!');
         return;
     }
-  const user1 = 'b90940ae-ae81-4f6c-b4f2-6986d0b91d4c';
-  const user2 = '33227c67-0b70-40fc-b7ab-b7eea18f35ae';
+  const user1 = ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c => (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16))
+;
+  const user2 = ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c => (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16))
+;
   
   // Тест отправки сообщения
   const sendRes = http.post(`${BASE_URL}/dialog/${user1}/send`, JSON.stringify({

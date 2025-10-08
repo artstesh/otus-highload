@@ -11,41 +11,35 @@ namespace Dialogs.DataAccess.Repositories;
 
 public class DialogRepository : IDialogRepository
 {
-    private readonly string _connectionString;
+    private readonly IBoxConnectionPool _connectionPool;
 
-    public DialogRepository(string connectionString)
+    public DialogRepository(IBoxConnectionPool connectionPool)
     {
-        _connectionString = connectionString;
-        Console.WriteLine(connectionString);
+        _connectionPool = connectionPool;
     }
 
     public async Task<string> SendMessageAsync(Guid fromUserId, Guid toUserId, string text)
     {
-            var _box = await Box.Connect(_connectionString, 3301)!;
+        var box = await _connectionPool.GetConnectionAsync();
         try
         {
-            var result = await _box.Call<TarantoolTuple<string,string,string>,string>("send_message",
+            var result = await box.Call<TarantoolTuple<string, string, string>, string>("send_message",
                 TarantoolTuple.Create(fromUserId.ToString(), toUserId.ToString(), text));
             return result.Data[0];
         }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.StackTrace);
-            throw;
-        }
         finally
         {
-            _box.Dispose();
+            _connectionPool.ReturnConnection(box);
         }
     }
 
     public async Task<IEnumerable<Message>> GetDialogAsync(Guid user1, Guid user2)
     {
-            var _box = await Box.Connect(_connectionString, 3301);
+        var box = await _connectionPool.GetConnectionAsync();
         try
         {
             var result =
-                await _box.Call<TarantoolTuple<string, string>, TarantoolTuple<string, string, string, string, long>[]>(
+                await box.Call<TarantoolTuple<string, string>, TarantoolTuple<string, string, string, string, long>[]>(
                     "get_dialog",
                     TarantoolTuple.Create(user1.ToString(), user2.ToString()));
 
@@ -59,23 +53,18 @@ public class DialogRepository : IDialogRepository
                 SentAt = e.Item5
             });
         }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.StackTrace);
-            throw;
-        }
         finally
         {
-            _box.Dispose();
+            _connectionPool.ReturnConnection(box);
         }
     }
 
     public async Task<UserStats> GetUserStatsAsync(Guid userId)
     {
-            var _box = await Box.Connect(_connectionString, 3301);
+        var box = await _connectionPool.GetConnectionAsync();
         try
         {
-            var result = await _box.Call<TarantoolTuple<string>,TarantoolTuple<string, int, int, int>>(
+            var result = await box.Call<TarantoolTuple<string>, TarantoolTuple<string, int, int, int>>(
                 "get_user_stats",
                 TarantoolTuple.Create(userId.ToString())
             );
@@ -88,14 +77,9 @@ public class DialogRepository : IDialogRepository
                 TotalCount = result.Data[0].Item4
             };
         }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.StackTrace);
-            throw;
-        }
         finally
         {
-            _box.Dispose();
+            _connectionPool.ReturnConnection(box);
         }
     }
 }
