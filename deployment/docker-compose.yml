@@ -30,9 +30,7 @@ services:
       - development
       - production
     depends_on:
-      dialogs-pg-1:
-          condition: service_healthy
-      dialogs-pg-2:
+      dialogs-db:
           condition: service_healthy
 
   post-socket:
@@ -70,6 +68,8 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/data
+    profiles:
+      - development
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
       interval: 1s
@@ -89,6 +89,8 @@ services:
       RABBITMQ_DEFAULT_PASS: 6GccewECzxGJgTh4QYr82D8JUgCxsC5E
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
+    profiles:
+      - development
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -99,10 +101,23 @@ services:
       retries: 5
       start_period: 20s
 
+  dialogs-db:
+    image: tarantool/tarantool:2.10
+    ports:
+      - "3301:3301"
+    volumes:
+      - ./services/tarantool/setup:/opt/tarantool
+      - tarantool_data:/var/lib/tarantool
+    command: tarantool /opt/tarantool/tarantool_config.lua
+    restart: unless-stopped
+    profiles:
+      - development
+
 volumes:
   postgres:
   redis_data:
   rabbitmq_data:
+  tarantool_data:
 
 networks:
   default:

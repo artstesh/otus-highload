@@ -50,17 +50,12 @@ export default function (data) {
   const user1 = 'b90940ae-ae81-4f6c-b4f2-6986d0b91d4c';
   const user2 = '33227c67-0b70-40fc-b7ab-b7eea18f35ae';
   
-  // Тест отправки сообщения
-  const sendRes = http.post(`${BASE_URL}/dialog/${user1}/send`, JSON.stringify({
-    toUserId: user2,
-    text: `Test message ${Date.now()}`
-  }), {
-    headers: { 'Content-Type': 'application/json' },
-  });
+  // Тест получения диалога
+  const getRes = http.get(`${BASE_URL}/dialog/${user1}/list/with/${user2}`);
   
-  check(sendRes, {
-    'send message status 200': (r) => r.status === 200,
-    'send message response time < 500ms': (r) => r.timings.duration < 500,
+  check(getRes, {
+    'get dialog status 200': (r) => r.status === 200,
+    'get dialog response time < 300ms': (r) => r.timings.duration < 300,
   });
   
   sleep(1);

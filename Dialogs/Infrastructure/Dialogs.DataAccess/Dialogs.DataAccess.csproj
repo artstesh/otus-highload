@@ -9,17 +9,15 @@
     <ItemGroup>
         <PackageReference Include="Dapper" Version="2.1.66" />
         <PackageReference Include="Npgsql" Version="9.0.3" />
+        <PackageReference Include="progaudi.tarantool" Version="0.16.0" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\Common\DataAccess\Common.DataAccess\Common.DataAccess.csproj" />
       <ProjectReference Include="..\..\..\Common\Utility\Common.Utility.csproj" />
+      <ProjectReference Include="..\..\Application\Dialogs.Application\Dialogs.Application.csproj" />
       <ProjectReference Include="..\..\Contracts\Dialogs.Contracts\Dialogs.Contracts.csproj" />
       <ProjectReference Include="..\..\Domain\Dialogs.Entities\Dialogs.Entities.csproj" />
-      <ProjectReference Include="..\Common\DataAccess\Common.DataAccess\Common.DataAccess.csproj" />
-      <ProjectReference Include="..\Common\Utility\Common.Utility.csproj" />
-      <ProjectReference Include="..\Dialogs.Contracts\Dialogs.Contracts.csproj" />
-      <ProjectReference Include="..\Dialogs.Entities\Dialogs.Entities.csproj" />
     </ItemGroup>
 
 </Project>

@@ -38,5 +38,6 @@
       <Content Include="services\rabbitmq\etc\enabled_plugins" />
       <Content Include="services\rabbitmq\etc\rabbitmq.conf" />
       <Content Include="services\rabbitmq\obj\Docker\CanonicalServiceNames.cache" />
+      <Content Include="services\tarantool\setup\tarantool_config.lua" />
     </ItemGroup>
 </Project>

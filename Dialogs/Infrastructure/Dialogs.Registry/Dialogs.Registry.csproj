@@ -14,7 +14,6 @@
     <ItemGroup>
       <ProjectReference Include="..\..\..\Common\DataAccess\Common.DataAccess\Common.DataAccess.csproj" />
       <ProjectReference Include="..\..\Application\Dialogs.Application\Dialogs.Application.csproj" />
-      <ProjectReference Include="..\Dialogs.Application\Dialogs.Application.csproj" />
       <ProjectReference Include="..\Dialogs.DataAccess\Dialogs.DataAccess.csproj" />
     </ItemGroup>
 

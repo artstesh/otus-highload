@@ -8,7 +8,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDialogs(builder.Configuration);
-builder.Services.AddSingleton<DbSeedService>();
 
 var app = builder.Build();
 
@@ -24,5 +23,4 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-app.Services.GetRequiredService<DbSeedService>().Seed();
 app.Run();

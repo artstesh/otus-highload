@@ -1,11 +1,21 @@
-﻿namespace Dialogs.Entities;
+﻿using System.Text.Json.Serialization;
+
+namespace Dialogs.Entities;
 
 public class Message
 {
-    public Guid Id { get; set; }
-    public Guid FromUserId { get; set; }
-    public Guid ToUserId { get; set; }
+    [JsonPropertyName("id")]
+    public string Id { get; set; }
+
+    [JsonPropertyName("from_user_id")]
+    public string FromUserId { get; set; }
+
+    [JsonPropertyName("to_user_id")]
+    public string ToUserId { get; set; }
+
+    [JsonPropertyName("text")]
     public string Text { get; set; }
-    public DateTime SentAt { get; set; }
-    public Guid ShardKey { get; set; }
+
+    [JsonPropertyName("sent_at")]
+    public long SentAt { get; set; }
 }

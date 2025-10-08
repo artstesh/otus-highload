@@ -1,6 +1,7 @@
 ﻿using Common.DataAccess;
+using Dialogs.Application.Repositories;
 using Dialogs.Application.Services;
-using Dialogs.DataAccess.Managers;
+using Dialogs.DataAccess.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,7 +12,7 @@ namespace Dialogs.Registry
         public static IServiceCollection AddDialogs(this IServiceCollection services, IConfiguration configuration)
         {
             services
-                .AddSingleton<IShardManager, ShardManager>()
+                .AddScoped<IDialogRepository, DialogRepository>(e => new DialogRepository(configuration.GetConnectionString("Dialogs")!))
                 .AddScoped<IDialogService, DialogService>()
                 .AddSingleton<IOtusContextFactory, OtusContextFactory>();
 

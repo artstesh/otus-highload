@@ -60,7 +60,7 @@ public class DialogController : ControllerBase
     {
         try
         {
-            var messages = await _dialogService.GetAllUserMessagesAsync(userId);
+            var messages = await _dialogService.GetUserStatsAsync(userId);
             return Ok(messages);
         }
         catch (Exception ex)
