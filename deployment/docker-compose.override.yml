@@ -9,6 +9,7 @@ services:
       "Kestrel:Certificates:Default:Password": "123"
       "Kestrel:Certificates:Default:AllowInvalid": "true"
       "EventBus__HostAddress": "amqp://otus:6GccewECzxGJgTh4QYr82D8JUgCxsC5E@rabbitmq:5672"
+      "Services__Dialogs": "http://dialogs"
       "Security__EncryptionKey": "iNyEkoVuMRs1YTdOeKzq0GkpB7sCZy9/CqSVvYr9N9rpYc7RrGJS8LjOfVRhewsf"
     ports:
       - "5001:443"

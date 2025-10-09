@@ -33,9 +33,10 @@ public class OtusContext
 
     public T Query<T>(Func<NpgsqlConnection, T> func)
     {
-        var connection = ConnectionPool.Instance.GetConnection(_connectionString);
+        var connection = new NpgsqlConnection(_connectionString);
+        connection.Open();
         var result = func(connection);
-        ConnectionPool.Instance.ReturnConnection(connection);
+        connection.Close();
         return result;
     }
 
