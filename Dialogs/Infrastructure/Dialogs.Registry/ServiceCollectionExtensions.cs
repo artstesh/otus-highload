@@ -13,7 +13,10 @@ namespace Dialogs.Registry
             services
                 .AddSingleton<IShardManager, ShardManager>()
                 .AddScoped<IDialogService, DialogService>()
-                .AddSingleton<IOtusContextFactory, OtusContextFactory>();
+                .AddSingleton<ITokenCryptoService, TokenCryptoService>(e => new TokenCryptoService(configuration.GetValue<string>("Security:EncryptionKey")))
+                .AddSingleton<IOtusContextFactory, OtusContextFactory>()
+                .AddScoped<IRequestContext, RequestContext>()
+                .AddTransient<RequestIdLoggingMiddleware>();
 
             return services;
         }

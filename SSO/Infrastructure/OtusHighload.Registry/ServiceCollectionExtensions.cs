@@ -17,6 +17,7 @@ namespace OtusHighload.Registry
                 .AddScoped<IFriendRepository, FriendRepository>()
                 .AddScoped<IUserService, UserService>()
                 .AddScoped<IPostService, PostService>()
+                .AddSingleton<ITokenCryptoService, TokenCryptoService>(e => new TokenCryptoService(configuration.GetValue<string>("Security:EncryptionKey")))
                 .AddScoped<IFriendshipService, FriendshipService>()
                 .AddScoped<IFeedCacheService, FeedCacheService>()
                 .AddScoped<ICacheRebuildService, CacheRebuildService>()

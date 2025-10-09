@@ -9,6 +9,7 @@ services:
       "Kestrel:Certificates:Default:Password": "123"
       "Kestrel:Certificates:Default:AllowInvalid": "true"
       "EventBus__HostAddress": "amqp://otus:6GccewECzxGJgTh4QYr82D8JUgCxsC5E@rabbitmq:5672"
+      "Security__EncryptionKey": "iNyEkoVuMRs1YTdOeKzq0GkpB7sCZy9/CqSVvYr9N9rpYc7RrGJS8LjOfVRhewsf"
     ports:
       - "5001:443"
       - "8001:80"
@@ -30,6 +31,7 @@ services:
       "RabbitMQ__UserName": "otus"
       "RabbitMQ__Password": "6GccewECzxGJgTh4QYr82D8JUgCxsC5E"
       "RabbitMQ__VirtualHost": "/"
+      "Security__EncryptionKey": "iNyEkoVuMRs1YTdOeKzq0GkpB7sCZy9/CqSVvYr9N9rpYc7RrGJS8LjOfVRhewsf"
 
     ports:
       - "5002:443"
