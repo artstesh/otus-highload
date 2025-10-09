@@ -1,3 +1,4 @@
+using Common.Utility;
 using Dialogs.DataAccess;
 using Dialogs.Registry;
 
@@ -23,6 +24,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+app.UseMiddleware<RequestIdLoggingMiddleware>();
 app.MapControllers();
 app.Services.GetRequiredService<DbSeedService>().Seed();
 app.Run();

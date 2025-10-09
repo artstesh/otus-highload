@@ -17,11 +17,13 @@ public interface IDialogService
 
 public class DialogService : IDialogService
 {
+    private readonly IRequestContext _requestContext;
     private readonly IShardManager _shardManager;
     private readonly ILogger<DialogService> _logger;
 
-    public DialogService(IShardManager shardManager, ILogger<DialogService> logger)
+    public DialogService(IRequestContext requestContext,IShardManager shardManager, ILogger<DialogService> logger)
     {
+        _requestContext = requestContext;
         _shardManager = shardManager;
         _logger = logger;
     }
@@ -51,7 +53,7 @@ public class DialogService : IDialogService
 
         await connection.ExecuteAsync(sql, message);
 
-        _logger.LogDebug($"Message {message.Id} sent from {fromUserId} to {toUserId}");
+        _logger.LogInformation($"{_requestContext.RequestId}: Message {message.Id} sent from {fromUserId} to {toUserId}");
         return message.Id;
     }
 
@@ -69,7 +71,7 @@ public class DialogService : IDialogService
 
         var messages = await connection.QueryAsync<Message>(sql, new { user1, user2 });
 
-        _logger.LogDebug($"Retrieved {messages.Count()} messages for dialog between {user1} and {user2}");
+        _logger.LogDebug($"{_requestContext.RequestId}: Retrieved {messages.Count()} messages for dialog between {user1} and {user2}");
         return messages;
     }
 
@@ -84,7 +86,7 @@ public class DialogService : IDialogService
                                .OrderBy(x => x.SentAt)
                                .ToList();
 
-        _logger.LogDebug($"Retrieved {allMessages.Count} total messages for user {userId}");
+        _logger.LogDebug($"{_requestContext.RequestId}: Retrieved {allMessages.Count} total messages for user {userId}");
         return allMessages;
     }
 
@@ -111,7 +113,7 @@ public class DialogService : IDialogService
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, $"Failed to get messages from shard for user {userId}");
+            _logger.LogWarning(ex, $"{_requestContext.RequestId}: Failed to get messages from shard for user {userId}");
             return Enumerable.Empty<Message>();
         }
     }
@@ -128,7 +130,7 @@ public class DialogService : IDialogService
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, $"Failed to get message count from shard for user {userId}");
+            _logger.LogWarning(ex, $"{_requestContext.RequestId}: Failed to get message count from shard for user {userId}");
             return 0;
         }
     }

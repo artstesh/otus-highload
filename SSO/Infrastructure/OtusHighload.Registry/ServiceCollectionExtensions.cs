@@ -1,4 +1,5 @@
 ﻿using Common.DataAccess;
+using Common.Utility;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OtusHighload.Application.Repositories;
@@ -22,6 +23,8 @@ namespace OtusHighload.Registry
                 .AddScoped<IFeedCacheService, FeedCacheService>()
                 .AddScoped<ICacheRebuildService, CacheRebuildService>()
                 .AddScoped<IMessageBusService, RabbitMQService>()
+                .AddTransient<RequestIdLoggingMiddleware>()
+                .AddScoped<IRequestContext, RequestContext>()
                 .AddSingleton<IOtusContextFactory, OtusContextFactory>(p =>
                     new OtusContextFactory(configuration.GetConnectionString("DefaultConnection")!));
 
