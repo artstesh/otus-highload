@@ -1,4 +1,5 @@
 ﻿using Common.DataAccess;
+using Common.Utility;
 using Dialogs.Application.Services;
 using Dialogs.DataAccess.Managers;
 using Microsoft.Extensions.Configuration;
@@ -14,9 +15,7 @@ namespace Dialogs.Registry
                 .AddSingleton<IShardManager, ShardManager>()
                 .AddScoped<IDialogService, DialogService>()
                 .AddSingleton<ITokenCryptoService, TokenCryptoService>(e => new TokenCryptoService(configuration.GetValue<string>("Security:EncryptionKey")))
-                .AddSingleton<IOtusContextFactory, OtusContextFactory>()
-                .AddScoped<IRequestContext, RequestContext>()
-                .AddTransient<RequestIdLoggingMiddleware>();
+                .AddSingleton<IOtusContextFactory, OtusContextFactory>();
 
             return services;
         }
