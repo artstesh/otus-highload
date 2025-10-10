@@ -8,7 +8,8 @@ services:
       "Kestrel:Certificates:Default:Path": "/app/aspnetapp.pfx"
       "Kestrel:Certificates:Default:Password": "123"
       "Kestrel:Certificates:Default:AllowInvalid": "true"
-      "ConnectionStrings__DefaultConnection": "User ID=postgres;Password=postgres;Host=haproxy;Port=5432;Database=postgres;Pooling=true;"
+      "ConnectionStrings__DefaultConnection": "User ID=postgres;Password=postgres;Host=haproxy;Port=5443;Database=postgres;Pooling=true;"
+      "ConnectionStrings__ReadConnection": "User ID=postgres;Password=postgres;Host=haproxy;Port=5442;Database=postgres;Pooling=true;"
     ports:
       - "5004:443"
       - "8004:80"
@@ -19,7 +20,8 @@ services:
       "Kestrel:Certificates:Default:Path": "/app/aspnetapp.pfx"
       "Kestrel:Certificates:Default:Password": "123"
       "Kestrel:Certificates:Default:AllowInvalid": "true"
-      "ConnectionStrings__DefaultConnection": "User ID=postgres;Password=postgres;Host=haproxy;Port=5432;Database=postgres;Pooling=true;"
+      "ConnectionStrings__DefaultConnection": "User ID=postgres;Password=postgres;Host=haproxy;Port=5443;Database=postgres;Pooling=true;"
+      "ConnectionStrings__ReadConnection": "User ID=postgres;Password=postgres;Host=haproxy;Port=5442;Database=postgres;Pooling=true;"
     ports:
       - "5002:443"
       - "8002:80"
@@ -30,7 +32,8 @@ services:
       "Kestrel:Certificates:Default:Path": "/app/aspnetapp.pfx"
       "Kestrel:Certificates:Default:Password": "123"
       "Kestrel:Certificates:Default:AllowInvalid": "true"
-      "ConnectionStrings__DefaultConnection": "User ID=postgres;Password=postgres;Host=haproxy;Port=5432;Database=postgres;Pooling=true;"
+      "ConnectionStrings__DefaultConnection": "User ID=postgres;Password=postgres;Host=haproxy;Port=5443;Database=postgres;Pooling=true;"
+      "ConnectionStrings__ReadConnection": "User ID=postgres;Password=postgres;Host=haproxy;Port=5442;Database=postgres;Pooling=true;"
     ports:
       - "5003:443"
       - "8003:80"

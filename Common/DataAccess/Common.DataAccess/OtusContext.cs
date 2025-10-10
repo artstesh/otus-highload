@@ -8,6 +8,7 @@ namespace OtusHighload.DataAccess;
 public class OtusContext
 {
     private readonly string _masterConnectionString;
+    private readonly string _slaveConnectionString;
 
     // Политика повторных попыток для временных ошибок
     private readonly Polly.Retry.AsyncRetryPolicy _policy =
@@ -15,9 +16,10 @@ public class OtusContext
             .WaitAndRetryAsync(3, retryAttempt =>
                 TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
 
-    public OtusContext(string masterConnectionString)
+    public OtusContext(string masterConnectionString, string slaveConnectionString)
     {
         _masterConnectionString = masterConnectionString;
+        _slaveConnectionString = slaveConnectionString;
     }
 
     // Методы для операций чтения (используют слейвы)
@@ -62,7 +64,7 @@ public class OtusContext
 
     private async Task<T> ApplyPolicy<T>(Func<NpgsqlConnection, Task<T>> func, bool isReadOperation)
     {
-        var connectionString = _masterConnectionString;
+        var connectionString = isReadOperation ? _slaveConnectionString : _masterConnectionString;
         var connection = ConnectionPool.Instance.GetConnection(connectionString);
 
         T result;
@@ -75,6 +77,15 @@ public class OtusContext
             ConnectionPool.Instance.ReturnConnection(connection);
         }
 
+        return result;
+    }
+
+    // Дополнительный метод для принудительного использования мастера для чтения
+    // (например, для чтения после записи в рамках одной транзакции)
+    public async Task<T> QueryWithMasterAsync<T>(Func<NpgsqlConnection, Task<T>> func)
+    {
+        T result = default;
+        await ApplyPolicy(async c => result = await func(c), isReadOperation: false);
         return result;
     }
 }

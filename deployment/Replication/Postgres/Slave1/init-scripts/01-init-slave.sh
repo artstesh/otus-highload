@@ -5,7 +5,7 @@ echo "Setting up the slave1..."
 
 echo "Waiting for the master..."
 until pg_isready -h postgres -p 5432 -U postgres; do
-  sleep 2
+  sleep 5
 done
 
 echo "Master is ready, setting up..."

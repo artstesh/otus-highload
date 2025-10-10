@@ -14,6 +14,7 @@ hot_standby = on
 archive_mode = on
 archive_command = 'cd .'
 listen_addresses = '*'
+wal_sender_timeout = 5
 EOF
 
 echo "Master is ready for replication"

@@ -65,7 +65,8 @@ services:
     volumes:
       - ./haproxy/:/usr/local/etc/haproxy/
     ports:
-      - "5432:5432"
+      - "5442:5442"
+      - "5443:5443"
     profiles:
       - development
     depends_on:
@@ -78,6 +79,8 @@ services:
   postgres:
     build: ./postgres/Master
     container_name: postgres
+    ports:
+      - "5432:5432"
     profiles:
       - development
     networks:
@@ -93,6 +96,8 @@ services:
   postgres-slave1:
     build: ./postgres/Slave1
     container_name: postgres-slave1
+    ports:
+      - "5433:5432"
     profiles:
       - development
     networks:
@@ -111,6 +116,8 @@ services:
   postgres-slave2:
     build: ./postgres/Slave2
     container_name: postgres-slave2
+    ports:
+      - "5434:5432"
     profiles:
       - development
     networks:

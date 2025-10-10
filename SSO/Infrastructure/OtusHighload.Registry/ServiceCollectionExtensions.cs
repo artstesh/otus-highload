@@ -15,7 +15,7 @@ namespace SSO.ComponentRegistry
                 .AddScoped<IUserRepository, UserRepository>()
                 .AddScoped<IUserService, UserService>()
                 .AddSingleton<IOtusContextFactory, OtusContextFactory>(p =>
-                    new OtusContextFactory(configuration.GetConnectionString("DefaultConnection")));
+                    new OtusContextFactory(configuration.GetConnectionString("DefaultConnection"),configuration.GetConnectionString("ReadConnection")));
 
             return services;
         }
