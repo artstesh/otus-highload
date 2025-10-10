@@ -42,8 +42,8 @@ public class DialogService : IDialogService
             SentAt = DateTime.UtcNow
         };
 
-        var sql = @"INSERT INTO messages (id, from_user_id, to_user_id, text, sent_at, shard_key)
-                   VALUES (@Id, @FromUserId, @ToUserId, @Text, @SentAt, @ShardKey)";
+        var sql = @"INSERT INTO messages (id, from_user_id, to_user_id, text, sent_at)
+                   VALUES (@Id, @FromUserId, @ToUserId, @Text, @SentAt)";
 
         await connection.ExecuteAsync(sql, message);
 
@@ -71,7 +71,7 @@ public class DialogService : IDialogService
     {
         using var connection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection"));
 
-        var sql = @"SELECT id as Id, from_user_id as FromUserId, to_user_id as ToUserId, text as Text, sent_at as SentAt, shard_key as ShardKey, is_read as IsRead FROM messages
+        var sql = @"SELECT id as Id, from_user_id as FromUserId, to_user_id as ToUserId, text as Text, sent_at as SentAt, is_read as IsRead FROM messages
                    WHERE (from_user_id = @user1 AND to_user_id = @user2)
                       OR (from_user_id = @user2 AND to_user_id = @user1)
                    ORDER BY sent_at";
@@ -87,7 +87,7 @@ public class DialogService : IDialogService
         try
         {
             using var connection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-            var sql = @"SELECT id as Id, from_user_id as FromUserId, to_user_id as ToUserId, text as Text, sent_at as SentAt, shard_key as ShardKey, is_read as IsRead FROM messages
+            var sql = @"SELECT id as Id, from_user_id as FromUserId, to_user_id as ToUserId, text as Text, sent_at as SentAt, is_read as IsRead FROM messages
                        WHERE from_user_id = @userId OR to_user_id = @userId
                        ORDER BY sent_at";
 
