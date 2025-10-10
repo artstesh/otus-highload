@@ -91,7 +91,7 @@ public class UserService : IUserService
         for (var i = 0; i < count; i++)
         {
             users.Add(UserGenerator.GenerateUser());
-            if (users.Count >= 10000 || i >= count)
+            if (users.Count >= count || i >= count)
             {
                 await _userRepository.BulkCreateAsync(userKeys, users.Cast<object>().ToList(), ct);
                 users.Clear();
