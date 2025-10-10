@@ -13,7 +13,10 @@ namespace Counter.Registry
         {
             services
                 .AddScoped<ICounterRepository, CounterRepository>()
+                .AddScoped<ISagaRepository, SagaRepository>()
                 .AddScoped<ICounterService, CounterService>()
+                .AddScoped<ISagaService, SagaService>()
+                .AddScoped<IMessageServiceClient, MessageServiceClient>()
                 .AddSingleton<IOtusContextFactory, OtusContextFactory>(p =>
                     new OtusContextFactory(configuration.GetConnectionString("DefaultConnection")!));
 

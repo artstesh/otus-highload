@@ -11,6 +11,7 @@ services:
       "EventBus__HostAddress": "amqp://otus:6GccewECzxGJgTh4QYr82D8JUgCxsC5E@rabbitmq:5672"
       "Services__Dialogs": "http://dialogs"
       "Security__EncryptionKey": "iNyEkoVuMRs1YTdOeKzq0GkpB7sCZy9/CqSVvYr9N9rpYc7RrGJS8LjOfVRhewsf"
+      "ConnectionStrings__DefaultConnection": "User ID=postgres;Password=postgres;Host=postgres;Port=5432;Database=postgres;Pooling=true;MaxPoolSize=90;"
     ports:
       - "5001:443"
       - "8001:80"
@@ -22,21 +23,31 @@ services:
       "Kestrel:Certificates:Default:Path": "/app/aspnetapp.pfx"
       "Kestrel:Certificates:Default:Password": "123"
       "Kestrel:Certificates:Default:AllowInvalid": "true"
-      "Database__Shards__0__ShardId": 1
-      "Database__Shards__0__ConnectionString": "Host=dialogs-pg-2;Port=5432;Database=postgres;Username=postgres;Password=postgres"
-      "Database__Shards__0__IsActive": true
-      "Database__Shards__1__ShardId": 2
-      "Database__Shards__1__ConnectionString": "Host=dialogs-pg-1;Port=5432;Database=postgres;Username=postgres;Password=postgres"
-      "Database__Shards__1__IsActive": true
+      "ConnectionStrings__DefaultConnection": "User ID=postgres;Password=postgres;Host=dialogs-pg;Port=5432;Database=postgres;Pooling=true;MaxPoolSize=90;"
       "RabbitMQ__HostName": "rabbitmq"
       "RabbitMQ__UserName": "otus"
       "RabbitMQ__Password": "6GccewECzxGJgTh4QYr82D8JUgCxsC5E"
       "RabbitMQ__VirtualHost": "/"
       "Security__EncryptionKey": "iNyEkoVuMRs1YTdOeKzq0GkpB7sCZy9/CqSVvYr9N9rpYc7RrGJS8LjOfVRhewsf"
-
     ports:
       - "5002:443"
       - "8002:80"
+
+
+  counter:
+    environment:
+      "ASPNETCORE_ENVIRONMENT": "Development"
+      "ASPNETCORE_URLS": "https://+;http://+"
+      "Kestrel:Certificates:Default:Path": "/app/aspnetapp.pfx"
+      "Kestrel:Certificates:Default:Password": "123"
+      "Kestrel:Certificates:Default:AllowInvalid": "true"
+      "Services__Dialogs": "http://dialogs"
+      "Security__EncryptionKey": "iNyEkoVuMRs1YTdOeKzq0GkpB7sCZy9/CqSVvYr9N9rpYc7RrGJS8LjOfVRhewsf"
+      "ConnectionStrings__DefaultConnection": "User ID=postgres;Password=postgres;Host=counter-pg;Port=5432;Database=postgres;Pooling=true;MaxPoolSize=90;"
+      "ConnectionStrings__Redis": "redis:6379"
+    ports:
+      - "5003:443"
+      - "8003:80"
 
   post-socket:
     environment:
@@ -57,13 +68,13 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
 
-  dialogs-pg-1:
+  dialogs-pg:
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
 
-  dialogs-pg-2:
+  counter-pg:
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres

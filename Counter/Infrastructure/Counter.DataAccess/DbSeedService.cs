@@ -1,20 +1,22 @@
-﻿using Common.DataAccess;
+﻿using System.Text.RegularExpressions;
+using Common.DataAccess;
 using Dapper;
-using Dialogs.DataAccess.Migrations;
+using OtusHighload.DataAccess.Migrations;
 
-namespace Dialogs.DataAccess;
+namespace OtusHighload.DataAccess;
 
 public class DbSeedService
 {
     private readonly IOtusContextFactory _contextFactory;
     private readonly List<IMigration> _migrations;
+    private string dbName;
 
     public DbSeedService(IOtusContextFactory contextFactory)
     {
         _contextFactory = contextFactory;
         _migrations = new List<IMigration>
         {
-            new MessagesMigration(contextFactory)
+            new InitMigration(contextFactory)
         };
     }
 

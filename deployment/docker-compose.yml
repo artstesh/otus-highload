@@ -30,10 +30,24 @@ services:
       - development
       - production
     depends_on:
-      dialogs-pg-1:
+      dialogs-pg:
           condition: service_healthy
-      dialogs-pg-2:
+
+  counter:
+    image: ${DOCKER_REGISTRY}/africa-platform/counter:${TAG}
+    container_name: counter
+    restart: always
+    build:
+      context: ../
+      dockerfile: Counter/Host/Counter.Api/Dockerfile
+    profiles:
+      - development
+      - production
+    depends_on:
+      counter-pg:
           condition: service_healthy
+      redis:
+        condition: service_healthy
 
   post-socket:
     image: ${DOCKER_REGISTRY}/africa-platform/post-socket:${TAG}
@@ -64,30 +78,30 @@ services:
       timeout: 5s
       retries: 5
 
-  dialogs-pg-1:
+  counter-pg:
     image: postgres:13-alpine
-    container_name: dialogs-pg-1
+    container_name: counter-pg
     ports:
-      - "5443:5432"
+      - "5440:5432"
     profiles:
       - development
     volumes:
-      - dialogs_pg_one:/var/lib/postgresql/data/
+      - counter-pg:/var/lib/postgresql/data/
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       timeout: 5s
       retries: 5
 
-  dialogs-pg-2:
+  dialogs-pg:
     image: postgres:13-alpine
-    container_name: dialogs-pg-2
+    container_name: dialogs-pg
     ports:
-      - "5444:5432"
+      - "5443:5432"
     profiles:
       - development
     volumes:
-      - dialogs_pg_two:/var/lib/postgresql/data/
+      - dialogs_pg_one:/var/lib/postgresql/data/
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
@@ -131,6 +145,7 @@ services:
 
 volumes:
   postgres:
+  counter-pg:
   dialogs_pg_one:
   dialogs_pg_two:
   redis_data:

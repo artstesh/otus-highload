@@ -4,14 +4,31 @@
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2"/>
+        <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.9" />
+        <PackageReference Include="StackExchange.Redis" Version="2.9.25" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\Application\Counter.Application\Counter.Application.csproj" />
       <ProjectReference Include="..\..\Domain\Counter.Entities\Counter.Entities.csproj" />
+      <ProjectReference Include="..\..\Infrastructure\Counter.Registry\Counter.Registry.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\..\..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="aspnetapp.pfx">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

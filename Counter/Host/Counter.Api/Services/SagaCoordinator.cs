@@ -1,36 +1,33 @@
-﻿using Counter.Entities;
+﻿using Counter.Application.Services;
+using Counter.Entities;
 
 namespace Counter.Api.Services;
 
 public interface ISagaCoordinator
 {
-    Task<Guid> StartMarkMessageReadSagaAsync(Guid messageId, Guid userId);
-    Task<bool> CompleteMarkMessageReadStepAsync(Guid sagaId);
-    Task<bool> CompleteDecrementCounterStepAsync(Guid sagaId);
-    Task<bool> CompensateAsync(Guid sagaId, string reason);
+    Task<Guid> StartMarkMessageReadSagaAsync(Guid messageId, Guid userId, CancellationToken tkn);
 }
 
-// Saga.Core/Services/SagaCoordinator.cs
 public class SagaCoordinator : ISagaCoordinator
 {
-    private readonly ISagaRepository _sagaRepository;
+    private readonly ISagaService _service;
     private readonly IMessageServiceClient _messageService;
     private readonly ICounterService _counterService;
     private readonly ILogger<SagaCoordinator> _logger;
 
     public SagaCoordinator(
-        ISagaRepository sagaRepository,
+        ISagaService service,
         IMessageServiceClient messageService,
         ICounterService counterService,
         ILogger<SagaCoordinator> logger)
     {
-        _sagaRepository = sagaRepository;
+        _service = service;
         _messageService = messageService;
         _counterService = counterService;
         _logger = logger;
     }
 
-    public async Task<Guid> StartMarkMessageReadSagaAsync(Guid messageId, Guid userId)
+    public async Task<Guid> StartMarkMessageReadSagaAsync(Guid messageId, Guid userId, CancellationToken tkn)
     {
         var saga = new MessageReadSaga
         {
@@ -38,16 +35,15 @@ public class SagaCoordinator : ISagaCoordinator
             UserId = userId
         };
 
-        await _sagaRepository.CreateAsync(saga);
-        _logger.LogInformation("Started SAGA {SagaId} for message {MessageId}", saga.SagaId, messageId);
+        await _service.CreateAsync(saga);
+        _logger.LogInformation("Started SAGA {SagaId} for message {MessageId}", saga.Id, messageId);
 
-        // Шаг 1: Пометить сообщение как прочитанное
-        await ExecuteMarkMessageReadStepAsync(saga);
+        await ExecuteMarkMessageReadStepAsync(saga,tkn);
 
-        return saga.SagaId;
+        return saga.Id;
     }
 
-    private async Task ExecuteMarkMessageReadStepAsync(MessageReadSaga saga)
+    private async Task ExecuteMarkMessageReadStepAsync(MessageReadSaga saga, CancellationToken tkn)
     {
         try
         {
@@ -55,79 +51,79 @@ public class SagaCoordinator : ISagaCoordinator
             if (success)
             {
                 saga.State = SagaState.MessageMarkedAsRead;
-                await _sagaRepository.UpdateAsync(saga);
+                await _service.UpdateAsync(saga);
 
-                _logger.LogInformation("SAGA {SagaId}: Message marked as read", saga.SagaId);
+                _logger.LogInformation("SAGA {SagaId}: Message marked as read", saga.Id);
 
-                // Шаг 2: Уменьшить счетчик
-                await ExecuteDecrementCounterStepAsync(saga);
+                await ExecuteDecrementCounterStepAsync(saga, tkn);
             }
             else
             {
-                await CompensateAsync(saga.SagaId, "Failed to mark message as read");
+                await CompensateAsync(saga.Id, "Failed to mark message as read");
             }
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "SAGA {SagaId}: Error marking message as read", saga.SagaId);
-            await CompensateAsync(saga.SagaId, $"Mark message failed: {ex.Message}");
+            _logger.LogError(ex, "SAGA {Id}: Error marking message as read", saga.Id);
+            await CompensateAsync(saga.Id, $"Mark message failed: {ex.Message}");
         }
     }
 
-    private async Task ExecuteDecrementCounterStepAsync(MessageReadSaga saga)
+    private async Task ExecuteDecrementCounterStepAsync(MessageReadSaga saga, CancellationToken tkn)
     {
         try
         {
-            var success = await _counterService.DecrementUnreadCountAsync(saga.UserId);
+            var success = await _counterService.DecrementUnreadCountAsync(saga.UserId, tkn);
             if (success)
             {
                 saga.State = SagaState.Completed;
                 saga.CompletedAt = DateTime.UtcNow;
-                await _sagaRepository.UpdateAsync(saga);
+                await _service.UpdateAsync(saga);
 
-                _logger.LogInformation("SAGA {SagaId}: Completed successfully", saga.SagaId);
+                _logger.LogInformation("SAGA {Id}: Completed successfully", saga.Id);
             }
             else
             {
                 // Компенсирующая транзакция: помечаем сообщение как непрочитанное
-                await CompensateAsync(saga.SagaId, "Failed to decrement counter");
+                await CompensateAsync(saga.Id, "Failed to decrement counter");
             }
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "SAGA {SagaId}: Error decrementing counter", saga.SagaId);
-            await CompensateAsync(saga.SagaId, $"Decrement counter failed: {ex.Message}");
+            _logger.LogError(ex, "SAGA {Id}: Error decrementing counter", saga.Id);
+            await CompensateAsync(saga.Id, $"Decrement counter failed: {ex.Message}");
         }
     }
 
     public async Task<bool> CompensateAsync(Guid sagaId, string reason)
     {
-        var saga = await _sagaRepository.GetByIdAsync(sagaId);
+        var saga = await _service.GetByIdAsync(sagaId);
         if (saga == null) return false;
 
         saga.State = SagaState.Compensating;
         saga.FailureReason = reason;
-        await _sagaRepository.UpdateAsync(saga);
+        await _service.UpdateAsync(saga);
 
-        _logger.LogWarning("SAGA {SagaId}: Starting compensation - {Reason}", sagaId, reason);
+        _logger.LogWarning("SAGA {Id}: Starting compensation - {Reason}", sagaId, reason);
 
         try
         {
+            var success = false;
             // Компенсируем только если сообщение было помечено как прочитанное
             if (saga.State == SagaState.MessageMarkedAsRead)
             {
-                await _messageService.MarkMessageAsUnreadAsync(saga.MessageId);
-                _logger.LogInformation("SAGA {SagaId}: Compensation completed - message marked as unread", sagaId);
+               success =  await _messageService.MarkMessageAsUnreadAsync(saga.MessageId);
+                _logger.LogInformation("SAGA {Id}: Compensation completed - message marked as unread", sagaId);
             }
 
             saga.State = SagaState.Failed;
-            await _sagaRepository.UpdateAsync(saga);
+            success = success && await _service.UpdateAsync(saga);
 
-            return true;
+            return success;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "SAGA {SagaId}: Compensation failed", sagaId);
+            _logger.LogError(ex, "SAGA {Id}: Compensation failed", sagaId);
             return false;
         }
     }

@@ -1,7 +1,6 @@
-﻿using Common.Utility;
-using Dapper;
-using Dialogs.DataAccess.Managers;
+﻿using Dapper;
 using Dialogs.Entities;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Npgsql;
 
@@ -13,17 +12,18 @@ public interface IDialogService
     Task<IEnumerable<Message>> GetDialogAsync(Guid user1, Guid user2);
     Task<IEnumerable<Message>> GetAllUserMessagesAsync(Guid userId);
     Task<int> GetUserMessageCountAsync(Guid userId);
+    Task<bool> MarkMessageAsAsync(Guid id, bool read);
 }
 
 public class DialogService : IDialogService
 {
-    private readonly IShardManager _shardManager;
+    private readonly IConfiguration _configuration;
     private readonly ILogger<DialogService> _logger;
 
-    public DialogService(IShardManager shardManager, ILogger<DialogService> logger)
+    public DialogService( ILogger<DialogService> logger, IConfiguration configuration)
     {
-        _shardManager = shardManager;
         _logger = logger;
+        _configuration = configuration;
     }
 
     public async Task<Guid> SendMessageAsync(Guid fromUserId, Guid toUserId, string text)
@@ -31,10 +31,7 @@ public class DialogService : IDialogService
         if (string.IsNullOrWhiteSpace(text))
             throw new ArgumentException("Message text cannot be empty", nameof(text));
 
-        var shardKey = ShardKeyGenerator.GetShardKeyForMessage(fromUserId, toUserId);
-        var connectionString = _shardManager.GetShardConnectionString(shardKey);
-
-        using var connection = new NpgsqlConnection(connectionString);
+        using var connection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection"));
 
         var message = new Message
         {
@@ -42,8 +39,7 @@ public class DialogService : IDialogService
             FromUserId = fromUserId,
             ToUserId = toUserId,
             Text = text,
-            SentAt = DateTime.UtcNow,
-            ShardKey = shardKey
+            SentAt = DateTime.UtcNow
         };
 
         var sql = @"INSERT INTO messages (id, from_user_id, to_user_id, text, sent_at, shard_key)
@@ -55,14 +51,27 @@ public class DialogService : IDialogService
         return message.Id;
     }
 
+    public async Task<bool> MarkMessageAsAsync(Guid id, bool read)
+    {
+        using var connection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+
+        var queryArgs = new Message
+        {
+            Id = id,
+            IsRead = read
+        };
+
+        var sql = @"UPDATE messages SET is_read = @IsRead where id = @Id VALUES (@Id, @IsRead)";
+
+        var affectedRows = await connection.ExecuteAsync(sql, queryArgs);
+        return affectedRows > 0;
+    }
+
     public async Task<IEnumerable<Message>> GetDialogAsync(Guid user1, Guid user2)
     {
-        var shardKey = ShardKeyGenerator.GetShardKeyForMessage(user1, user2);
-        var connectionString = _shardManager.GetShardConnectionString(shardKey);
+        using var connection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection"));
 
-        using var connection = new NpgsqlConnection(connectionString);
-
-        var sql = @"SELECT id as Id, from_user_id as FromUserId, to_user_id as ToUserId, text as Text, sent_at as SentAt, shard_key as ShardKey FROM messages
+        var sql = @"SELECT id as Id, from_user_id as FromUserId, to_user_id as ToUserId, text as Text, sent_at as SentAt, shard_key as ShardKey, is_read as IsRead FROM messages
                    WHERE (from_user_id = @user1 AND to_user_id = @user2)
                       OR (from_user_id = @user2 AND to_user_id = @user1)
                    ORDER BY sent_at";
@@ -75,35 +84,10 @@ public class DialogService : IDialogService
 
     public async Task<IEnumerable<Message>> GetAllUserMessagesAsync(Guid userId)
     {
-        var allShards = _shardManager.GetAllActiveShardsAsync();
-        var tasks = allShards.Select(shard =>
-            GetUserMessagesFromShardAsync(shard.ConnectionString, userId));
-
-        var results = await Task.WhenAll(tasks);
-        var allMessages = results.SelectMany(x => x)
-                               .OrderBy(x => x.SentAt)
-                               .ToList();
-
-        _logger.LogDebug($"Retrieved {allMessages.Count} total messages for user {userId}");
-        return allMessages;
-    }
-
-    public async Task<int> GetUserMessageCountAsync(Guid userId)
-    {
-        var allShards = _shardManager.GetAllActiveShardsAsync();
-        var tasks = allShards.Select(shard =>
-            GetUserMessageCountFromShardAsync(shard.ConnectionString, userId));
-
-        var results = await Task.WhenAll(tasks);
-        return results.Sum();
-    }
-
-    private async Task<IEnumerable<Message>> GetUserMessagesFromShardAsync(string connectionString, Guid userId)
-    {
         try
         {
-            using var connection = new NpgsqlConnection(connectionString);
-            var sql = @"SELECT id as Id, from_user_id as FromUserId, to_user_id as ToUserId, text as Text, sent_at as SentAt, shard_key as ShardKey FROM messages
+            using var connection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            var sql = @"SELECT id as Id, from_user_id as FromUserId, to_user_id as ToUserId, text as Text, sent_at as SentAt, shard_key as ShardKey, is_read as IsRead FROM messages
                        WHERE from_user_id = @userId OR to_user_id = @userId
                        ORDER BY sent_at";
 
@@ -116,11 +100,11 @@ public class DialogService : IDialogService
         }
     }
 
-    private async Task<int> GetUserMessageCountFromShardAsync(string connectionString, Guid userId)
+    public async Task<int> GetUserMessageCountAsync(Guid userId)
     {
         try
         {
-            using var connection = new NpgsqlConnection(connectionString);
+            using var connection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection"));
             var sql = @"SELECT COUNT(*) FROM messages
                        WHERE from_user_id = @userId OR to_user_id = @userId";
 

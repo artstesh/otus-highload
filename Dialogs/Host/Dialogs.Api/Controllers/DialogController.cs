@@ -69,4 +69,18 @@ public class DialogController : ControllerBase
             return StatusCode(500, new { error = "Internal server error" });
         }
     }
+
+    [HttpGet("mark/{id}/read/{read}")]
+    public async Task<IActionResult> GetAllUserMessages([FromQuery] Guid id, [FromQuery] bool read)
+    {
+        try
+        {
+            return Ok(await _dialogService.MarkMessageAsAsync(id, read));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error marking a message read status");
+            return Ok(false);
+        }
+    }
 }

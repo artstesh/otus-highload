@@ -7,5 +7,5 @@ public class Message
     public Guid ToUserId { get; set; }
     public string Text { get; set; }
     public DateTime SentAt { get; set; }
-    public Guid ShardKey { get; set; }
+    public bool IsRead { get; set; }
 }
