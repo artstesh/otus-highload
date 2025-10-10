@@ -21,7 +21,7 @@ public class DbSeedService
 
     public void Seed()
     {
-        _contextFactory.Get(_contextFactory.GetConnectionString()).Execute(conn =>
+        _contextFactory.Get().Execute(conn =>
         {
             conn.Execute("CREATE TABLE IF NOT EXISTS \"Migrations\" (Id uuid not null);");
         });

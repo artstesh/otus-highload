@@ -2,7 +2,7 @@
 
 public interface IOtusContextFactory
 {
-    OtusContext Get(string? connectionString = null);
+    OtusContext Get();
     string GetConnectionString();
 }
 
@@ -17,9 +17,9 @@ public class OtusContextFactory : IOtusContextFactory
         _slaveConnectionString = slaveConnectionString;
     }
 
-    public OtusContext Get(string? connectionString = null)
+    public OtusContext Get()
     {
-        return new OtusContext(connectionString ?? _connectionString, _slaveConnectionString);
+        return new OtusContext(_connectionString, _slaveConnectionString);
     }
 
     public string GetConnectionString()

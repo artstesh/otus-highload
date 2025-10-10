@@ -1,32 +1,38 @@
-﻿namespace OtusHighload.Services;
+﻿using Common.Utility;
+
+namespace OtusHighload.Services;
 
 public interface IAuthStoreService
 {
-    string AddEntry(Guid userId);
-    Guid? GetId(Guid token);
-    Guid? CheckExisting(Guid id);
+    string GetToken(Guid id);
+    Guid? GetId(string token);
 }
 
 public class AuthStoreService : IAuthStoreService
 {
+    private readonly ITokenCryptoService _crypto;
     private Dictionary<Guid, Guid> _tokenStore = new Dictionary<Guid, Guid>();
     private Dictionary<Guid, Guid> _idStore = new Dictionary<Guid, Guid>();
 
-    public Guid? CheckExisting(Guid id)
+    public AuthStoreService(ITokenCryptoService crypto)
     {
-        return _idStore.TryGetValue(id, out var value) ? value : null;
+        _crypto = crypto;
     }
 
-    public string AddEntry(Guid userId)
+    public string GetToken(Guid id)
     {
-        var token = Guid.NewGuid();
-        _tokenStore.Add(token, userId);
-        _idStore.Add(userId,token);
-        return token.ToString();
+        return _crypto.EncryptUserId(id);
     }
 
-    public Guid? GetId(Guid token)
+    public Guid? GetId(string token)
     {
-        return _tokenStore.TryGetValue(token, out var value) ? value : null;
+        try
+        {
+            return _crypto.DecryptUserId(token);
+        }
+        catch
+        {
+            return null;
+        }
     }
 }

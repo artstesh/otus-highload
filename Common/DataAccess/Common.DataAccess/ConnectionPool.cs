@@ -9,6 +9,7 @@ namespace Common.DataAccess;
 public class ConnectionPool
 {
     public static ConnectionPool Instance { get; } = new ConnectionPool();
+    private readonly int _maxPoolSize = 90;
 
     private ConnectionPool(){}
 
@@ -16,10 +17,11 @@ public class ConnectionPool
 
     public NpgsqlConnection GetConnection(string connectionString)
     {
-        var host = Regex.Match(connectionString, "Host=([^;]+);").Groups[1].Value;
-        if(!_dic.ContainsKey(host))
-            _dic[host] = new ConcurrentBag<NpgsqlConnection>();
-        if (_dic[host].TryTake(out var connection))
+        var key = GetKey(Regex.Match(connectionString, "Host=([^;]+);").Groups[1].Value
+        ,Regex.Match(connectionString, "Port=([^;]+);").Groups[1].Value);
+        if(!_dic.ContainsKey(key))
+            _dic[key] = new ConcurrentBag<NpgsqlConnection>();
+        if (_dic[key].TryTake(out var connection))
         {
             return connection.FullState != ConnectionState.Open ? GetConnection(connectionString) : connection;
         }
@@ -30,13 +32,19 @@ public class ConnectionPool
 
     public void ReturnConnection(NpgsqlConnection connection)
     {
-        if(!_dic.ContainsKey(connection.Host))
-            _dic[connection.Host] = new ConcurrentBag<NpgsqlConnection>();
-        if (connection.FullState != ConnectionState.Open)
+        var key = GetKey(connection.Host,connection.Port.ToString());
+        if(!_dic.ContainsKey(key))
+            _dic[key] = new ConcurrentBag<NpgsqlConnection>();
+        if (_dic[key].Count >= _maxPoolSize || connection.FullState != ConnectionState.Open)
         {
-            connection.Close();
+            connection.Dispose();
             return;
         }
-        _dic[connection.Host].Add(connection);
+        _dic[key].Add(connection);
+    }
+
+    private string GetKey(string host, string port)
+    {
+        return $"{host}:{port}";
     }
 }

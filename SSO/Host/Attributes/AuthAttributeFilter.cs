@@ -10,7 +10,7 @@ public class AuthAttribute : ActionFilterAttribute
 
     public override void OnActionExecuting(ActionExecutingContext context)
     {var token = context.HttpContext.Request.Headers["x-token"].ToString();
-        if (string.IsNullOrWhiteSpace(token) || GetService(context).GetId(Guid.Parse(token)) == null)
+        if (string.IsNullOrWhiteSpace(token) || GetService(context).GetId(token) == null)
             context.Result = new UnauthorizedResult();
         else
             base.OnActionExecuting(context);

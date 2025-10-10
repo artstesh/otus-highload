@@ -65,7 +65,7 @@ export default function (data) {
         'Content-Type': 'application/json',
     };
 
-    const searchUrl = `${BASE_URL}/User/search?firstName=Kara&lastname=Mic`;
+    const searchUrl = `${BASE_URL}/User/search?firstName=Jad&lastname=Her`;
     
     const searchResponse = http.get(searchUrl, { headers: headers });
     

@@ -32,16 +32,12 @@ public class OtusContext
 
     public T Query<T>(Func<NpgsqlConnection, T> func, bool forceMaster = false)
     {
-        var connectionString = _masterConnectionString;
-        var connection = ConnectionPool.Instance.GetConnection(connectionString);
-        try
-        {
-            return func(connection);
-        }
-        finally
-        {
-            ConnectionPool.Instance.ReturnConnection(connection);
-        }
+
+        var connection = new NpgsqlConnection(_masterConnectionString);
+        connection.Open();
+        var result = func(connection);
+        connection.Close();
+        return result;
     }
 
     // Методы для операций записи (используют мастер)
