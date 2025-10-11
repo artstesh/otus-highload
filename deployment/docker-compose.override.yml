@@ -44,6 +44,10 @@ services:
       "Services__Dialogs": "http://dialogs"
       "Security__EncryptionKey": "iNyEkoVuMRs1YTdOeKzq0GkpB7sCZy9/CqSVvYr9N9rpYc7RrGJS8LjOfVRhewsf"
       "ConnectionStrings__DefaultConnection": "User ID=postgres;Password=postgres;Host=counter-pg;Port=5432;Database=postgres;Pooling=true;MaxPoolSize=90;"
+      "RabbitMQ__HostName": "rabbitmq"
+      "RabbitMQ__UserName": "otus"
+      "RabbitMQ__Password": "6GccewECzxGJgTh4QYr82D8JUgCxsC5E"
+      "RabbitMQ__VirtualHost": "/"
       "ConnectionStrings__Redis": "redis:6379"
     ports:
       - "5003:443"

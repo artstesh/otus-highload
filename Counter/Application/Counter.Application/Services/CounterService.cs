@@ -44,7 +44,6 @@ public class CounterService : ICounterService
 
         var counter = await _repository.GetByUserIdAsync(userId);
 
-        // Сохраняем в кеш
         await CacheAsync(cacheKey,counter);
 
         return counter;

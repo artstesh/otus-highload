@@ -61,7 +61,7 @@ public class DialogService : IDialogService
             IsRead = read
         };
 
-        var sql = @"UPDATE messages SET is_read = @IsRead where id = @Id VALUES (@Id, @IsRead)";
+        var sql = @"UPDATE messages SET is_read = @IsRead where id = @Id;";
 
         var affectedRows = await connection.ExecuteAsync(sql, queryArgs);
         return affectedRows > 0;

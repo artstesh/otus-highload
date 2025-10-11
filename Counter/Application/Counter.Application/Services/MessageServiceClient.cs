@@ -5,8 +5,8 @@ namespace Counter.Application.Services;
 
 public interface IMessageServiceClient
 {
-    Task<bool> MarkMessageAsUnreadAsync(Guid id);
-    Task<bool> MarkMessageAsReadAsync(Guid id);
+    Task<bool> MarkMessageAsUnreadAsync(Guid id, Guid userId);
+    Task<bool> MarkMessageAsReadAsync(Guid id, Guid userId);
 }
 
 public class MessageServiceClient : IMessageServiceClient
@@ -20,14 +20,14 @@ public class MessageServiceClient : IMessageServiceClient
         _logger = logger;
     }
 
-    public async Task<bool> MarkMessageAsUnreadAsync(Guid id)
+    public async Task<bool> MarkMessageAsUnreadAsync(Guid id, Guid userId)
     {
-        return await HandleProxyResponse(c => c.GetAsync($"/dialog/mark/{id}/read/{false}"));
+        return await HandleProxyResponse(c => c.GetAsync($"/dialog/{userId}/mark/{id}/read/{false}"));
     }
 
-    public async Task<bool> MarkMessageAsReadAsync(Guid id)
+    public async Task<bool> MarkMessageAsReadAsync(Guid id, Guid userId)
     {
-        return await HandleProxyResponse(c => c.GetAsync($"/dialog/mark/{id}/read/{true}"));
+        return await HandleProxyResponse(c => c.GetAsync($"/dialog/{userId}/mark/{id}/read/{true}"));
     }
 
     private async Task<bool> HandleProxyResponse(Func<HttpClient, Task<HttpResponseMessage>> request)

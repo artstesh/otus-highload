@@ -28,7 +28,7 @@ public class CountersController : Controller
     {
         var sagaId = await _sagaCoordinator.StartMarkMessageReadSagaAsync(request.MessageId, request.UserId, tkn);
 
-        return Accepted(new { SagaId = sagaId, Message = "SAGA started" });
+        return Accepted(new { SagaId = sagaId, Message = $"SAGA finished", IsSuccesful = sagaId != null });
     }
 }
 

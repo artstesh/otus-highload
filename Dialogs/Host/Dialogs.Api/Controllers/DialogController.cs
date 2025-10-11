@@ -1,6 +1,8 @@
 ﻿using Dialogs.Application.Services;
 using Dialogs.Contracts.Models;
 using Microsoft.AspNetCore.Mvc;
+using OtusHighload.Application.Services;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Dialogs.Api.Controllers;
 
@@ -10,11 +12,13 @@ public class DialogController : ControllerBase
 {
     private readonly IDialogService _dialogService;
     private readonly ILogger<DialogController> _logger;
+    private readonly IMessageBusService _bus;
 
-    public DialogController(IDialogService dialogService, ILogger<DialogController> logger)
+    public DialogController(IDialogService dialogService, ILogger<DialogController> logger, IMessageBusService bus)
     {
         _dialogService = dialogService;
         _logger = logger;
+        _bus = bus;
     }
 
     [HttpPost("send")]
@@ -28,7 +32,7 @@ public class DialogController : ControllerBase
                 userId,
                 request.ToUserId,
                 request.Text);
-
+            await _bus.PublishPostCreatedAsync(request.ToUserId, CancellationToken.None);
             return Ok(new { MessageId = messageId });
         }
         catch (Exception ex)
@@ -70,8 +74,9 @@ public class DialogController : ControllerBase
         }
     }
 
+    [SwaggerIgnore]
     [HttpGet("mark/{id}/read/{read}")]
-    public async Task<IActionResult> GetAllUserMessages([FromQuery] Guid id, [FromQuery] bool read)
+    public async Task<IActionResult> GetAllUserMessages([FromRoute] Guid id, [FromRoute] bool read)
     {
         try
         {

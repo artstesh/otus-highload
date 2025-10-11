@@ -12,11 +12,12 @@ namespace Counter.Registry
         public static IServiceCollection AddCounter(this IServiceCollection services, IConfiguration configuration)
         {
             services
-                .AddScoped<ICounterRepository, CounterRepository>()
+                .AddSingleton<ICounterRepository, CounterRepository>()
                 .AddScoped<ISagaRepository, SagaRepository>()
-                .AddScoped<ICounterService, CounterService>()
+                .AddSingleton<ICounterService, CounterService>()
                 .AddScoped<ISagaService, SagaService>()
                 .AddScoped<IMessageServiceClient, MessageServiceClient>()
+                .AddSingleton<IMessageBusService, RabbitMQService>()
                 .AddSingleton<IOtusContextFactory, OtusContextFactory>(p =>
                     new OtusContextFactory(configuration.GetConnectionString("DefaultConnection")!));
 

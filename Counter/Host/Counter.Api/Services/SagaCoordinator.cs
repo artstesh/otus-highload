@@ -5,7 +5,7 @@ namespace Counter.Api.Services;
 
 public interface ISagaCoordinator
 {
-    Task<Guid> StartMarkMessageReadSagaAsync(Guid messageId, Guid userId, CancellationToken tkn);
+    Task<Guid?> StartMarkMessageReadSagaAsync(Guid messageId, Guid userId, CancellationToken tkn);
 }
 
 public class SagaCoordinator : ISagaCoordinator
@@ -27,27 +27,29 @@ public class SagaCoordinator : ISagaCoordinator
         _logger = logger;
     }
 
-    public async Task<Guid> StartMarkMessageReadSagaAsync(Guid messageId, Guid userId, CancellationToken tkn)
+    public async Task<Guid?> StartMarkMessageReadSagaAsync(Guid messageId, Guid userId, CancellationToken tkn)
     {
         var saga = new MessageReadSaga
         {
+            Id = Guid.NewGuid(),
             MessageId = messageId,
             UserId = userId
         };
 
-        await _service.CreateAsync(saga);
+        var created = await _service.CreateAsync(saga);
+        if (!created) return null;
         _logger.LogInformation("Started SAGA {SagaId} for message {MessageId}", saga.Id, messageId);
 
-        await ExecuteMarkMessageReadStepAsync(saga,tkn);
+        var fulfilled = await ExecuteMarkMessageReadStepAsync(saga, tkn);
 
-        return saga.Id;
+        return fulfilled ? saga.Id : null;
     }
 
-    private async Task ExecuteMarkMessageReadStepAsync(MessageReadSaga saga, CancellationToken tkn)
+    private async Task<bool> ExecuteMarkMessageReadStepAsync(MessageReadSaga saga, CancellationToken tkn)
     {
         try
         {
-            var success = await _messageService.MarkMessageAsReadAsync(saga.MessageId);
+            var success = await _messageService.MarkMessageAsReadAsync(saga.MessageId, saga.UserId);
             if (success)
             {
                 saga.State = SagaState.MessageMarkedAsRead;
@@ -55,21 +57,24 @@ public class SagaCoordinator : ISagaCoordinator
 
                 _logger.LogInformation("SAGA {SagaId}: Message marked as read", saga.Id);
 
-                await ExecuteDecrementCounterStepAsync(saga, tkn);
+                return await ExecuteDecrementCounterStepAsync(saga, tkn);
             }
             else
             {
                 await CompensateAsync(saga.Id, "Failed to mark message as read");
+                return false;
             }
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "SAGA {Id}: Error marking message as read", saga.Id);
-            await CompensateAsync(saga.Id, $"Mark message failed: {ex.Message}");
+            await CompensateAsync(saga.Id, $"Mark message failed: {ex.StackTrace}");
         }
+
+        return false;
     }
 
-    private async Task ExecuteDecrementCounterStepAsync(MessageReadSaga saga, CancellationToken tkn)
+    private async Task<bool> ExecuteDecrementCounterStepAsync(MessageReadSaga saga, CancellationToken tkn)
     {
         try
         {
@@ -81,6 +86,7 @@ public class SagaCoordinator : ISagaCoordinator
                 await _service.UpdateAsync(saga);
 
                 _logger.LogInformation("SAGA {Id}: Completed successfully", saga.Id);
+                return true;
             }
             else
             {
@@ -93,6 +99,8 @@ public class SagaCoordinator : ISagaCoordinator
             _logger.LogError(ex, "SAGA {Id}: Error decrementing counter", saga.Id);
             await CompensateAsync(saga.Id, $"Decrement counter failed: {ex.Message}");
         }
+
+        return false;
     }
 
     public async Task<bool> CompensateAsync(Guid sagaId, string reason)
@@ -112,7 +120,7 @@ public class SagaCoordinator : ISagaCoordinator
             // Компенсируем только если сообщение было помечено как прочитанное
             if (saga.State == SagaState.MessageMarkedAsRead)
             {
-               success =  await _messageService.MarkMessageAsUnreadAsync(saga.MessageId);
+                success = await _messageService.MarkMessageAsUnreadAsync(saga.MessageId, saga.UserId);
                 _logger.LogInformation("SAGA {Id}: Compensation completed - message marked as unread", sagaId);
             }
 

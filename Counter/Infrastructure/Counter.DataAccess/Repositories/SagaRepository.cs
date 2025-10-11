@@ -9,7 +9,7 @@ public class SagaRepository : Repository<MessageReadSaga, Guid>, ISagaRepository
 {
     private readonly IOtusContextFactory _factory;
 
-    public SagaRepository(IOtusContextFactory factory) : base(factory, "message_saga")
+    public SagaRepository(IOtusContextFactory factory) : base(factory, "sagas")
     {
         _factory = factory;
     }
@@ -25,7 +25,7 @@ public class SagaRepository : Repository<MessageReadSaga, Guid>, ISagaRepository
                     created_at as CreatedAt,
                     completed_at as CompletedAt,
                     failure_reason as FailureReason
-                FROM message_saga
+                FROM sagas
                 WHERE id = @SagaId";
         var queryArgs = new { SagaId = sagaId };
         return await _factory.Get().QueryAsync<MessageReadSaga?>(f =>
@@ -45,7 +45,7 @@ public class SagaRepository : Repository<MessageReadSaga, Guid>, ISagaRepository
                     created_at as CreatedAt,
                     completed_at as CompletedAt,
                     failure_reason as FailureReason
-                FROM message_saga
+                FROM sagas
                 WHERE state = @State
                 ORDER BY created_at DESC";
 
@@ -59,20 +59,20 @@ public class SagaRepository : Repository<MessageReadSaga, Guid>, ISagaRepository
     public async Task<bool> CreateAsync(MessageReadSaga saga)
     {
         const string sql = @"
-                INSERT INTO message_saga
+                INSERT INTO sagas
                     (id, message_id, user_id, state, created_at, completed_at, failure_reason)
                 VALUES
                     (@SagaId, @MessageId, @UserId, @State, @CreatedAt, @CompletedAt, @FailureReason)";
 
         var queryArgs = new
         {
-            saga.Id,
-            saga.MessageId,
-            saga.UserId,
+            SagaId= saga.Id,
+            MessageId= saga.MessageId,
+            UserId=saga.UserId,
             State = (int)saga.State,
-            saga.CreatedAt,
-            saga.CompletedAt,
-            saga.FailureReason
+            CreatedAt=saga.CreatedAt,
+            CompletedAt=saga.CompletedAt,
+            FailureReason=saga.FailureReason
         };
         var affectedRows = await _factory.Get().QueryAsync<int>(f => { return f.ExecuteAsync(sql, queryArgs); });
         return affectedRows > 0;
@@ -81,7 +81,7 @@ public class SagaRepository : Repository<MessageReadSaga, Guid>, ISagaRepository
     public async Task<bool> UpdateAsync(MessageReadSaga saga)
     {
         const string sql = @"
-                UPDATE message_saga
+                UPDATE sagas
                 SET
                     message_id = @MessageId,
                     user_id = @UserId,
@@ -93,13 +93,13 @@ public class SagaRepository : Repository<MessageReadSaga, Guid>, ISagaRepository
 
         var queryArgs = new
         {
-            saga.Id,
-            saga.MessageId,
-            saga.UserId,
+            SagaId= saga.Id,
+            MessageId= saga.MessageId,
+            UserId=saga.UserId,
             State = (int)saga.State,
-            saga.CreatedAt,
-            saga.CompletedAt,
-            saga.FailureReason
+            CreatedAt=saga.CreatedAt,
+            CompletedAt=saga.CompletedAt,
+            FailureReason=saga.FailureReason
         };
 
         var affectedRows = await _factory.Get().QueryAsync<int>(f => { return f.ExecuteAsync(sql, queryArgs); });
@@ -108,7 +108,7 @@ public class SagaRepository : Repository<MessageReadSaga, Guid>, ISagaRepository
 
     public async Task<bool> DeleteAsync(Guid sagaId)
     {
-        const string sql = "DELETE FROM message_saga WHERE id = @SagaId";
+        const string sql = "DELETE FROM sagas WHERE id = @SagaId";
 
         var queryArgs = new { SagaId = sagaId };
 
@@ -118,7 +118,7 @@ public class SagaRepository : Repository<MessageReadSaga, Guid>, ISagaRepository
 
     public async Task<bool> ExistsAsync(Guid sagaId)
     {
-        const string sql = "SELECT COUNT(1) FROM message_saga WHERE id = @SagaId";
+        const string sql = "SELECT COUNT(1) FROM sagas WHERE id = @SagaId";
 
         var queryArgs = new { SagaId = sagaId };
 
@@ -137,7 +137,7 @@ public class SagaRepository : Repository<MessageReadSaga, Guid>, ISagaRepository
                     created_at as CreatedAt,
                     completed_at as CompletedAt,
                     failure_reason as FailureReason
-                FROM message_saga
+                FROM sagas
                 WHERE state = @State AND created_at < @Threshold
                 ORDER BY created_at ASC";
 

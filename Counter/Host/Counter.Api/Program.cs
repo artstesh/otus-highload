@@ -1,4 +1,5 @@
 using Counter.Api.Services;
+using Counter.Api.Workers;
 using Counter.Application.Services;
 using Counter.Registry;
 using OtusHighload.DataAccess;
@@ -34,6 +35,7 @@ builder.Services.AddHttpClient("DialogsService", client =>
 builder.Services.AddSingleton<DbSeedService>();
 builder.Services.AddCounter(builder.Configuration);
 builder.Services.AddScoped<ISagaCoordinator, SagaCoordinator>();
+builder.Services.AddHostedService<RabbitMQBackgroundService>();
 // Регистрация фоновой службы очистки
 // builder.Services.AddHostedService<SagaCleanupService>();
 
@@ -52,4 +54,5 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.Services.GetRequiredService<DbSeedService>().Seed();
 app.Run();
