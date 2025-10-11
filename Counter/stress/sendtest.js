@@ -8,9 +8,9 @@ const searchTrend = new Trend('search_endpoint_duration');
 
 export const options = {
     stages: [
-        { duration: '10s', target: 50 },  // Постепенно наращиваем до 50 пользователей
-        { duration: '10s', target: 50 },  // Держим нагрузку
-        { duration: '10s', target: 0 },   // Постепенно снижаем до 0
+        { duration: '5s', target: 50 },  // Постепенно наращиваем до 50 пользователей
+        { duration: '5s', target: 50 },  // Держим нагрузку
+        { duration: '5s', target: 0 },   // Постепенно снижаем до 0
     ],
     thresholds: {
         errors: ['rate<0.01'], // Меньше 1% ошибок
