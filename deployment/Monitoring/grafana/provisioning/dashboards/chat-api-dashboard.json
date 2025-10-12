@@ -1,0 +1,478 @@
+﻿{
+  "id" : null,
+  "title" : "Chat API Monitoring Dashboard",
+  "tags" : [
+    "api",
+    "chat",
+    "monitoring"
+  ],
+  "timezone" : "browser",
+  "panels" : [
+    {
+      "id" : 1,
+      "title" : "Requests Rate (RPS)",
+      "type" : "stat",
+      "targets" : [
+        {
+          "expr" : "rate(http_requests_total[5m])",
+          "legendFormat" : "Requests/sec",
+          "refId" : "A"
+        }
+      ],
+      "gridPos" : {
+        "h" : 8,
+        "w" : 12,
+        "x" : 0,
+        "y" : 0
+      },
+      "fieldConfig" : {
+        "defaults" : {
+          "color" : {
+            "mode" : "palette-classic"
+          },
+          "unit" : "reqps"
+        }
+      }
+    },
+    {
+      "id" : 2,
+      "title" : "Error Rate",
+      "type" : "stat",
+      "targets" : [
+        {
+          "expr" : "rate(http_requests_total{status=~\"5..\"}[5m]) / rate(http_requests_total[5m]) * 100",
+          "legendFormat" : "Error Rate",
+          "refId" : "A"
+        }
+      ],
+      "gridPos" : {
+        "h" : 8,
+        "w" : 12,
+        "x" : 12,
+        "y" : 0
+      },
+      "fieldConfig" : {
+        "defaults" : {
+          "color" : {
+            "mode" : "thresholds"
+          },
+          "unit" : "percent",
+          "thresholds" : {
+            "steps" : [
+              {
+                "color" : "green",
+                "value" : null
+              },
+              {
+                "color" : "red",
+                "value" : 5
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id" : 3,
+      "title" : "Request Duration (p95)",
+      "type" : "stat",
+      "targets" : [
+        {
+          "expr" : "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))",
+          "legendFormat" : "p95 Duration",
+          "refId" : "A"
+        }
+      ],
+      "gridPos" : {
+        "h" : 8,
+        "w" : 12,
+        "x" : 0,
+        "y" : 8
+      },
+      "fieldConfig" : {
+        "defaults" : {
+          "color" : {
+            "mode" : "palette-classic"
+          },
+          "unit" : "s"
+        }
+      }
+    },
+    {
+      "id" : 4,
+      "title" : "Request Duration Percentiles",
+      "type" : "graph",
+      "targets" : [
+        {
+          "expr" : "histogram_quantile(0.50, rate(http_request_duration_seconds_bucket[5m]))",
+          "legendFormat" : "p50",
+          "refId" : "A"
+        },
+        {
+          "expr" : "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))",
+          "legendFormat" : "p95",
+          "refId" : "B"
+        },
+        {
+          "expr" : "histogram_quantile(0.99, rate(http_request_duration_seconds_bucket[5m]))",
+          "legendFormat" : "p99",
+          "refId" : "C"
+        }
+      ],
+      "gridPos" : {
+        "h" : 8,
+        "w" : 12,
+        "x" : 12,
+        "y" : 8
+      },
+      "fieldConfig" : {
+        "defaults" : {
+          "color" : {
+            "mode" : "palette-classic"
+          },
+          "unit" : "s"
+        }
+      }
+    },
+    {
+      "id" : 5,
+      "title" : "Dialogs Operations",
+      "type" : "graph",
+      "targets" : [
+        {
+          "expr" : "rate(chat_message_send_total[5m])",
+          "legendFormat" : "Send total",
+          "refId" : "A"
+        },
+        {
+          "expr" : "rate(chat_dialogs_get_total[5m])",
+          "legendFormat" : "Get total",
+          "refId" : "B"
+        },
+        {
+          "expr" : "rate(chat_messages_listed_total[5m])",
+          "legendFormat" : "List total",
+          "refId" : "C"
+        }
+      ],
+      "gridPos" : {
+        "h" : 8,
+        "w" : 12,
+        "x" : 0,
+        "y" : 16
+      },
+      "fieldConfig" : {
+        "defaults" : {
+          "color" : {
+            "mode" : "palette-classic"
+          },
+          "unit" : "ops"
+        }
+      }
+    },
+    {
+      "id" : 6,
+      "title" : "Total Dialogs Operations",
+      "type" : "graph",
+      "targets" : [
+        {
+          "expr" : "chat_message_send_total",
+          "legendFormat" : "Total send",
+          "refId" : "A"
+        },
+        {
+          "expr" : "chat_dialogs_get_total",
+          "legendFormat" : "Total Updated",
+          "refId" : "B"
+        },
+        {
+          "expr" : "chat_messages_listed_total",
+          "legendFormat" : "Total Deleted",
+          "refId" : "C"
+        }
+      ],
+      "gridPos" : {
+        "h" : 8,
+        "w" : 12,
+        "x" : 12,
+        "y" : 16
+      },
+      "fieldConfig" : {
+        "defaults" : {
+          "color" : {
+            "mode" : "palette-classic"
+          }
+        }
+      }
+    },
+    {
+      "id" : 7,
+      "title" : "CPU Usage",
+      "type" : "gauge",
+      "targets" : [
+        {
+          "expr" : "100 - (avg by (instance) (rate(node_cpu_seconds_total{mode=\"idle\"}[5m])) * 100)",
+          "legendFormat" : "CPU Usage",
+          "refId" : "A"
+        }
+      ],
+      "gridPos" : {
+        "h" : 8,
+        "w" : 8,
+        "x" : 0,
+        "y" : 24
+      },
+      "fieldConfig" : {
+        "defaults" : {
+          "color" : {
+            "mode" : "thresholds"
+          },
+          "unit" : "percent",
+          "thresholds" : {
+            "steps" : [
+              {
+                "color" : "green",
+                "value" : null
+              },
+              {
+                "color" : "yellow",
+                "value" : 70
+              },
+              {
+                "color" : "red",
+                "value" : 85
+              }
+            ]
+          },
+          "min" : 0,
+          "max" : 100
+        }
+      }
+    },
+    {
+      "id" : 8,
+      "title" : "Memory Usage",
+      "type" : "gauge",
+      "targets" : [
+        {
+          "expr" : "(1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100",
+          "legendFormat" : "Memory Usage",
+          "refId" : "A"
+        }
+      ],
+      "gridPos" : {
+        "h" : 8,
+        "w" : 8,
+        "x" : 8,
+        "y" : 24
+      },
+      "fieldConfig" : {
+        "defaults" : {
+          "color" : {
+            "mode" : "thresholds"
+          },
+          "unit" : "percent",
+          "thresholds" : {
+            "steps" : [
+              {
+                "color" : "green",
+                "value" : null
+              },
+              {
+                "color" : "yellow",
+                "value" : 70
+              },
+              {
+                "color" : "red",
+                "value" : 85
+              }
+            ]
+          },
+          "min" : 0,
+          "max" : 100
+        }
+      }
+    },
+    {
+      "id" : 10,
+      "title" : "HTTP Status Codes",
+      "type" : "piechart",
+      "targets" : [
+        {
+          "expr" : "sum by (status) (rate(http_requests_total[5m]))",
+          "legendFormat" : "{{status}}",
+          "refId" : "A"
+        }
+      ],
+      "gridPos" : {
+        "h" : 8,
+        "w" : 12,
+        "x" : 0,
+        "y" : 32
+      },
+      "fieldConfig" : {
+        "defaults" : {
+          "color" : {
+            "mode" : "palette-classic"
+          }
+        }
+      }
+    },
+    {
+      "id" : 12,
+      "title" : "Failed Requests",
+      "type" : "graph",
+      "targets" : [
+        {
+          "expr" : "rate(chat_failed_requests_total[5m])",
+          "legendFormat" : "Failed Requests/sec",
+          "refId" : "A"
+        }
+      ],
+      "gridPos" : {
+        "h" : 8,
+        "w" : 12,
+        "x" : 0,
+        "y" : 40
+      },
+      "fieldConfig" : {
+        "defaults" : {
+          "color" : {
+            "mode" : "palette-classic"
+          },
+          "unit" : "reqps"
+        }
+      }
+    },
+    {
+      "id" : 13,
+      "title" : "Disk Usage",
+      "type" : "gauge",
+      "targets" : [
+        {
+          "expr" : "(1 - (node_filesystem_avail_bytes / node_filesystem_size_bytes)) * 100",
+          "legendFormat" : "Disk Usage",
+          "refId" : "A"
+        }
+      ],
+      "gridPos" : {
+        "h" : 8,
+        "w" : 8,
+        "x" : 0,
+        "y" : 48
+      },
+      "fieldConfig" : {
+        "defaults" : {
+          "color" : {
+            "mode" : "thresholds"
+          },
+          "unit" : "percent",
+          "thresholds" : {
+            "steps" : [
+              {
+                "color" : "green",
+                "value" : null
+              },
+              {
+                "color" : "yellow",
+                "value" : 80
+              },
+              {
+                "color" : "red",
+                "value" : 90
+              }
+            ]
+          },
+          "min" : 0,
+          "max" : 100
+        }
+      }
+    },
+    {
+      "id" : 14,
+      "title" : "Network I/O",
+      "type" : "graph",
+      "targets" : [
+        {
+          "expr" : "rate(node_network_receive_bytes_total[5m])",
+          "legendFormat" : "Network Receive",
+          "refId" : "A"
+        },
+        {
+          "expr" : "rate(node_network_transmit_bytes_total[5m])",
+          "legendFormat" : "Network Transmit",
+          "refId" : "B"
+        }
+      ],
+      "gridPos" : {
+        "h" : 8,
+        "w" : 16,
+        "x" : 8,
+        "y" : 48
+      },
+      "fieldConfig" : {
+        "defaults" : {
+          "color" : {
+            "mode" : "palette-classic"
+          },
+          "unit" : "Bps"
+        }
+      }
+    }
+  ],
+  "time" : {
+    "from" : "now-1h",
+    "to" : "now"
+  },
+  "timepicker" : {
+    "refresh_intervals" : [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ],
+    "time_options" : [
+      "5m",
+      "15m",
+      "1h",
+      "6h",
+      "12h",
+      "24h",
+      "2d",
+      "7d",
+      "30d"
+    ]
+  },
+  "templating" : {
+    "list" : [
+      {
+        "name" : "instance",
+        "type" : "query",
+        "query" : "label_values(instance)",
+        "refresh" : 1,
+        "includeAll" : true,
+        "multi" : true,
+        "allValue" : ".*"
+      },
+      {
+        "name" : "endpoint",
+        "type" : "query",
+        "query" : "label_values(http_requests_total, endpoint)",
+        "refresh" : 1,
+        "includeAll" : true,
+        "multi" : true,
+        "allValue" : ".*"
+      }
+    ]
+  },
+  "refresh" : "10s",
+  "schemaVersion" : 35,
+  "version" : 1,
+  "description" : "Comprehensive monitoring dashboard for Chat API with RED metrics, business metrics, and technical metrics"
+}

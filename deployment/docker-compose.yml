@@ -11,6 +11,8 @@ services:
     profiles:
       - development
       - production
+    networks:
+      - postgres-network
     depends_on:
       postgres:
         condition: service_healthy
@@ -29,6 +31,8 @@ services:
     profiles:
       - development
       - production
+    networks:
+      - postgres-network
     depends_on:
       dialogs-pg-1:
           condition: service_healthy
@@ -42,6 +46,8 @@ services:
     build:
       context: ../
       dockerfile: Infrastructure/PostSocket/Hosts/PostSocket.Daemon/Dockerfile
+    networks:
+      - postgres-network
     depends_on:
       postgres:
         condition: service_healthy
@@ -58,6 +64,8 @@ services:
       - development
     volumes:
       - postgres:/var/lib/postgresql/data/
+    networks:
+      - postgres-network
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
@@ -73,6 +81,8 @@ services:
       - development
     volumes:
       - dialogs_pg_one:/var/lib/postgresql/data/
+    networks:
+      - postgres-network
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
@@ -88,6 +98,8 @@ services:
       - development
     volumes:
       - dialogs_pg_two:/var/lib/postgresql/data/
+    networks:
+      - postgres-network
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
@@ -100,6 +112,8 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/data
+    networks:
+      - postgres-network
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
       interval: 1s
@@ -119,6 +133,8 @@ services:
       RABBITMQ_DEFAULT_PASS: 6GccewECzxGJgTh4QYr82D8JUgCxsC5E
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - postgres-network
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -137,5 +153,6 @@ volumes:
   rabbitmq_data:
 
 networks:
-  default:
+  postgres-network:
     driver: bridge
+    name: chat-network
