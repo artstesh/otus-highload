@@ -31,7 +31,7 @@ public class FieldRepository : IFieldRepository
 
     public Task<IEnumerable<GeoField>> Get(double[] extent, int zoom, CancellationToken tkn)
     {
-        var includePolygons = zoom >= 13 ? ", st_astext(polygon) as Wkt" : "";
+        var includePolygons = zoom >= 15 ? ", st_astext(polygon) as Wkt" : "";
         var sql = $"select id as Id, region_id as RegionId, st_x(point) as Lon, st_y(point) as Lat" +
                   $"{includePolygons} from fields " +
                   $"where st_contains(st_makeenvelope({extent[0]}, {extent[1]}, {extent[2]}, {extent[3]}), point);";
