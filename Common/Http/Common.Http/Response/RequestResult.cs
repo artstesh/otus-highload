@@ -1,4 +1,4 @@
-namespace UZ.Http.Response
+namespace Common.Http.Response
 {
     public class RequestResult<TResponse, TError> : RequestSilentResult<TError>
     {

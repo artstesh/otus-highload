@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace UZ.Http.Exceptions
+namespace Common.Http.Exceptions
 {
     /// <summary>
     ///     Исключение, возникающее при некорректной работе Proxy сервиса

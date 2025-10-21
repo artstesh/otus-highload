@@ -1,0 +1,38 @@
+@import '@angular/cdk/overlay-prebuilt.css';
+
+html {
+   font-size: 14px;
+}
+
+html,
+body {
+   height: 100%;
+}
+
+body {
+   margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+   color: var(--color-main-font);
+}
+
+h2 {
+   font-size: 24px;
+   font-weight: 600;
+}
+
+h4 {
+   font-size: 20px;
+   font-weight: 600;
+}
+
+h6 {
+   font-size: 16px;
+   font-weight: 500;
+}

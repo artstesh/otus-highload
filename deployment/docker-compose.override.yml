@@ -1,20 +1,80 @@
 version: '3.8'
 
 services:
-  sso:
+  geo:
     environment:
       "ASPNETCORE_ENVIRONMENT": "Development"
       "ASPNETCORE_URLS": "https://+;http://+"
       "Kestrel:Certificates:Default:Path": "/app/aspnetapp.pfx"
       "Kestrel:Certificates:Default:Password": "123"
       "Kestrel:Certificates:Default:AllowInvalid": "true"
+      "EventBus__HostAddress": "amqp://otus:6GccewECzxGJgTh4QYr82D8JUgCxsC5E@rabbitmq:5672"
+      "RabbitMQ__HostName": "rabbitmq"
+      "RabbitMQ__UserName": "otus"
+      "RabbitMQ__Password": "6GccewECzxGJgTh4QYr82D8JUgCxsC5E"
+      "RabbitMQ__VirtualHost": "/"
+      "Security__EncryptionKey": "iNyEkoVuMRs1YTdOeKzq0GkpB7sCZy9/CqSVvYr9N9rpYc7RrGJS8LjOfVRhewsf"
     ports:
       - "5001:443"
       - "8001:80"
-    depends_on:
-      - postgres
+
+  fields:
+    environment:
+      "ASPNETCORE_ENVIRONMENT": "Development"
+      "ASPNETCORE_URLS": "https://+;http://+"
+      "Kestrel:Certificates:Default:Path": "/app/aspnetapp.pfx"
+      "Kestrel:Certificates:Default:Password": "123"
+      "Kestrel:Certificates:Default:AllowInvalid": "true"
+      "Database__Shards__0__RegionId": "4a49d6fd-18e0-4b7e-ab6c-477bcc4c9085"
+      "Database__Shards__0__ConnectionString": "Host=fields-pg-1;Port=5432;Database=postgres;Username=postgres;Password=postgres"
+      "Database__Shards__1__RegionId": "99734c62-f9b5-4f54-a8ce-9118c01d6026"
+      "Database__Shards__1__ConnectionString": "Host=fields-pg-2;Port=5432;Database=postgres;Username=postgres;Password=postgres"
+      "Database__Shards__2__RegionId": "616d2e07-1fdb-4f9c-aeb6-be87c3c0e07d"
+      "Database__Shards__2__ConnectionString": "Host=fields-pg-3;Port=5432;Database=postgres;Username=postgres;Password=postgres"
+      "Database__Shards__3__RegionId": "fa56e62e-191c-4438-b132-7d9c46b24cf1"
+      "Database__Shards__3__ConnectionString": "Host=fields-pg-4;Port=5432;Database=postgres;Username=postgres;Password=postgres"
+      "Database__Shards__4__RegionId": "ce83893d-e521-40e7-bbaf-22919cbf5076"
+      "Database__Shards__4__ConnectionString": "Host=fields-pg-5;Port=5432;Database=postgres;Username=postgres;Password=postgres"
+      "RabbitMQ__HostName": "rabbitmq"
+      "RabbitMQ__UserName": "otus"
+      "RabbitMQ__Password": "6GccewECzxGJgTh4QYr82D8JUgCxsC5E"
+      "RabbitMQ__VirtualHost": "/"
+      "Services__Geo": "http://geo"
+    ports:
+      - "5002:443"
+      - "8002:80"
 
   postgres:
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  fields-pg-1:
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  fields-pg-2:
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  fields-pg-3:
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  fields-pg-4:
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  fields-pg-5:
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres

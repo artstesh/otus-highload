@@ -1,10 +1,10 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
 using System.Text.Json;
-using UZ.Http.Exceptions;
-using UZ.Http.Response;
+using Common.Http.Exceptions;
+using Common.Http.Response;
 
-namespace UZ.Http.Extensions
+namespace Common.Http.Extensions
 {
     /// <summary>
     ///     Методы расширения Http клиента

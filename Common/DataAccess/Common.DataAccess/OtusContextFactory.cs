@@ -1,25 +1,30 @@
-﻿namespace OtusHighload.DataAccess;
+﻿namespace Common.DataAccess;
 
 public interface IOtusContextFactory
 {
-    OtusContext Get();
+    OtusContext Get(string? connectionString = null);
     string GetConnectionString();
 }
 
 public class OtusContextFactory : IOtusContextFactory
 {
     private readonly string _connectionString;
-    private readonly string _slaveConnectionString;
 
-    public OtusContextFactory(string connectionString, string slaveConnectionString)
+    public OtusContextFactory(string connectionString)
     {
         _connectionString = connectionString;
-        _slaveConnectionString = slaveConnectionString;
     }
 
-    public OtusContext Get()
+    public OtusContextFactory()
     {
-        return new OtusContext(_connectionString, _slaveConnectionString);
+        _connectionString = string.Empty;
+    }
+
+    public OtusContext Get(string? connectionString = null)
+    {
+        var cs = connectionString ?? _connectionString;
+        if (string.IsNullOrEmpty(cs)) throw new ArgumentNullException(nameof(connectionString));
+        return new OtusContext(cs);
     }
 
     public string GetConnectionString()

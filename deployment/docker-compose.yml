@@ -1,31 +1,207 @@
 version: '3.8'
 
 services:
-  sso:
-    image: ${DOCKER_REGISTRY}/africa-platform/sso:${TAG}
-    container_name: sso
+  geo:
+    image: ${DOCKER_REGISTRY}/otus-platform/geo:${TAG}
+    container_name: geo
     restart: always
     build:
       context: ../
-      dockerfile: SSO/Host//Dockerfile
+      dockerfile: Geo/Host/Dockerfile
     profiles:
       - development
       - production
+    networks:
+      - postgres-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  fields:
+    image: ${DOCKER_REGISTRY}/otus-platform/fields:${TAG}
+    container_name: fields
+    restart: always
+    build:
+      context: ../
+      dockerfile: Fields/Host/Dockerfile
+    profiles:
+      - development
+      - production
+    networks:
+      - postgres-network
+    depends_on:
+      fields-pg-1:
+          condition: service_healthy
+      fields-pg-2:
+          condition: service_healthy
+      fields-pg-3:
+          condition: service_healthy
+      fields-pg-4:
+          condition: service_healthy
+      fields-pg-5:
+          condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
 
   #### Infrastructure
   postgres:
-    image: postgres:13-alpine
+    image: postgis/postgis:13-3.4-alpine
     container_name: postgres
     ports:
-      - 5432:5432
+      - "5432:5432"
     profiles:
       - development
     volumes:
       - postgres:/var/lib/postgresql/data/
+    networks:
+      - postgres-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  fields-pg-1:
+    image: postgis/postgis:13-3.4-alpine
+    container_name: fields-pg-1
+    ports:
+      - "5441:5432"
+    profiles:
+      - development
+    volumes:
+      - fields_pg_one:/var/lib/postgresql/data/
+    networks:
+      - postgres-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  fields-pg-2:
+    image: postgis/postgis:13-3.4-alpine
+    container_name: fields-pg-2
+    ports:
+      - "5442:5432"
+    profiles:
+      - development
+    volumes:
+      - fields_pg_two:/var/lib/postgresql/data/
+    networks:
+      - postgres-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  fields-pg-3:
+    image: postgis/postgis:13-3.4-alpine
+    container_name: fields-pg-3
+    ports:
+      - "5443:5432"
+    profiles:
+      - development
+    volumes:
+      - fields_pg_three:/var/lib/postgresql/data/
+    networks:
+      - postgres-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  fields-pg-4:
+    image: postgis/postgis:13-3.4-alpine
+    container_name: fields-pg-4
+    ports:
+      - "5444:5432"
+    profiles:
+      - development
+    volumes:
+      - fields_pg_four:/var/lib/postgresql/data/
+    networks:
+      - postgres-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  fields-pg-5:
+    image: postgis/postgis:13-3.4-alpine
+    container_name: fields-pg-5
+    ports:
+      - "5445:5432"
+    profiles:
+      - development
+    volumes:
+      - fields_pg_five:/var/lib/postgresql/data/
+    networks:
+      - postgres-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - postgres-network
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 1s
+      timeout: 3s
+      retries: 30
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    hostname: 'otus-rabbit'
+    restart: always
+    build:
+      context: ./services/rabbitmq
+      dockerfile: Dockerfile
+    environment:
+      RABBITMQ_DEFAULT_USER: otus
+      RABBITMQ_DEFAULT_PASS: 6GccewECzxGJgTh4QYr82D8JUgCxsC5E
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - postgres-network
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: [ "CMD", "rabbitmq-diagnostics", "-q", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
 
 volumes:
   postgres:
+  fields_pg_one:
+  fields_pg_two:
+  fields_pg_three:
+  fields_pg_four:
+  fields_pg_five:
+  redis_data:
+  rabbitmq_data:
 
 networks:
-  default:
+  postgres-network:
     driver: bridge
+    name: chat-network

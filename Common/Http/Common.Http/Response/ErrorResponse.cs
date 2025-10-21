@@ -1,4 +1,4 @@
-﻿namespace UZ.Http.Response
+﻿namespace Common.Http.Response
 {
     /// <summary>
     ///     Описывает базовый ответ с ошибкой

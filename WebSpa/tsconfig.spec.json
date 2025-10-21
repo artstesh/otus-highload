@@ -1,0 +1,23 @@
+/* To learn more about this file see: https://angular.io/config/tsconfig. */
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "strictPropertyInitialization": false,
+    "useDefineForClassFields": false,
+    "outDir": "./out-tsc/spec",
+    "types": [
+      "jasmine"
+    ],
+    "plugins": [
+      { "transform": "@artstesh/forger/lib/utils/transformer" }
+    ]
+  },
+  "files": [
+    "src/test.ts",
+    "src/polyfills.ts"
+  ],
+  "include": [
+    "src/**/*.spec.ts",
+    "src/**/*.d.ts"
+  ]
+}

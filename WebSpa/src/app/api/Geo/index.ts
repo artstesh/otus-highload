@@ -1,0 +1,13 @@
+export { GeoApiConfiguration } from './geo-api-configuration';
+export { BaseService } from './base-service';
+export { RequestBuilder } from './request-builder';
+export { StrictHttpResponse } from './strict-http-response';
+export { GeoApiModule } from './geo-api.module';
+export { DefineRegionRequest } from './models/define-region-request';
+export { FieldCluster } from './models/field-cluster';
+export { GeoField } from './models/geo-field';
+export { GetByBoundingBoxRequest } from './models/get-by-bounding-box-request';
+export { Region } from './models/region';
+export { ClusterService } from './services/cluster.service';
+export { FieldService } from './services/field.service';
+export { RegionService } from './services/region.service';

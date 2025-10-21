@@ -1,0 +1,24 @@
+
+
+app-gis-field-passport-modal {
+  --am-dialog-content-padding: 0;
+
+  .modal-content-wrapper {
+    width: 650px;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  .closer {
+    cursor: pointer;
+  }
+
+  .art-modal-dialog-buttons,.art-modal-dialog-title {
+    display: none !important;
+  }
+
+
+  app-loader {
+    position: unset;
+  }
+}

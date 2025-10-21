@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+cd WebSpa/Weather && npm run pretty-quick && npm run i18n:extract && npm run lint && git add .

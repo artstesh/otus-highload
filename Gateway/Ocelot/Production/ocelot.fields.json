@@ -1,0 +1,118 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/meta",
+      "DownstreamScheme": "https",
+      "DelegatingHandlers": [],
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "fields-dev.agri.space.gov.rw",
+          "Port": 443
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/meta",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "OpenIddict.Validation.AspNetCore",
+        "AllowedScopes": []
+      },
+      "UpstreamHttpMethod": [ "Get" ],
+      "SwaggerKey": "fields",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "DownstreamPathTemplate": "/dashboard",
+      "DownstreamScheme": "https",
+      "DelegatingHandlers": [],
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "fields-dev.agri.space.gov.rw",
+          "Port": 443
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/dashboard",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "OpenIddict.Validation.AspNetCore",
+        "AllowedScopes": []
+      },
+      "UpstreamHttpMethod": [ "Get" ],
+      "SwaggerKey": "fields",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "DownstreamPathTemplate": "/regions",
+      "DownstreamScheme": "https",
+      "DelegatingHandlers": [],
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "fields-dev.agri.space.gov.rw",
+          "Port": 443
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/regions",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "OpenIddict.Validation.AspNetCore",
+        "AllowedScopes": []
+      },
+      "UpstreamHttpMethod": [ "Get" ],
+      "SwaggerKey": "fields",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "DownstreamPathTemplate": "/reports/arable-land",
+      "DownstreamScheme": "https",
+      "DelegatingHandlers": [],
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "fields-dev.agri.space.gov.rw",
+          "Port": 443
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/reports/arable-land",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "OpenIddict.Validation.AspNetCore",
+        "AllowedScopes": []
+      },
+      "UpstreamHttpMethod": [ "Get" ],
+      "SwaggerKey": "fields",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "DownstreamPathTemplate": "/reports/crop-suitability",
+      "DownstreamScheme": "https",
+      "DelegatingHandlers": [],
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "fields-dev.agri.space.gov.rw",
+          "Port": 443
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/reports/crop-suitability",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "OpenIddict.Validation.AspNetCore",
+        "AllowedScopes": []
+      },
+      "UpstreamHttpMethod": [ "Get" ],
+      "SwaggerKey": "fields",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "DownstreamPathTemplate": "/reports/crop-suitability/export",
+      "DownstreamScheme": "https",
+      "DelegatingHandlers": [],
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "fields-dev.agri.space.gov.rw",
+          "Port": 443
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/reports/crop-suitability/export",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "OpenIddict.Validation.AspNetCore",
+        "AllowedScopes": []
+      },
+      "UpstreamHttpMethod": [ "Get" ],
+      "SwaggerKey": "fields",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    }
+  ]
+}

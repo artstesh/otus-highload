@@ -1,0 +1,49 @@
+﻿{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/{type}/tiles/{param}/{crop}/{z}/{x}/{y}",
+      "DownstreamScheme": "https",
+      "DelegatingHandlers": [],
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "resources.agri.space.gov.rw",
+          "Port": 443
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/tiles/{type}/tiles/{param}/{crop}/{z}/{x}/{y}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "SwaggerKey": "tiles",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "DownstreamPathTemplate": "/{type}/{year}/{month}/tiles/{crop}/{z}/{x}/{y}",
+      "DownstreamScheme": "https",
+      "DelegatingHandlers": [],
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "resources.agri.space.gov.rw",
+          "Port": 443
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/tiles/{type}/{year}/{month}/tiles/{crop}/{z}/{x}/{y}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "SwaggerKey": "tiles",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "DownstreamPathTemplate": "/{type}/tiles/{z}/{x}/{y}",
+      "DownstreamScheme": "https",
+      "DelegatingHandlers": [],
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "resources.agri.space.gov.rw",
+          "Port": 443
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/tiles/{type}/tiles/{z}/{x}/{y}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "SwaggerKey": "tiles",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    }
+  ]
+}

@@ -1,87 +1,67 @@
 ﻿using Npgsql;
 using Polly;
-using System.Data.SqlClient;
-using Common.DataAccess;
 
-namespace OtusHighload.DataAccess;
+namespace Common.DataAccess;
 
 public class OtusContext
 {
-    private readonly string _masterConnectionString;
-    private readonly string _slaveConnectionString;
+    private string _connectionString;
 
-    // Политика повторных попыток для временных ошибок
-    private readonly Polly.Retry.AsyncRetryPolicy _policy =
-        Policy.Handle<NpgsqlException>(ex => ex.IsTransient)
-            .WaitAndRetryAsync(3, retryAttempt =>
-                TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+    private Polly.Retry.AsyncRetryPolicy policy = Policy.Handle<NpgsqlException>(ex => ex.IsTransient)
+        .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
 
-    public OtusContext(string masterConnectionString, string slaveConnectionString)
+    public OtusContext(string connectionString)
     {
-        _masterConnectionString = masterConnectionString;
-        _slaveConnectionString = slaveConnectionString;
+        _connectionString = connectionString;
     }
 
-    // Методы для операций чтения (используют слейвы)
     public async Task<T> QueryAsync<T>(Func<NpgsqlConnection, Task<T>> func)
     {
         T result = default;
-        await ApplyPolicy(async c => result = await func(c), isReadOperation: true);
+        await ApplyPolicy(async c => result = await func(c));
         return result;
     }
 
-    public T Query<T>(Func<NpgsqlConnection, T> func, bool forceMaster = false)
-    {
-
-        var connection = new NpgsqlConnection(_masterConnectionString);
-        connection.Open();
-        var result = func(connection);
-        connection.Close();
-        return result;
-    }
-
-    // Методы для операций записи (используют мастер)
     public Task ExecuteAsync(Func<NpgsqlConnection, Task> func)
     {
         return ApplyPolicy(async c =>
         {
             await func(c);
             return true;
-        }, isReadOperation: false);
+        });
+    }
+
+    public T Query<T>(Func<NpgsqlConnection, T> func)
+    {
+        var connection = new NpgsqlConnection(_connectionString);
+        connection.Open();
+        var result = func(connection);
+        connection.Close();
+        return result;
     }
 
     public void Execute(Action<NpgsqlConnection> func)
     {
-        var connection = new NpgsqlConnection(_masterConnectionString);
+        var connection = new NpgsqlConnection(_connectionString);
         connection.Open();
         func(connection);
         connection.Close();
     }
 
-    private async Task<T> ApplyPolicy<T>(Func<NpgsqlConnection, Task<T>> func, bool isReadOperation)
+    private async Task<T> ApplyPolicy<T>(Func<NpgsqlConnection, Task<T>> func)
     {
-        var connectionString = isReadOperation ? _slaveConnectionString : _masterConnectionString;
-        var connection = ConnectionPool.Instance.GetConnection(connectionString);
+        var connection = ConnectionPool.Instance.GetConnection(_connectionString);
 
         T result;
         try
         {
-            result = await _policy.ExecuteAsync(() => func(connection));
+            result = await policy.ExecuteAsync(() => func(connection.Connection));
         }
         finally
         {
             ConnectionPool.Instance.ReturnConnection(connection);
         }
 
-        return result;
-    }
-
-    // Дополнительный метод для принудительного использования мастера для чтения
-    // (например, для чтения после записи в рамках одной транзакции)
-    public async Task<T> QueryWithMasterAsync<T>(Func<NpgsqlConnection, Task<T>> func)
-    {
-        T result = default;
-        await ApplyPolicy(async c => result = await func(c), isReadOperation: false);
         return result;
     }
 }

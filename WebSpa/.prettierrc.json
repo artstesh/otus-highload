@@ -1,0 +1,33 @@
+{
+   "useTabs": false,
+   "singleQuote": true,
+   "semi": true,
+   "arrowParens": "avoid",
+   "bracketSameLine": true,
+   "printWidth": 120,
+   "tabWidth": 3,
+   "quoteProps": "as-needed",
+   "trailingComma": "none",
+   "endOfLine": "lf",
+   "formatOnSave": true,
+   "bracketSpacing": true,
+   "editor.codeActionsOnSave": {
+      "source.organizeImports": "always",
+      "source.fixAll": "explicit"
+   },
+   "overrides": [
+      {
+         "files": "*.component.html",
+         "options": {
+            "parser": "angular"
+         }
+      },
+      {
+         "files": "*.html",
+         "options": {
+            "parser": "html"
+         }
+      }
+   ],
+   "plugins": ["prettier-plugin-organize-imports"]
+}

@@ -1,8 +1,4 @@
-﻿using System.Diagnostics;
-using Common.DataAccess;
-using Dapper;
-using Microsoft.EntityFrameworkCore;
-using OtusHighload.DataAccess;
+﻿using Dapper;
 
 namespace Common.DataAccess
 {

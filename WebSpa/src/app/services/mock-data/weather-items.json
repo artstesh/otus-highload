@@ -1,0 +1,21 @@
+[
+    {
+        "date": "2024-10-08T10:09:43.884Z",
+        "datasourceId": 1,
+        "lat": 12.436544553,
+        "lng": 10.653569876,
+        "temperature": 20.4,
+        "precipitation": 12,
+        "condition": "string",
+        "humidity": 65,
+        "minHumidity": 30,
+        "maxHumidity": 70,
+        "idCondition": 2,
+        "solar": 1,
+        "wind_speed": 2,
+        "wind_direction": 5,
+        "min_temperature": 12.2,
+        "max_temperature": 30.2,
+        "solar_radiation": 12.43
+    }
+]

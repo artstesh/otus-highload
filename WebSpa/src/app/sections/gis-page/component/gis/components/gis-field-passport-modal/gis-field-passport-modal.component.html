@@ -1,0 +1,15 @@
+<art-modal [settings]="settings">
+    <div (click)="close()" class="closer" fxLayoutAlign="end ">✖</div>
+    <app-loading-zone [contentRef]="cadastralLoadingZone" [isLoading]="!field()"></app-loading-zone>
+    <ng-template #cadastralLoadingZone>
+        <div class="modal-content-wrapper" fxLayout="column" fxLayoutGap="20px">
+            <app-gis-field-passport-section-wrapper label="Field info"
+                                                    [contentRef]="fieldInfoModalContent">
+            </app-gis-field-passport-section-wrapper>
+        </div>
+    </ng-template>
+</art-modal>
+
+<ng-template #fieldInfoModalContent>
+    <app-gis-field-passport-field-info [field]="field()"></app-gis-field-passport-field-info>
+</ng-template>

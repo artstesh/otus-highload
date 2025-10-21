@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace SSO.Contracts
+namespace Common.Http.Response
 {
     /// <summary>
     /// Represents the result of an operation.

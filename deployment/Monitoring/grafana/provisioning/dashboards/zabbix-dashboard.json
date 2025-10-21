@@ -1,0 +1,113 @@
+﻿{
+    "id": null,
+    "title": "Zabbix Technical Metrics",
+    "tags": ["zabbix", "technical"],
+    "timezone": "browser",
+    "panels": [
+      {
+        "id": 1,
+        "title": "CPU Usage",
+        "type": "graph",
+        "datasource": "Zabbix",
+        "targets": [
+          {
+            "group": {"filter": "Zabbix servers"},
+            "host": {"filter": "Zabbix server"},
+            "application": {"filter": "CPU"},
+            "item": {"filter": "Processor load (1 min average per core)"}
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "palette-classic"},
+            "unit": "percent"
+          }
+        }
+      },
+      {
+        "id": 2,
+        "title": "Memory Usage",
+        "type": "graph",
+        "datasource": "Zabbix",
+        "targets": [
+          {
+            "group": {"filter": "Zabbix servers"},
+            "host": {"filter": "Zabbix server"},
+            "application": {"filter": "Memory"},
+            "item": {"filter": "Available memory"}
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "palette-classic"},
+            "unit": "bytes"
+          }
+        }
+      },
+      {
+        "id": 3,
+        "title": "Disk Space Usage",
+        "type": "graph",
+        "datasource": "Zabbix",
+        "targets": [
+          {
+            "group": {"filter": "Zabbix servers"},
+            "host": {"filter": "Zabbix server"},
+            "application": {"filter": "Filesystems"},
+            "item": {"filter": "Free disk space on /"}
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "palette-classic"},
+            "unit": "bytes"
+          }
+        }
+      },
+      {
+        "id": 4,
+        "title": "Network Traffic",
+        "type": "graph",
+        "datasource": "Zabbix",
+        "targets": [
+          {
+            "group": {"filter": "Zabbix servers"},
+            "host": {"filter": "Zabbix server"},
+            "application": {"filter": "Network"},
+            "item": {"filter": "Network incoming traffic on eth0"}
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8},
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "palette-classic"},
+            "unit": "Bps"
+          }
+        }
+      }
+    ],
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "timepicker": {
+      "refresh_intervals": ["5s", "10s", "30s", "1m", "5m", "15m", "30m", "1h", "2h", "1d"]
+    },
+    "templating": {
+      "list": [
+        {
+          "name": "host",
+          "type": "query",
+          "datasource": "Zabbix",
+          "query": "ZabbixHosts"
+        }
+      ]
+    },
+    "refresh": "10s",
+    "schemaVersion": 35,
+    "version": 1,
+    "description": "Technical metrics from Zabbix"
+  }

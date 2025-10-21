@@ -1,0 +1,6 @@
+<div fxFill *ngIf="!_isLoading">
+    <ng-container *ngTemplateOutlet="contentRef"> </ng-container>
+</div>
+<div fxFill *ngIf="_isLoading" fxLayoutAlign="center center">
+    <app-loader [size]="size"></app-loader>
+</div>

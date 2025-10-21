@@ -1,0 +1,12 @@
+<div class="info-wrapper" fxLayout="row" fxLayoutGap="20px">
+    <app-gis-field-passport-data-wrapper label="Field Id" [contentRef]="fieldId"></app-gis-field-passport-data-wrapper>
+    <app-gis-field-passport-data-wrapper label="Field area" [contentRef]="area"></app-gis-field-passport-data-wrapper>
+</div>
+
+<ng-template #fieldId>
+    {{field().id}}
+</ng-template>
+
+<ng-template #area>
+    {{field().areaM2/10000 | number: '1.0-2'}} {{'Ha' | translate}}
+</ng-template>

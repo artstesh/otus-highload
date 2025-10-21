@@ -1,0 +1,48 @@
+{
+  "SwaggerEndPoints": [
+    {
+      "Key": "profile",
+      "TakeServersFromDownstreamService": false,
+      "Config": [
+        {
+          "Name": "Profile Api",
+          "Version": "v1",
+          "Url": "http://host.docker.internal:8001/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "permissions",
+      "TakeServersFromDownstreamService": false,
+      "Config": [
+        {
+          "Name": "Permissions Api",
+          "Version": "v1",
+          "Url": "http://rwanda-permission/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "admin",
+      "TakeServersFromDownstreamService": false,
+      "Config": [
+        {
+          "Name": "Admin Api",
+          "Version": "v1",
+          "Url": "http://rwanda-sso/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "fields",
+      "TakeServersFromDownstreamService": false,
+      "Config": [
+        {
+          "Name": "Field Api",
+          "Version": "v1",
+          "Url": "https://fields-dev.agri.space.gov.rw/swagger/api-docs"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <DockerfileContext>..\..</DockerfileContext>
+        <RootNamespace>AgroPlatform.Migrator</RootNamespace>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="NetTopologySuite" Version="2.6.0"/>
+        <PackageReference Include="FluentMigrator.Runner" Version="5.2.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.10" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="9.0.10" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="9.0.10" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.10" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.10" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.10" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Configuration" Version="9.0.10" />
+        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
+        <PackageReference Include="Npgsql" Version="9.0.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Common\Http\Common.Http\Common.Http.csproj" />
+        <ProjectReference Include="..\Fields\Domain\Fields.Entities.csproj" />
+        <ProjectReference Include="..\Fields\Host\Fields.Api.csproj" />
+        <ProjectReference Include="..\Geo\Domain\Geo.Entities.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
+    </ItemGroup>
+
+</Project>

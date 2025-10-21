@@ -1,0 +1,70 @@
+
+app-loader {
+   position: fixed;
+   height: 100%;
+   width: 100%;
+   display: flex;
+   z-index: 100;
+}
+
+art-map-plate {
+   position: relative;
+
+   .ol-scale-line {
+      background: rgba(0, 60, 136, .3);
+      border-radius: 4px;
+      bottom: 8px;
+      left: 8px;
+      padding: 2px;
+      position: absolute;
+
+      .ol-scale-line-inner {
+         border: 1px solid #eee;
+         border-top: none;
+         color: #eee;
+         font-size: 10px;
+         text-align: center;
+         margin: 1px;
+         padding: 0 2px;
+      }
+   }
+
+  app-gis-business-potential-layer-trigger {
+    position: absolute;
+    right: 10px;
+    top: 60px;
+    z-index: 100;
+  }
+
+   .ol-zoom {
+      display: flex;
+      flex-direction: row;
+      position: absolute;
+      right: 10px;
+      top: 92px;
+      gap: 3px;
+
+      background: rgba(255, 255, 255, 0.75);
+      border: 1px solid white;
+      border-radius: 5px;
+      padding: 3px;
+
+      $btn-size: 20px;
+
+      .ol-zoom-out,
+      .ol-zoom-in {
+         color: black;
+         width: $btn-size;
+         height: $btn-size;
+         display: flex;
+         justify-content: center;
+         border: none;
+         background: transparent;
+         font-size: 17px;
+
+         &:hover {
+            background: #fff;
+         }
+      }
+   }
+}

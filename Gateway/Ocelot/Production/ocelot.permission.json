@@ -1,0 +1,128 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/api/v1/access",
+      "DownstreamScheme": "http",
+      "DelegatingHandlers": [],
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "rwanda-permission",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/permissions/access",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "OpenIddict.Validation.AspNetCore",
+        "AllowedScopes": []
+      },
+      "UpstreamHttpMethod": ["Get"],
+      "SwaggerKey": "permissions"
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/Permission/list/{role}",
+      "DownstreamScheme": "http",
+      "DelegatingHandlers": [],
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "rwanda-permission",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/permissions/Permission/list/{role}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "OpenIddict.Validation.AspNetCore",
+        "AllowedScopes": []
+      },
+      "UpstreamHttpMethod": ["Get"],
+      "SwaggerKey": "permissions"
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/Permission/add",
+      "DownstreamScheme": "http",
+      "DelegatingHandlers": ["AccessDelegatingHandler"],
+      "Metadata": {
+        "zone": "Admin.Permissions",
+        "level": "4"
+      },
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "rwanda-permission",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/permissions/Permission/add",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "OpenIddict.Validation.AspNetCore",
+        "AllowedScopes": []
+      },
+      "UpstreamHttpMethod": ["Post"],
+      "SwaggerKey": "permissions"
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/Permission/update",
+      "DownstreamScheme": "http",
+      "DelegatingHandlers": ["AccessDelegatingHandler"],
+      "Metadata": {
+        "zone": "Admin.Permissions",
+        "level": "16"
+      },
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "rwanda-permission",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/permissions/Permission/update",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "OpenIddict.Validation.AspNetCore",
+        "AllowedScopes": []
+      },
+      "UpstreamHttpMethod": ["Put"],
+      "SwaggerKey": "permissions"
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/Permission/rmv/{id}",
+      "DownstreamScheme": "http",
+      "DelegatingHandlers": ["AccessDelegatingHandler"],
+      "Metadata": {
+        "zone": "Admin.Permissions",
+        "level": "8"
+      },
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "rwanda-permission",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/permissions/Permission/rmv/{id}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "OpenIddict.Validation.AspNetCore",
+        "AllowedScopes": []
+      },
+      "UpstreamHttpMethod": ["Delete"],
+      "SwaggerKey": "permissions"
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/zone/list",
+      "DownstreamScheme": "http",
+      "DelegatingHandlers": ["AccessDelegatingHandler"],
+      "Metadata": {
+        "zone": "Admin.Permissions",
+        "level": "2"
+      },
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "rwanda-permission",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/permissions/zone/list",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "OpenIddict.Validation.AspNetCore",
+        "AllowedScopes": []
+      },
+      "UpstreamHttpMethod": ["Get"],
+      "SwaggerKey": "permissions"
+    }
+  ]
+}

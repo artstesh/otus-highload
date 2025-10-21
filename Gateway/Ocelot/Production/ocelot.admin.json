@@ -1,0 +1,253 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/api/{version}/user/list",
+      "DownstreamScheme": "http",
+      "DelegatingHandlers": ["AccessDelegatingHandler"],
+      "Metadata": {
+        "zone": "Admin.Users",
+        "level": "1"
+      },
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "rwanda-sso",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/{version}/admin/user/list",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "OpenIddict.Validation.AspNetCore",
+        "AllowedScopes": []
+      },
+      "UpstreamHttpMethod": ["Post"],
+      "SwaggerKey": "admin"
+    },
+    {
+      "DownstreamPathTemplate": "/api/{version}/user/services/list",
+      "DownstreamScheme": "http",
+      "DelegatingHandlers": ["AccessDelegatingHandler"],
+      "Metadata": {
+        "zone": "Admin.Users",
+        "level": "1"
+      },
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "rwanda-sso",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/{version}/admin/user/services/list",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "OpenIddict.Validation.AspNetCore",
+        "AllowedScopes": []
+      },
+      "UpstreamHttpMethod": ["Get"],
+      "SwaggerKey": "admin"
+    },
+    {
+      "DownstreamPathTemplate": "/api/{version}/user/{id}",
+      "DownstreamScheme": "http",
+      "DelegatingHandlers": ["AccessDelegatingHandler"],
+      "Metadata": {
+        "zone": "Admin.Users",
+        "level": "1"
+      },
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "rwanda-sso",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/{version}/admin/user/{id}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "OpenIddict.Validation.AspNetCore",
+        "AllowedScopes": []
+      },
+      "UpstreamHttpMethod": ["Get"],
+      "SwaggerKey": "admin"
+    },
+    {
+      "DownstreamPathTemplate": "/api/{version}/user/management/{userId}",
+      "DownstreamScheme": "http",
+      "DelegatingHandlers": ["AccessDelegatingHandler"],
+      "Metadata": {
+        "zone": "Admin.Users",
+        "level": "4"
+      },
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "rwanda-sso",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/{version}/admin/user/management/{userId}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "OpenIddict.Validation.AspNetCore",
+        "AllowedScopes": []
+      },
+      "UpstreamHttpMethod": ["Delete"],
+      "SwaggerKey": "admin"
+    },
+    {
+      "DownstreamPathTemplate": "/api/{version}/user/management",
+      "DownstreamScheme": "http",
+      "DelegatingHandlers": ["AccessDelegatingHandler"],
+      "Metadata": {
+        "zone": "Admin.Users",
+        "level": "8"
+      },
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "rwanda-sso",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/{version}/admin/user/management",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "OpenIddict.Validation.AspNetCore",
+        "AllowedScopes": []
+      },
+      "UpstreamHttpMethod": ["Put"],
+      "SwaggerKey": "admin"
+    },
+    {
+      "DownstreamPathTemplate": "/api/{version}/user/management",
+      "DownstreamScheme": "http",
+      "DelegatingHandlers": ["AccessDelegatingHandler", "UserCreationHandler"],
+      "Metadata": {
+        "zone": "Admin.Users",
+        "level": "2"
+      },
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "rwanda-sso",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/{version}/admin/user/management",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "OpenIddict.Validation.AspNetCore",
+        "AllowedScopes": []
+      },
+      "UpstreamHttpMethod": ["Post"],
+      "SwaggerKey": "admin"
+    },
+    {
+      "DownstreamPathTemplate": "/api/{version}/role/list",
+      "DownstreamScheme": "http",
+      "DelegatingHandlers": ["AccessDelegatingHandler"],
+      "Metadata": {
+        "zone": "Admin.Roles",
+        "level": "1"
+      },
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "rwanda-sso",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/{version}/admin/role/list",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "OpenIddict.Validation.AspNetCore",
+        "AllowedScopes": []
+      },
+      "UpstreamHttpMethod": ["Get"],
+      "SwaggerKey": "admin"
+    },
+    {
+      "DownstreamPathTemplate": "/api/{version}/role",
+      "DownstreamScheme": "http",
+      "DelegatingHandlers": ["AccessDelegatingHandler"],
+      "Metadata": {
+        "zone": "Admin.Roles",
+        "level": "2"
+      },
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "rwanda-sso",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/{version}/admin/role",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "OpenIddict.Validation.AspNetCore",
+        "AllowedScopes": []
+      },
+      "UpstreamHttpMethod": ["Post"],
+      "SwaggerKey": "admin"
+    },
+    {
+      "DownstreamPathTemplate": "/api/{version}/role/{id}",
+      "DownstreamScheme": "http",
+      "DelegatingHandlers": ["AccessDelegatingHandler"],
+      "Metadata": {
+        "zone": "Admin.Roles",
+        "level": "4"
+      },
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "rwanda-sso",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/{version}/admin/role/{id}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "OpenIddict.Validation.AspNetCore",
+        "AllowedScopes": []
+      },
+      "UpstreamHttpMethod": ["Delete"],
+      "SwaggerKey": "admin"
+    },
+    {
+      "DownstreamPathTemplate": "/api/{version}/applicationClient",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "rwanda-sso",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/{version}/admin/applicationClient",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "OpenIddict.Validation.AspNetCore",
+        "AllowedScopes": []
+      },
+      "UpstreamHttpMethod": ["Post","Put"],
+      "SwaggerKey": "admin"
+    },
+    {
+      "DownstreamPathTemplate": "/api/{version}/applicationClient/list",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "rwanda-sso",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/{version}/admin/applicationClient/list",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "OpenIddict.Validation.AspNetCore",
+        "AllowedScopes": []
+      },
+      "UpstreamHttpMethod": ["Get"],
+      "SwaggerKey": "admin"
+    },
+    {
+      "DownstreamPathTemplate": "/api/{version}/applicationClient/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "rwanda-sso",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/{version}/admin/applicationClient/{id}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "OpenIddict.Validation.AspNetCore",
+        "AllowedScopes": []
+      },
+      "UpstreamHttpMethod": [ "Delete" ],
+      "SwaggerKey": "admin"
+    }
+  ]
+}

@@ -3,9 +3,17 @@
     "Docker Compose": {
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
-      "serviceActions": { 
-        "sso": "StartDebugging",
-        "postgres": "StartWithoutDebugging"
+      "serviceActions": {
+        "fields": "StartDebugging",
+        "postgres": "StartWithoutDebugging",
+        "fields-pg-1": "StartWithoutDebugging",
+        "fields-pg-2": "StartWithoutDebugging",
+        "fields-pg-3": "StartWithoutDebugging",
+        "fields-pg-4": "StartWithoutDebugging",
+        "fields-pg-5": "StartWithoutDebugging",
+        "geo": "StartDebugging",
+        "rabbitmq": "StartWithoutDebugging",
+        "redis": "StartWithoutDebugging"
       }
     }
   }

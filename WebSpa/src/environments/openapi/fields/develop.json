@@ -1,0 +1,11 @@
+{
+  "$schema": "../../../../node_modules/ng-openapi-gen/ng-openapi-gen-schema.json",
+  "input": "https://localhost:5002/swagger/v1/swagger.json",
+  "output": "src/app/api/fields",
+  "ignoreUnusedModels": false,
+  "indexFile": true,
+  "removeStaleFiles": true,
+  "skipJsonSuffix": true,
+  "module": "FieldsApiModule",
+  "configuration": "FieldsApiConfiguration"
+}

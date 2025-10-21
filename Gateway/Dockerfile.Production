@@ -1,0 +1,33 @@
+﻿FROM ubuntu:24.04 AS base
+WORKDIR /app
+EXPOSE 80
+EXPOSE 443
+
+RUN apt update
+RUN apt install --no-install-recommends -y aspnetcore-runtime-8.0
+
+
+FROM ubuntu:24.04 AS build
+
+RUN apt update
+RUN apt install --no-install-recommends -y dotnet-sdk-8.0
+
+ARG BUILD_CONFIGURATION=Release
+WORKDIR /src
+COPY ["Gateway/Gateway.csproj", "Gateway/"]
+COPY ["Common/Security/Rwanda.Security/Rwanda.Security.csproj", "Common/Security/Rwanda.Security/"]
+COPY ["SSO/Contracts/SSO.Contracts/SSO.Contracts.csproj", "SSO/Contracts/SSO.Contracts/"]
+RUN dotnet restore "Gateway/Gateway.csproj"
+COPY . .
+WORKDIR "/src/Gateway"
+RUN dotnet build "Gateway.csproj" -c $BUILD_CONFIGURATION -o /app/build
+
+FROM build AS publish
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "Gateway.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+COPY aspnetapp.pfx /src/aspnetapp.pfx
+ENTRYPOINT ["dotnet", "Gateway.dll"]

@@ -12,10 +12,8 @@
         <None Include="docker-compose.override.yml">
             <DependentUpon>docker-compose.yml</DependentUpon>
         </None>
-        <None Include="docker-compose.production.yml">
-            <DependentUpon>docker-compose.yml</DependentUpon>
-        </None>
         <None Include="docker-compose.yml" />
+        <None Include="Monitoring\start.bat" />
         <None Include="proxy\certs\localhost-selfsigned.crt" />
         <None Include="proxy\certs\localhost-selfsigned.key" />
         <None Include="proxy\proxy.conf" />
@@ -26,33 +24,24 @@
         <None Remove="proxy\**" />
     </ItemGroup>
     <ItemGroup>
-      <Content Include="Monitoring\dashboards\dashboard.yml" />
-      <Content Include="Monitoring\dashboards\postgresql-replication.json" />
-      <Content Include="Monitoring\datasources\prometheus.yml" />
-      <Content Include="Monitoring\docker-compose.monitoring.yml" />
-      <Content Include="Monitoring\prometheus.yml" />
-      <Content Include="Monitoring\start.bat" />
-      <Content Include="Replication\.env" />
-      <Content Include="Replication\check-status.bat" />
-      <Content Include="Replication\haproxy\haproxy.cfg" />
-      <Content Include="Replication\nginx\Dockerfile" />
-      <Content Include="Replication\nginx\nginx-selfsigned.crt" />
-      <Content Include="Replication\nginx\nginx-selfsigned.key" />
-      <Content Include="Replication\nginx\nginx.conf">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <Content Include="Replication\Postgres\Master\Dockerfile" />
-      <Content Include="Replication\Postgres\Master\init-scripts\02-create-replication-user.sh" />
-      <Content Include="Replication\Postgres\Master\init-scripts\01-init-master.sh" />
-      <Content Include="Replication\Postgres\Master\init-scripts\03-configure-pg-hba.sh" />
-      <Content Include="Replication\Postgres\Slave1\Dockerfile" />
-      <Content Include="Replication\Postgres\Slave1\init-scripts\01-init-slave.sh" />
-      <Content Include="Replication\Postgres\Slave2\Dockerfile" />
-      <Content Include="Replication\Postgres\Slave2\init-scripts\01-init-slave.sh" />
-      <Content Include="Replication\replica-compose.override.yml">
-        <DependentUpon>replica-compose.yml</DependentUpon>
-      </Content>
-      <Content Include="Replication\replica-compose.yml" />
-      <Content Include="Replication\start-replica.bat" />
+      <Folder Include="services\grafana\config\csv\" />
+      <Folder Include="services\grafana\config\pdf\" />
+      <Folder Include="services\grafana\config\plugins\" />
+      <Folder Include="services\grafana\config\png\" />
+      <Folder Include="services\prometheus\" />
+      <Folder Include="services\rabbitmq\obj\Docker\empty\" />
+    </ItemGroup>
+    <ItemGroup>
+      <Content Include="Monitoring\docker-compose.yml" />
+      <Content Include="Monitoring\grafana\provisioning\dashboards\chat-api-dashboard.json" />
+      <Content Include="Monitoring\grafana\provisioning\dashboards\dashboard.yml" />
+      <Content Include="Monitoring\grafana\provisioning\dashboards\zabbix-dashboard.json" />
+      <Content Include="Monitoring\grafana\provisioning\dashboards\zabbix.yml" />
+      <Content Include="Monitoring\prometheus\prometheus.yml" />
+      <Content Include="Monitoring\scripts\chat-api-metrics.sh" />
+      <Content Include="services\rabbitmq\Dockerfile" />
+      <Content Include="services\rabbitmq\etc\enabled_plugins" />
+      <Content Include="services\rabbitmq\etc\rabbitmq.conf" />
+      <Content Include="services\rabbitmq\obj\Docker\CanonicalServiceNames.cache" />
     </ItemGroup>
 </Project>

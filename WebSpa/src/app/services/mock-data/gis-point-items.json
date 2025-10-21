@@ -1,0 +1,26 @@
+[
+   {
+      "id": 1,
+      "lat": 42.21124602,
+      "lng": 62.68485777,
+      "name": "Point1",
+      "sourceId": "e26c9cda-372d-400f-b5a7-28c37f881f36",
+      "userId": ""
+   },
+   {
+      "id": 2,
+      "lat": 42.3,
+      "lng": 62.9,
+      "name": "Point2",
+      "sourceId": "f03fe3e3-ccc8-4b47-970e-69684d03b0f0",
+      "userId": ""
+   },
+   {
+      "id": 3,
+      "lat": 42.5,
+      "lng": 63.0,
+      "name": "Point3",
+      "sourceId": "62196f83-4227-42a0-be0e-90936ca3713b",
+      "userId": ""
+   }
+]

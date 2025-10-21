@@ -6,7 +6,7 @@
     {
         Task<Guid?> CreateAsync(string[] names, object item, CancellationToken cancellationToken);
         Task<int> UpdateAsync(string[] names, object item, CancellationToken token);
-        Task<int> DeleteAsync(TEntity id, CancellationToken cancellationToken);
+        Task<int> DeleteAsync(TPrimaryKey id, CancellationToken cancellationToken);
         Task BulkCreateAsync(string[] names, List<object> items, CancellationToken cancellationToken);
     }
 }

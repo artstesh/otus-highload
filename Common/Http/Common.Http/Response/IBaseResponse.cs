@@ -1,4 +1,4 @@
-﻿namespace UZ.Http.Response
+﻿namespace Common.Http.Response
 {
     /// <summary>
     ///     Интерфейс базового ответа
