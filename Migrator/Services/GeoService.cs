@@ -20,4 +20,9 @@ public class GeoService
     {
         return await _httpClient.GetFromJsonAsync<List<Region>>("region");
     }
+
+    internal async Task Reset()
+    {
+        await _httpClient.PostAsync("cluster/reset", null);
+    }
 }

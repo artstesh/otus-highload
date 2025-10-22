@@ -9,6 +9,7 @@ public interface IOtusContextFactory
 public class OtusContextFactory : IOtusContextFactory
 {
     private readonly string _connectionString;
+    private readonly string _slaveConnectionString;
 
     public OtusContextFactory(string connectionString)
     {
@@ -18,13 +19,18 @@ public class OtusContextFactory : IOtusContextFactory
     public OtusContextFactory()
     {
         _connectionString = string.Empty;
+        _slaveConnectionString = string.Empty;
+    }
+
+    public OtusContextFactory(string connectionString, string slaveConnectionString)
+    {
+        _connectionString = connectionString;
+        _slaveConnectionString = slaveConnectionString;
     }
 
     public OtusContext Get(string? connectionString = null)
     {
-        var cs = connectionString ?? _connectionString;
-        if (string.IsNullOrEmpty(cs)) throw new ArgumentNullException(nameof(connectionString));
-        return new OtusContext(cs);
+        return new OtusContext(connectionString ?? _connectionString, connectionString ??_slaveConnectionString);
     }
 
     public string GetConnectionString()

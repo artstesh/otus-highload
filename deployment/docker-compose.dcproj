@@ -32,6 +32,7 @@
       <Folder Include="services\rabbitmq\obj\Docker\empty\" />
     </ItemGroup>
     <ItemGroup>
+      <Content Include="haproxy\haproxy.cfg" />
       <Content Include="Monitoring\docker-compose.yml" />
       <Content Include="Monitoring\grafana\provisioning\dashboards\chat-api-dashboard.json" />
       <Content Include="Monitoring\grafana\provisioning\dashboards\dashboard.yml" />
@@ -39,6 +40,14 @@
       <Content Include="Monitoring\grafana\provisioning\dashboards\zabbix.yml" />
       <Content Include="Monitoring\prometheus\prometheus.yml" />
       <Content Include="Monitoring\scripts\chat-api-metrics.sh" />
+      <Content Include="Postgres\Master\Dockerfile" />
+      <Content Include="Postgres\Master\init-scripts\01-init-master.sh" />
+      <Content Include="Postgres\Master\init-scripts\02-create-replication-user.sh" />
+      <Content Include="Postgres\Master\init-scripts\03-configure-pg-hba.sh" />
+      <Content Include="Postgres\Slave1\Dockerfile" />
+      <Content Include="Postgres\Slave1\init-scripts\01-init-slave.sh" />
+      <Content Include="Postgres\Slave2\Dockerfile" />
+      <Content Include="Postgres\Slave2\init-scripts\01-init-slave.sh" />
       <Content Include="services\rabbitmq\Dockerfile" />
       <Content Include="services\rabbitmq\etc\enabled_plugins" />
       <Content Include="services\rabbitmq\etc\rabbitmq.conf" />

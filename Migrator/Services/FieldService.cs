@@ -25,10 +25,5 @@ namespace AgroPlatform.Migrator.Services
                 await _httpClient.PostAsync("field", field);
             }
         }
-
-        internal async Task Reset()
-        {
-                await _httpClient.PostAsync("reset", null);
-        }
     }
 }

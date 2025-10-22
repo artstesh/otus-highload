@@ -14,6 +14,8 @@ services:
       "RabbitMQ__Password": "6GccewECzxGJgTh4QYr82D8JUgCxsC5E"
       "RabbitMQ__VirtualHost": "/"
       "Security__EncryptionKey": "iNyEkoVuMRs1YTdOeKzq0GkpB7sCZy9/CqSVvYr9N9rpYc7RrGJS8LjOfVRhewsf"
+      "ConnectionStrings__DefaultConnection": "User ID=postgres;Password=postgres;Host=haproxy;Port=5453;Database=postgres;Pooling=true;"
+      "ConnectionStrings__ReadConnection": "User ID=postgres;Password=postgres;Host=haproxy;Port=5452;Database=postgres;Pooling=true;"
     ports:
       - "5001:443"
       - "8001:80"
@@ -56,6 +58,18 @@ services:
       - "8002:80"
 
   postgres:
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  postgres-slave1:
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  postgres-slave2:
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres

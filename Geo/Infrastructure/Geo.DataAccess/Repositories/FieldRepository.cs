@@ -26,7 +26,7 @@ public class FieldRepository : IFieldRepository
         {
             return conn.QueryFirstOrDefaultAsync<Guid?>(new CommandDefinition(sql, parameters: field,
                 cancellationToken: tkn));
-        });
+        }, false);
     }
 
     public Task<IEnumerable<GeoField>> Get(double[] extent, int zoom, CancellationToken tkn)

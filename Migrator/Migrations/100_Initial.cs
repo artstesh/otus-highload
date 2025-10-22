@@ -44,7 +44,7 @@ namespace AgroPlatform.Migrator.Migrations
                 }
 
                 await _fieldService.CreateFieldsAsync(fields);
-                await _fieldService.Reset();
+                await _geoService.Reset();
             }));
         }
 

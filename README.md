@@ -24,45 +24,22 @@ cd otus-highload
 
 #### 2. Run the Project with Docker Compose
 
+Move to `deployment` directory:
 ```bash
-cd deployment
+> cd deployment
 ```
-
-The folder includes a `docker-compose.yml` file that defines the required services.
-
-There are two options for the app:
-
-**1. Start with the postgres container**
-
-Run the `start.bat`, or the following script:
+and run `start.bat`
 
 ```bash
-docker-compose --profile development -f docker-compose.yml -f docker-compose.override.yml down && docker-compose --profile development -f docker-compose.yml -f docker-compose.override.yml build && docker-compose --profile development -f docker-compose.yml -f docker-compose.override.yml up
+> start.bat
 ```
-
-**2. With existing postgres**
-
-* Open the `docker-compose.production.yml` and change the `ConnectionStrings__DefaultConnection` accordingly to your settings.
-
-* Run the `start-production.bat`, or the following script:
-
-```bash
-docker-compose --profile production -f docker-compose.yml -f docker-compose.production.yml down && docker-compose --profile production -f docker-compose.yml -f docker-compose.production.yml build && docker-compose --profile production -f docker-compose.yml -f docker-compose.production.yml up
-```
-
 ---
 
 #### 3. Access the Application
 
-Once the containers are running, access the application in your browser or via a tool like `curl` at `https://localhost:5001/swagger/index.html`.
-
-
-### Customization
-
-If you need to customize the project (e.g., change network ports, environment variables, or volumes), modify the `docker-compose.yml` file. For example:
-
-- Change port mappings under the `ports` section.
-- Update environment variables under the `environment` section.
+Geo Swagger - `https://localhost:5001`
+Fields Swagger - `https://localhost: 5002`
+UI - `http://localhost:4200`
 
 ### Postman
 

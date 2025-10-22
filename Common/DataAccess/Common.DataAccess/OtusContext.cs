@@ -5,20 +5,22 @@ namespace Common.DataAccess;
 
 public class OtusContext
 {
-    private string _connectionString;
+    private string _masterConnectionString;
+    private readonly string _slaveConnectionString;
 
     private Polly.Retry.AsyncRetryPolicy policy = Policy.Handle<NpgsqlException>(ex => ex.IsTransient)
         .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
 
-    public OtusContext(string connectionString)
+    public OtusContext(string masterConnectionString, string slaveConnectionString)
     {
-        _connectionString = connectionString;
+        _masterConnectionString = masterConnectionString;
+        _slaveConnectionString = slaveConnectionString;
     }
 
-    public async Task<T> QueryAsync<T>(Func<NpgsqlConnection, Task<T>> func)
+    public async Task<T> QueryAsync<T>(Func<NpgsqlConnection, Task<T>> func, bool read = true)
     {
         T result = default;
-        await ApplyPolicy(async c => result = await func(c));
+        await ApplyPolicy(async c => result = await func(c), isReadOperation: read);
         return result;
     }
 
@@ -28,12 +30,12 @@ public class OtusContext
         {
             await func(c);
             return true;
-        });
+        }, isReadOperation: false);
     }
 
     public T Query<T>(Func<NpgsqlConnection, T> func)
     {
-        var connection = new NpgsqlConnection(_connectionString);
+        var connection = new NpgsqlConnection(_masterConnectionString);
         connection.Open();
         var result = func(connection);
         connection.Close();
@@ -42,15 +44,16 @@ public class OtusContext
 
     public void Execute(Action<NpgsqlConnection> func)
     {
-        var connection = new NpgsqlConnection(_connectionString);
+        var connection = new NpgsqlConnection(_masterConnectionString);
         connection.Open();
         func(connection);
         connection.Close();
     }
 
-    private async Task<T> ApplyPolicy<T>(Func<NpgsqlConnection, Task<T>> func)
+    private async Task<T> ApplyPolicy<T>(Func<NpgsqlConnection, Task<T>> func, bool isReadOperation)
     {
-        var connection = await ConnectionPool.Instance.GetConnectionAsync(_connectionString);
+        var connectionString = isReadOperation ? _slaveConnectionString : _masterConnectionString;
+        var connection = await ConnectionPool.Instance.GetConnectionAsync(connectionString);
 
         T result;
         try

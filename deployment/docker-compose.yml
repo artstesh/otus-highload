@@ -14,12 +14,9 @@ services:
     networks:
       - postgres-network
     depends_on:
-      postgres:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
+      - haproxy
+      - rabbitmq
+      - redis
 
   fields:
     image: ${DOCKER_REGISTRY}/otus-platform/fields:${TAG}
@@ -44,6 +41,8 @@ services:
           condition: service_healthy
       fields-pg-5:
           condition: service_healthy
+      geo:
+          condition: service_started
       rabbitmq:
         condition: service_healthy
       redis:
@@ -64,7 +63,6 @@ services:
   migrator:
     image: ${DOCKER_REGISTRY}/otus-platform/migrator:${TAG}
     container_name: migrator
-    restart: "no"
     profiles:
       - development
     networks:
@@ -77,9 +75,27 @@ services:
       dockerfile: Migrator/Dockerfile
 
   #### Infrastructure
+
+  haproxy:
+    image: haproxy:2.4
+    restart: always
+    volumes:
+      - ./haproxy/:/usr/local/etc/haproxy/
+    ports:
+      - "5452:5452"
+      - "5453:5453"
+    profiles:
+      - development
+    depends_on:
+      - postgres-slave1
+      - postgres-slave2
+    networks:
+      - postgres-network
+
   postgres:
-    image: postgis/postgis:13-3.4-alpine
+    build: ./Postgres/Master
     container_name: postgres
+    restart: always
     ports:
       - "5432:5432"
     profiles:
@@ -89,10 +105,52 @@ services:
     networks:
       - postgres-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      test: ["CMD-SHELL", "sleep 20; pg_isready -U postgres"]
+      interval: 20s
+      timeout: 30s
+      retries: 15
+
+  postgres-slave1:
+    build: ./Postgres/Slave1
+    container_name: postgres-slave1
+    restart: always
+    ports:
+      - "5433:5432"
+    profiles:
+      - development
+    networks:
+      - postgres-network
+    volumes:
+      - slave1:/var/lib/postgresql/data/
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "sleep 10; pg_isready -U postgres"]
+      interval: 20s
+      timeout: 15s
+      retries: 15
+
+  postgres-slave2:
+    build: ./Postgres/Slave2
+    container_name: postgres-slave2
+    restart: always
+    ports:
+      - "5434:5432"
+    profiles:
+      - development
+    networks:
+      - postgres-network
+    volumes:
+      - slave2:/var/lib/postgresql/data/
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "sleep 10; pg_isready -U postgres"]
+      interval: 20s
+      timeout: 15s
+      retries: 15
 
   fields-pg-1:
     image: postgis/postgis:13-3.4-alpine
@@ -220,6 +278,8 @@ services:
 
 volumes:
   postgres:
+  slave1:
+  slave2:
   fields_pg_one:
   fields_pg_two:
   fields_pg_three:

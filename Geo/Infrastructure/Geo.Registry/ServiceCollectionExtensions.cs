@@ -20,7 +20,7 @@ namespace Geo.Registry
                 .AddScoped<IFieldService, FieldService>()
                 .AddSingleton<IMessageBusService, RabbitMQService>()
                 .AddSingleton<IOtusContextFactory, OtusContextFactory>(p =>
-                    new OtusContextFactory(configuration.GetConnectionString("DefaultConnection")!));
+                    new OtusContextFactory(configuration.GetConnectionString("DefaultConnection"),configuration.GetConnectionString("ReadConnection")));
 
             return services;
         }
