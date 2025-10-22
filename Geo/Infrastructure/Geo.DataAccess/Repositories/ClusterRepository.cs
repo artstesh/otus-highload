@@ -28,7 +28,7 @@ public class ClusterRepository : IClusterRepository
     {
         var sql = $"select count as Count, st_x(point) as Lon, st_y(point) as Lat " +
                   $"from field_clusters " +
-                  $"where st_contains(st_makeenvelope({extent[0]}, {extent[1]}, {extent[2]}, {extent[3]},4326), point);";
+                  $"where st_contains(st_makeenvelope({extent[0]}, {extent[1]}, {extent[2]}, {extent[3]}), point);";
 
         return _factory.Get().QueryAsync<IEnumerable<FieldCluster>>(conn =>
             conn.QueryAsync<FieldCluster>(new CommandDefinition(sql, cancellationToken: tkn)));

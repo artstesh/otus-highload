@@ -53,8 +53,8 @@ public class OtusContext
 
     private async Task<T> ApplyPolicy<T>(Func<NpgsqlConnection, Task<T>> func, bool isReadOperation)
     {
-        var connectionString = _masterConnectionString;
-        var connection = await ConnectionPool.Instance.GetConnection(connectionString);
+        var connectionString = isReadOperation ? GetSlaveConnectionString() : _masterConnectionString;
+        var connection = await ConnectionPool.Instance.GetConnectionAsync(connectionString);
 
         T result;
         try

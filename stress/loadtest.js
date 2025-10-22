@@ -7,7 +7,7 @@ import { Rate, Trend } from 'k6/metrics';
 const errorRate = new Rate('errors');
 const searchTrend = new Trend('endpoint_duration');
 
-const usersCount = 300;
+const usersCount = 50;
 
 const minX = 29.04;
 const maxX = 30.75;
