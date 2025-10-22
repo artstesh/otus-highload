@@ -26,13 +26,13 @@ public class ClustersMigration: IMigration
             conn.Execute(
                 @"drop materialized view if exists field_clusters;
 create materialized view field_clusters as
-SELECT st_centroid(st_collect(clusters.point))       AS point,
-       count(clusters.cid)                           AS count
-FROM (SELECT point,
-             st_clusterdbscan(point, 0.0075::double precision, 1)
-             OVER (PARTITION BY region_id) AS cid
+SELECT st_centroid(st_collect(clusters.point)) AS point,
+       count(clusters.cid)                     AS count,
+clusters.region_id as regionId
+FROM (SELECT fields.point,fields.region_id,
+             st_clusterdbscan(fields.point, 0.0075::double precision, 1) OVER (PARTITION BY fields.region_id) AS cid
       FROM fields) clusters
-GROUP BY clusters.cid;"));
+GROUP BY clusters.cid, regionId"));
         _factory.Get().Execute(conn => conn.Execute($"insert into \"Migrations\" (id) values ('{MigrationId}');"));
     }
 }

@@ -29,7 +29,7 @@ public class DbSeedService
 
     private void ApplyMigrations(string connectionString)
     {
-        new OtusContextFactory(connectionString).Get(connectionString).Execute(conn =>
+        new OtusContextFactory(connectionString, []).Get(connectionString).Execute(conn =>
         {
             conn.Execute("CREATE TABLE IF NOT EXISTS \"Migrations\" (Id uuid not null);");
         });

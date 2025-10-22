@@ -31,7 +31,7 @@ public class RegionsMigration : IMigration
                   (
                       id      uuid default uuid_generate_v4() not null,
                       name    varchar                         not null,
-                      polygon geometry                        not null
+                      polygon geometry(Polygon,4326)                        not null
                   );
                   DROP INDEX IF EXISTS idx_regions_polygon;
                   CREATE INDEX idx_regions_polygon ON regions USING GIST(polygon);"));

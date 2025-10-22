@@ -31,8 +31,8 @@ public class FieldsMigration : IMigration
                   (
                       id      uuid default uuid_generate_v4() not null,
                       region_id    uuid                         not null,
-                      polygon geometry                        not null,
-                      point geometry generated always as (ST_Centroid(polygon)) stored not null
+                      polygon geometry(Polygon,4326)                        not null,
+                      point geometry(Point, 4326) generated always as (ST_Centroid(polygon)) stored not null
                   );
                   DROP INDEX IF EXISTS idx_fields_point;
                   DROP INDEX IF EXISTS idx_fields_polygon;

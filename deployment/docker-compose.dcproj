@@ -32,7 +32,6 @@
       <Folder Include="services\rabbitmq\obj\Docker\empty\" />
     </ItemGroup>
     <ItemGroup>
-      <Content Include="haproxy\haproxy.cfg" />
       <Content Include="Monitoring\docker-compose.yml" />
       <Content Include="Monitoring\grafana\provisioning\dashboards\chat-api-dashboard.json" />
       <Content Include="Monitoring\grafana\provisioning\dashboards\dashboard.yml" />

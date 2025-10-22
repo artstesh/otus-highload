@@ -14,8 +14,9 @@ services:
       "RabbitMQ__Password": "6GccewECzxGJgTh4QYr82D8JUgCxsC5E"
       "RabbitMQ__VirtualHost": "/"
       "Security__EncryptionKey": "iNyEkoVuMRs1YTdOeKzq0GkpB7sCZy9/CqSVvYr9N9rpYc7RrGJS8LjOfVRhewsf"
-      "ConnectionStrings__DefaultConnection": "User ID=postgres;Password=postgres;Host=haproxy;Port=5453;Database=postgres;Pooling=true;"
-      "ConnectionStrings__ReadConnection": "User ID=postgres;Password=postgres;Host=haproxy;Port=5452;Database=postgres;Pooling=true;"
+      "ConnectionStrings__DefaultConnection": "User ID=postgres;Password=postgres;Host=postgres;Port=5432;Database=postgres;Pooling=true;"
+      "ConnectionStrings__Slave1Connection": "User ID=postgres;Password=postgres;Host=postgres-slave1;Port=5432;Database=postgres;Pooling=true;"
+      "ConnectionStrings__Slave2Connection": "User ID=postgres;Password=postgres;Host=postgres-slave2;Port=5432;Database=postgres;Pooling=true;"
     ports:
       - "5001:443"
       - "8001:80"
@@ -29,7 +30,7 @@ services:
       "ConnectionStrings__Default": "User ID=postgres;Password=postgres;Host=postgres;Port=5432;Database=postgres;Pooling=true;"
       "Application__Endpoints__Fields": "http://fields"
       "Application__Endpoints__Geo": "http://geo"
-      "Application__FieldNumber": 100
+      "Application__FieldNumber": 2500
 
   fields:
     environment:

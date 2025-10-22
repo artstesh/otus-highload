@@ -9,28 +9,23 @@ public interface IOtusContextFactory
 public class OtusContextFactory : IOtusContextFactory
 {
     private readonly string _connectionString;
-    private readonly string _slaveConnectionString;
+    private readonly string[] _slaveConnectionStrings;
 
-    public OtusContextFactory(string connectionString)
+    public OtusContextFactory(string connectionString, string[] slaveConnectionStrings)
     {
         _connectionString = connectionString;
+        _slaveConnectionStrings = slaveConnectionStrings;
     }
 
     public OtusContextFactory()
     {
         _connectionString = string.Empty;
-        _slaveConnectionString = string.Empty;
-    }
-
-    public OtusContextFactory(string connectionString, string slaveConnectionString)
-    {
-        _connectionString = connectionString;
-        _slaveConnectionString = slaveConnectionString;
+        _slaveConnectionStrings = [];
     }
 
     public OtusContext Get(string? connectionString = null)
     {
-        return new OtusContext(connectionString ?? _connectionString, connectionString ??_slaveConnectionString);
+        return new OtusContext(connectionString ?? _connectionString, _slaveConnectionStrings);
     }
 
     public string GetConnectionString()

@@ -14,7 +14,8 @@ services:
     networks:
       - postgres-network
     depends_on:
-      - haproxy
+      - postgres-slave1
+      - postgres-slave2
       - rabbitmq
       - redis
 
@@ -75,23 +76,6 @@ services:
       dockerfile: Migrator/Dockerfile
 
   #### Infrastructure
-
-  haproxy:
-    image: haproxy:2.4
-    restart: always
-    volumes:
-      - ./haproxy/:/usr/local/etc/haproxy/
-    ports:
-      - "5452:5452"
-      - "5453:5453"
-    profiles:
-      - development
-    depends_on:
-      - postgres-slave1
-      - postgres-slave2
-    networks:
-      - postgres-network
-
   postgres:
     build: ./Postgres/Master
     container_name: postgres
@@ -105,7 +89,7 @@ services:
     networks:
       - postgres-network
     healthcheck:
-      test: ["CMD-SHELL", "sleep 20; pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 20s
       timeout: 30s
       retries: 15
@@ -126,7 +110,7 @@ services:
       postgres:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "sleep 10; pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 20s
       timeout: 15s
       retries: 15
@@ -147,7 +131,7 @@ services:
       postgres:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "sleep 10; pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 20s
       timeout: 15s
       retries: 15
