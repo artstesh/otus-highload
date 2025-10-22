@@ -22,7 +22,7 @@ export class GisFieldPolygonsComponent extends DestructibleComponent implements 
    polygons = signal<PolygonModel[]>([]);
 
    layerSettings = new FeatureLayerSettings()
-      .setMinZoom(GisConstants.CnhFieldPolygonEdgeZoom)
+      .setMinZoom(15)
       .setName(GisConstants.GisFieldPolygonsLayerName)
       .setStyle(this.style);
 

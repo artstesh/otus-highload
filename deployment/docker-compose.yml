@@ -49,6 +49,33 @@ services:
       redis:
         condition: service_healthy
 
+  fields-spa:
+    image: ${DOCKER_REGISTRY}/otus-platform/fields-spa:${TAG}
+    container_name: fields-spa
+    restart: always
+    ports:
+      - "4200:80"
+    profiles:
+      - development
+    build:
+      context: ../WebSpa
+      dockerfile: Dockerfile
+
+  migrator:
+    image: ${DOCKER_REGISTRY}/otus-platform/migrator:${TAG}
+    container_name: migrator
+    restart: "no"
+    profiles:
+      - development
+    networks:
+      - postgres-network
+    depends_on:
+      - fields
+      - geo
+    build:
+      context: ../
+      dockerfile: Migrator/Dockerfile
+
   #### Infrastructure
   postgres:
     image: postgis/postgis:13-3.4-alpine

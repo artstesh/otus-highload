@@ -24,7 +24,6 @@ export class GisClustersComponent extends DestructibleComponent implements OnIni
    clusterLayerSettings = new ClusterLayerSettings()
       .setMaxZoom(12).setStyle(fs => {
       let count = 0;
-         console.log(fs);
          fs.forEach(f => count+=(f as unknown as { count: number }).count);
          return MarkerStyleHelper.withText(
             MarkerStyleHelper.circle(11, '#173867', '#fff', 1),

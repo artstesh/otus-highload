@@ -1,5 +1,0 @@
-{
-   "version": 5,
-   "stores": [{ "name": "uiSettings", "key": "id" }],
-   "storesToDelete": []
-}

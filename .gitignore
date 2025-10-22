@@ -171,9 +171,8 @@ bower_components/
 
 #JetBrains
 */.idea/*
-**/.idea/ 
-**/.nx/ 
-/WebSpa/**/dist/ 
-**/.angular/ 
-**/wwwroot/ 
+**/.idea/
+**/.nx/
+**/.angular/
+**/wwwroot/
 /src/deployment/.db

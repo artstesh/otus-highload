@@ -18,7 +18,7 @@ import { DestructibleComponent } from '@shared/components/destructible/destructi
 })
 export class GisFieldMarkersComponent extends DestructibleComponent implements OnInit {
    clusterLayerSettings = new ClusterLayerSettings()
-      .setMaxZoom(GisConstants.CnhFieldPolygonEdgeZoom)
+      .setMaxZoom(15)
       .setMinZoom(12).setDistance(100)
       .setStyle(f => MarkerStyleHelper.withText(
          MarkerStyleHelper.circle(11,'#963cff', '#fff', 2),

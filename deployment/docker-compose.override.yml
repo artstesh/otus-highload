@@ -18,6 +18,17 @@ services:
       - "5001:443"
       - "8001:80"
 
+  migrator:
+    environment:
+      "ASPNETCORE_ENVIRONMENT": "Development"
+      "Kestrel:Certificates:Default:Path": "/app/aspnetapp.pfx"
+      "Kestrel:Certificates:Default:Password": "123"
+      "Kestrel:Certificates:Default:AllowInvalid": "true"
+      "ConnectionStrings__Default": "User ID=postgres;Password=postgres;Host=postgres;Port=5432;Database=postgres;Pooling=true;"
+      "Application__Endpoints__Fields": "http://fields"
+      "Application__Endpoints__Geo": "http://geo"
+      "Application__FieldNumber": 100
+
   fields:
     environment:
       "ASPNETCORE_ENVIRONMENT": "Development"

@@ -22,7 +22,6 @@ namespace AgroPlatform.Migrator.Services
             for (var index = 0; index < fields.Count; index++)
             {
                 var field = fields[index];
-                Console.WriteLine($"{index} of {fields.Count} processing");
                 await _httpClient.PostAsync("field", field);
             }
         }

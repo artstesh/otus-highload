@@ -31,7 +31,6 @@ public class FarmFieldGenerator
     {
         return Enumerable.Range(0, count).Select(x =>
         {
-            Console.WriteLine($"Generate {x} of {count} processing");
             return GenerateRandomField();
         }).ToList();
     }
@@ -51,7 +50,7 @@ public class FarmFieldGenerator
 
                 // Проверяем, что сгенерированное поле находится внутри границ
                 if (_boundaryPolygon.Contains(field))
-                {Console.WriteLine("GenerateRandomField:");
+                {
                     return _wktWriter.Write(field);
                 }
             }

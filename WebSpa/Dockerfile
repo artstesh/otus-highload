@@ -7,13 +7,9 @@ FROM node:18.20.4 AS builder
 WORKDIR /app
 
 # Copy all files from current directory to working dir in image
-COPY . .
+COPY dist/Otus/. .
 # install node modules and build assets
 ARG ENV=Development
-RUN if [ "$ENV" = "Development" ] ; then npm install && npm run build; fi
-RUN if [ "$ENV" = "Staging" ] ; then npm install && npm run build:staging; fi
-RUN if [ "$ENV" = "PredProd" ] ; then npm install && npm run build:predprod; fi
-RUN if [ "$ENV" = "Production" ] ; then npm install && npm run build:prod; fi
 
 # nginx state for serving content
 FROM nginx:stable-alpine
@@ -23,6 +19,6 @@ WORKDIR /usr/share/nginx/html
 # Remove default nginx static assets
 RUN rm -rf ./*
 # Copy static assets from builder stage
-COPY --from=builder /app/dist/Otus .
+COPY --from=builder /app/. .
 # Containers run nginx with global directives and daemon off
 ENTRYPOINT ["nginx", "-g", "daemon off;"]

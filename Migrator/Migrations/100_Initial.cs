@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Fields.Entities;
 using FluentMigrator;
 using Geo.Entities;
+using Microsoft.Extensions.Configuration;
 
 namespace AgroPlatform.Migrator.Migrations
 {
@@ -14,19 +15,23 @@ namespace AgroPlatform.Migrator.Migrations
     {
         private readonly FieldService _fieldService;
         private readonly GeoService _geoService;
-        private readonly int NumberOfFields = 100000;
+        private readonly IConfiguration _configuration;
+        private int NumberOfFields = 10;
 
         public Initial(
                 FieldService fieldService,
-                GeoService geoService
+                GeoService geoService,
+                IConfiguration configuration
             )
         {
             _fieldService = fieldService;
             _geoService = geoService;
+            _configuration = configuration;
         }
 
         public override void Up()
         {
+            NumberOfFields = _configuration.GetValue<int>("Application:FieldNumber");
             Task.WaitAll(Task.Run(async () =>
             {
                 var regions =await  _geoService.GetRegions();
