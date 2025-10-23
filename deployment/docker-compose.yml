@@ -54,7 +54,7 @@ services:
     container_name: fields-spa
     restart: always
     ports:
-      - "4200:80"
+      - "4200:443"
     profiles:
       - development
     build:

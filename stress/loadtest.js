@@ -7,7 +7,7 @@ import { Rate, Trend } from 'k6/metrics';
 const errorRate = new Rate('errors');
 const searchTrend = new Trend('endpoint_duration');
 
-const usersCount = 50;
+const usersCount = 350;
 
 const minX = 29.04;
 const maxX = 30.75;
@@ -17,7 +17,7 @@ const maxY = -1.26;
 function getRandomExtent() {
   const x = Math.random() * (maxX - minX) + minX;
   const y = Math.random() * (maxY - minY) + minY;
-  const zoom =  Math.floor(Math.random() * (16 - 1) + 1);
+  const zoom =  Math.floor(Math.random() * (15) + 1);
   const width = zoom > 10 ? .05 : .1;
   return {zoom: zoom, extent: [x, y, x+width, y+width]};
 }

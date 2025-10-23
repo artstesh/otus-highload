@@ -83,7 +83,7 @@
                "configurations": {
                   "production": {
                      "browserTarget": "Otus:build:production",
-                    "ssl" : false
+                    "ssl" : true
                   },
                   "development": {
                      "browserTarget": "Otus:build:development",

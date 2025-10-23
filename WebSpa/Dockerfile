@@ -12,8 +12,15 @@ COPY dist/Otus/. .
 ARG ENV=Development
 
 # nginx state for serving content
-FROM nginx:stable-alpine
+FROM nginx:stable
 COPY nginx.conf /etc/nginx/nginx.conf
+
+RUN apt-get update
+RUN apt-get install -y openssl
+WORKDIR /etc/nginx/certs
+RUN openssl genrsa -out localhost.key 2048
+RUN openssl req -new -x509 -key localhost.key -out localhost.crt -days 365 -subj "/CN=localhost"
+
 # Set working directory to nginx asset directory
 WORKDIR /usr/share/nginx/html
 # Remove default nginx static assets

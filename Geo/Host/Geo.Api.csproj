@@ -21,15 +21,15 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="aspnetapp.pfx">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\Application\Geo.Application.csproj" />
       <ProjectReference Include="..\Contracts\Geo.Contracts.csproj" />
       <ProjectReference Include="..\Infrastructure\Geo.Registry\Geo.Registry.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Update="aspnetapp.pfx">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
     <ItemGroup>
