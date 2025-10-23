@@ -14,7 +14,7 @@ public class PoolEntity
 public class ConnectionPool
 {
     public static ConnectionPool Instance { get; } = new ConnectionPool();
-    private readonly int _maxPoolSize = 90;
+    private readonly int _maxPoolSize = 180;
 
     private ConnectionPool()
     {

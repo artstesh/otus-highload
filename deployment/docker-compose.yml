@@ -14,8 +14,7 @@ services:
     networks:
       - postgres-network
     depends_on:
-      - postgres-slave1
-      - postgres-slave2
+      - haproxy
       - rabbitmq
       - redis
 
@@ -76,6 +75,22 @@ services:
       dockerfile: Migrator/Dockerfile
 
   #### Infrastructure
+  haproxy:
+    image: haproxy:2.4
+    restart: always
+    volumes:
+      - ./haproxy/:/usr/local/etc/haproxy/
+    ports:
+      - "5452:5452"
+      - "5453:5453"
+    profiles:
+      - development
+    depends_on:
+      - postgres-slave1
+      - postgres-slave2
+    networks:
+      - postgres-network
+
   postgres:
     build: ./Postgres/Master
     container_name: postgres

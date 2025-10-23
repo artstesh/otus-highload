@@ -6,16 +6,15 @@ namespace Common.DataAccess;
 public class OtusContext
 {
     private string _masterConnectionString;
-    private readonly string[] _slaveConnectionStrings;
-    private readonly Random _random = new();
+    private readonly string _slaveConnectionString;
 
     private Polly.Retry.AsyncRetryPolicy policy = Policy.Handle<NpgsqlException>(ex => ex.IsTransient)
         .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
 
-    public OtusContext(string masterConnectionString, string[] slaveConnectionStrings)
+    public OtusContext(string masterConnectionString, string slaveConnectionString)
     {
         _masterConnectionString = masterConnectionString;
-        _slaveConnectionStrings = slaveConnectionStrings;
+        _slaveConnectionString = slaveConnectionString;
     }
 
     public async Task<T> QueryAsync<T>(Func<NpgsqlConnection, Task<T>> func, bool read = true)
@@ -53,7 +52,7 @@ public class OtusContext
 
     private async Task<T> ApplyPolicy<T>(Func<NpgsqlConnection, Task<T>> func, bool isReadOperation)
     {
-        var connectionString = isReadOperation ? GetSlaveConnectionString() : _masterConnectionString;
+        var connectionString = isReadOperation ? _slaveConnectionString : _masterConnectionString;
         var connection = await ConnectionPool.Instance.GetConnectionAsync(connectionString);
 
         T result;
@@ -67,16 +66,5 @@ public class OtusContext
         }
 
         return result;
-    }
-
-    private string GetSlaveConnectionString()
-    {
-        if (_slaveConnectionStrings == null || _slaveConnectionStrings.Length == 0)
-        {
-            return _masterConnectionString;
-        }
-
-        var index = _random.Next(0, _slaveConnectionStrings.Length);
-        return _slaveConnectionStrings[index];
     }
 }
